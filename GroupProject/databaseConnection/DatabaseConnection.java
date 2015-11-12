@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class DatabaseConnection {
 	
@@ -27,7 +30,7 @@ public class DatabaseConnection {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public Statement getStatement() {
 		return statement;
 	}
@@ -39,4 +42,13 @@ public class DatabaseConnection {
 			e.printStackTrace();
 		}
 	}
+
+	public Date convertSQLDateToDate(String sentDate) {
+        try {
+            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(sentDate);
+        } catch (ParseException e) {
+            return null;
+        }
+	}
+
 }
