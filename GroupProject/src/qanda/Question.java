@@ -1,6 +1,7 @@
-package hw6;
+package qanda;
 
-public class Question {
+
+public abstract class Question {
 	int score;
 	String question;
 	
@@ -19,5 +20,7 @@ public class Question {
 		this.score = score;
 		this.question = question;
 	}
+	
+	abstract boolean isCorrect(Answer answer);
 	
 }
