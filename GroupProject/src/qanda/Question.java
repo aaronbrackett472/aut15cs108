@@ -29,6 +29,18 @@ public abstract class Question {
 		this.statement = connection.getStatement();
 		
 		// Needs to redesign db to add ID and to work with the rest of the question types
+	    /*
+	    Table: question
+			+-------------------+--------------+------+-----+---------+----------------+
+			| Field       		| Type         | Null | Key | Default | Extra          |
+			+-------------------+--------------+------+-----+---------+----------------+
+			| questionId  		| int(11)      | NO   | PRI | NULL    | auto_increment |
+			| questionText		| int(11)      | NO   | MUL | NULL    |                |
+			| score				| VARCHAR(64)  | NO   | MUL | NULL    |                |
+			| isMultipleChoice  | TINYINT      | NO   |     | NULL    |                |
+			| imageUrl		    | VARCHAR(64)  | NO   |     | NULL    |                |
+			+-------------------+--------------+------+-----+---------+----------------+
+		 */
 		String friendshipQuery = "CREATE TABLE IF NOT EXISTS " + questionTable +
 				" (questionId INT, " +
 				" (questionText CHAR(64), " +
