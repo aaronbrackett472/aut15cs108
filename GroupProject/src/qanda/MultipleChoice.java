@@ -9,7 +9,7 @@ public class MultipleChoice extends Question {
 	List<String> choices;
 	int correctIndex;
 	
-	public MultipleChoice(int score, String question, List<String> choices, int index) {
+	public MultipleChoice(int score, String question, List<String> choices, List<Integer> index) {
 		super(score, question);
 		this.choices = new ArrayList<String>();
 		for (String choice: choices) {
