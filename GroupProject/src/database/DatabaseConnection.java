@@ -2,6 +2,7 @@ package database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -30,6 +31,26 @@ public class DatabaseConnection {
 	
 	public Statement getStatement() {
 		return statement;
+	}
+	
+	public void executeUpdate(String update) {
+		try {
+			statement.executeUpdate(update);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public ResultSet executeQuery(String query) {
+		ResultSet resultSet = null;
+		try {
+			resultSet = statement.executeQuery(query);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return resultSet;
 	}
 	
 	public void close() {

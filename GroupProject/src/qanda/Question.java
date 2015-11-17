@@ -5,6 +5,7 @@ import database.DatabaseConnection.*;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -21,51 +22,29 @@ public abstract class Question {
 	private Statement statement;
 	private DatabaseConnection connection;
 	
-	/*
-	 * Establish connection with the database
-	 */
-	public void establishDatabaseConnection() {
-		this.connection = new DatabaseConnection();
-		this.statement = connection.getStatement();
-		
-		// Needs to redesign db to add ID and to work with the rest of the question types
-	    /*
-	    Table: question
-			+-------------------+--------------+------+-----+---------+----------------+
-			| Field       		| Type         | Null | Key | Default | Extra          |
-			+-------------------+--------------+------+-----+---------+----------------+
-			| questionId  		| int(11)      | NO   | PRI | NULL    | auto_increment |
-			| questionText		| int(11)      | NO   | MUL | NULL    |                |
-			| score				| VARCHAR(64)  | NO   | MUL | NULL    |                |
-			| isMultipleChoice  | TINYINT      | NO   |     | NULL    |                |
-			| imageUrl		    | VARCHAR(64)  | NO   |     | NULL    |                |
-			+-------------------+--------------+------+-----+---------+----------------+
-		 */
-		String friendshipQuery = "CREATE TABLE IF NOT EXISTS " + questionTable +
-				" (questionId INT, " +
-				" (questionText CHAR(64), " +
-				" score VARCHAR(64), )" + 
-				" isMultipleChoice TINYINT, )" + 
-				" imageUrl VARCHAR(64) )";
-		executeSQLQuery(friendshipQuery);
-		
-		// Create a table storing choices
-		String choiceQuery = "CREATE TABLE IF NOT EXISTS " + choiceTable +
-				  " (choiceText CHAR(64), " +
-				  " questionId INT, )" + 
-				  " isCorrect TINYINT, )" + 
-				  " order VARCHAR(64) )";
-		executeSQLQuery(choiceQuery);
-	}
-	
-	public void executeSQLQuery(String query) {
-		
+	static int saveToDatabase(int quizID, String type, String question, String correctAnswer, int questionIndex, String imageUrl){
+		DatabaseConnection connection = new DatabaseConnection();
+		String query = "INSERT INTO questions (quizID, type, question, correctAnswer, questionIndex, imageUrl) VALUES(" +
+			quizID + ", " + type + ", " + question + ", " + correctAnswer + ", " + questionIndex;
+		if (imageUrl != null){
+			query += ", " + imageUrl;
+		}
+		query += ";";
+		connection.executeUpdate(query);
+		int id = -1;
+		ResultSet resultSet = connection.executeQuery("SELECT * FROM questions;");
 		try {
-			this.statement.executeUpdate(query);
+			resultSet.last();
+			id = resultSet.getInt("id");
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		connection.close();
+		return id;
 	}
+	
+	
 	
 	boolean checkValidQuestion() {
 		if (score < 0)return false;

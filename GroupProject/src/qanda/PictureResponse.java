@@ -12,15 +12,6 @@ public class PictureResponse extends Question {
 		correctResponse = answer;
 	}
 	
-	public void saveToDatabase() {
-		this.establishDatabaseConnection();
-		
-		// This needs to be finalized
-		String queryString = "INSERT INTO "+ this.questionTable + " (questionText, imageUrl, score) " +
-				"VALUES('" + this.question + "', '" + this.imageUrl + "', '" + this.score + "')" ;
-		
-		this.executeSQLQuery(queryString);
-	}
 	
 	@Override
 	boolean isCorrect(Answer answer) {
