@@ -18,6 +18,23 @@ public class MultipleChoice extends Question {
 		correctIndex = index;
 	}
 	
+	public void saveToDatabase() {
+		this.establishDatabaseConnection();
+		
+		// This needs to be finalized
+		String queryString = "INSERT INTO "+ this.questionTable + " (questionText, score) " +
+				"VALUES('" + this.question + "', '" + this.score + "')" ;
+		
+		this.executeSQLQuery(queryString);
+		
+		for (String choice: choices) {
+			String queryString2 = "INSERT INTO "+ this.questionTable + " (questionText, score) " +
+					"VALUES('" + this.question + "', '" + this.score + "')" ;
+			this.executeSQLQuery(queryString2);
+		}
+		
+	}
+	
 	public boolean isCorrect(Answer answer){
 		MultipleChoiceAnswer mca = (MultipleChoiceAnswer) answer;
 		if (mca.getIndex()==correctIndex){

@@ -2,14 +2,24 @@ package qanda;
 
 
 public class PictureResponse extends Question {
-	private String image;
+	private String imageUrl;
 	private String question;
 	private String correctResponse;
 
 	public PictureResponse(String url, String question, String answer){
-		image = url;
+		imageUrl = url;
 		this.question = question;
 		correctResponse = answer;
+	}
+	
+	public void saveToDatabase() {
+		this.establishDatabaseConnection();
+		
+		// This needs to be finalized
+		String queryString = "INSERT INTO "+ this.questionTable + " (questionText, imageUrl, score) " +
+				"VALUES('" + this.question + "', '" + this.imageUrl + "', '" + this.score + "')" ;
+		
+		this.executeSQLQuery(queryString);
 	}
 	
 	@Override
