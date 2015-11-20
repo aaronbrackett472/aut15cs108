@@ -22,14 +22,13 @@ public abstract class Question {
 	private Statement statement;
 	private DatabaseConnection connection;
 	
+	// This needs to work across multiple questions type
 	static int saveToDatabase(int quizID, String type, String question, String correctAnswer, int questionIndex, String imageUrl){
 		DatabaseConnection connection = new DatabaseConnection();
-		String query = "INSERT INTO questions (quizID, type, question, correctAnswer, questionIndex, imageUrl) VALUES(" +
-			quizID + ", " + type + ", " + question + ", " + correctAnswer + ", " + questionIndex;
-		if (imageUrl != null){
-			query += ", " + imageUrl;
-		}
-		query += ";";
+		String query = "INSERT INTO questions (quizID, type, question, correctAnswer, questionIndex, imageUrl) VALUES('" +
+			quizID + "', '" + type + "', '" + question + "', '" + correctAnswer + "', '" + questionIndex  + "', '" + imageUrl;
+		
+		query += "');";
 		connection.executeUpdate(query);
 		int id = -1;
 		ResultSet resultSet = connection.executeQuery("SELECT * FROM questions;");
@@ -44,22 +43,20 @@ public abstract class Question {
 		return id;
 	}
 	
+	// Get quiz
+	static ResultSet getQuestionsByQuizId(int quizID) {
+		DatabaseConnection connection = new DatabaseConnection();
+		ResultSet resultSet = connection.executeQuery("SELECT * FROM questions WHERE quizId = '" + quizID + "');");
+		
+		return resultSet;
+		
+	}
+	
 	
 	
 	boolean checkValidQuestion() {
 		if (score < 0)return false;
 		return true;
-	}
-	
-	// Default constructor - why?
-	public Question(){
-		score = 1;
-		question = "";
-	}
-	
-	public Question(int score, String question) {
-		this.score = score;
-		this.question = question;
 	}
 	
 	abstract boolean isCorrect(Answer answer);

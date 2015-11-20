@@ -4,7 +4,13 @@ package qanda;
 
 public class QuestionResponse extends Question {
 		
-	private String correctResponse;
+	public String correctResponse;
+	
+	public QuestionResponse(int score, String question, String correctResponse) {
+		this.score = score;
+		this.question = question;
+		this.correctResponse = correctResponse;
+	}
 	
 
 	
