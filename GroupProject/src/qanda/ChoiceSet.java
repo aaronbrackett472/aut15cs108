@@ -70,7 +70,7 @@ public class ChoiceSet {
 		for(Pair<String, Boolean> choice: choicesList) {
 			String query = "INSERT INTO " + choicesTable + " (questionId, choice, isCorrect) VALUES('" + 
 			this.questionId + "', '" + choice.getKey() + "', '" + convertBooleanToInt(choice.getValue()) + "');";
-			System.out.println(query);
+			//System.out.println(query);
 			connection.executeUpdate(query);
 		}
 		

@@ -10,22 +10,22 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 
-public abstract class Question {
+public class Question {
 	
 	//Constants
 	public static String questionTable = "Questions";
 	
-	int id, score;
-	String question;
+	int id, score, quizId;
+	String question, correctAnswer, imageUrl, type;
 	
 	private Statement statement;
 	private DatabaseConnection connection;
 	
 	// This needs to work across multiple questions type
-	static int saveToDatabase(int quizID, String type, String question, String correctAnswer, String imageUrl){
+	static int saveToDatabase(int quizId, String type, int score, String question, String correctAnswer, String imageUrl){
 		DatabaseConnection connection = new DatabaseConnection();
-		String query = "INSERT INTO " + questionTable + " (quizID, type, question, correctAnswer, imageUrl) VALUES('" +
-			quizID + "', '" + type + "', '" + question + "', '" + correctAnswer + "', '" + imageUrl;
+		String query = "INSERT INTO " + questionTable + " (quizId, type, score, question, correctAnswer, imageUrl) VALUES('" +
+			quizId + "', '" + type + "', '" + score + "', '" + question + "', '" + correctAnswer + "', '" + imageUrl;
 		
 		query += "');";
 		
@@ -52,13 +52,39 @@ public abstract class Question {
 		
 	}
 	
+	public Question() {
+		
+	}
 	
+	/*
+	 * When initialized given an int id, it will fetch other values from the db 
+	 * To use each of the question
+	 */
+	public Question(int id) {
+		this.id = id;
+		DatabaseConnection connection = new DatabaseConnection();
+		ResultSet resultSet = connection.executeQuery("SELECT * FROM " + questionTable + " WHERE id = '" + id + "';");
+		try {
+			resultSet.first();
+			this.quizId = resultSet.getInt("quizId");
+			this.type = resultSet.getString("type");
+			this.score = resultSet.getInt("score");
+			this.question = resultSet.getString("question");
+			this.correctAnswer = resultSet.getString("correctAnswer");
+			this.imageUrl = resultSet.getString("imageUrl");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	boolean checkValidQuestion() {
 		if (score < 0)return false;
 		return true;
 	}
 	
-	abstract int evaluateAnswer(Answer answer);
+	// Dummy implementation - will always be overridden
+	int evaluateAnswer(Answer answer) {
+		return 1;
+	};
 	
 }

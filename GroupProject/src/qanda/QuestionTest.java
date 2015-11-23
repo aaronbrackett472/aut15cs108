@@ -12,7 +12,7 @@ public class QuestionTest {
 	@Test
 	public void testSaveToDatabase() {
 		
-		Question.saveToDatabase(1, "Response", "Who is your daddy?", "You", "n/a");
+		Question.saveToDatabase(1, "Response", 1, "Who is your daddy?", "You", "n/a");
 		ResultSet questionResult = Question.getQuestionsByQuizId(1);
 		try {
 			questionResult.last();

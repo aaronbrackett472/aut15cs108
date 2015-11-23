@@ -13,23 +13,13 @@ import javafx.util.Pair;
 
 public class MultipleChoice extends Question {
 	
-	List<String> choices;
-	
 	public MultipleChoice(int id) {
-		DatabaseConnection connection = new DatabaseConnection();
-		ResultSet resultSet = connection.executeQuery("SELECT * FROM " + questionTable + " WHERE id = '" + id + "';");
-		try {
-			resultSet.first();
-			this.question = resultSet.getString("question");
-			this.score = resultSet.getInt("score");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		super(id);
 	}
 	
 	@Override
 	public int evaluateAnswer(Answer answer){
-		
+
 		int correctCount = 0;
 		ChoiceSet choices = new ChoiceSet();
 		choices.getChoicesByQuestionId(this.id);

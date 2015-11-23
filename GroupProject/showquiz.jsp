@@ -15,7 +15,12 @@ if(request.getParameter("id") == null){
 <title><% out.print(quizId); %></title>
 </head>
 <body>
-
+<%
+/* 
+for (questionId: quiz) {
+	out.println("<li><a href=\"show-product.jsp?id=" + p.productId + "\">" + p.name + "</a></li>");
+} */
+%>
 </body>
 </html>
 
