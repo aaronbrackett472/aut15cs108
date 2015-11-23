@@ -1,40 +1,47 @@
 package qanda;
 
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import database.DatabaseConnection;
+import javafx.util.Pair;
+
 public class MultipleChoice extends Question {
 	
 	List<String> choices;
-	Set<Integer> correctIndex;
 	
-	public MultipleChoice(int score, String question, List<String> choices, List<Integer> indexes) {
-		super(score, question);
-		this.choices = new ArrayList<String>();
-		for (String choice: choices) {
-			this.choices.add(choice);
-		}
-		correctIndex = new HashSet<Integer>();
-		for (int index : indexes){
-			correctIndex.add((Integer) index);
+	public MultipleChoice(int id) {
+		DatabaseConnection connection = new DatabaseConnection();
+		ResultSet resultSet = connection.executeQuery("SELECT * FROM " + questionTable + " WHERE id = '" + id + "';");
+		try {
+			resultSet.first();
+			this.question = resultSet.getString("question");
+			this.score = resultSet.getInt("score");
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 	
-	
-	public boolean isCorrect(Answer answer){
-		MultipleChoiceAnswer mca = (MultipleChoiceAnswer) answer;
-		List<Integer> indices = mca.getIndices();
-		for (Integer index : indices){
-			if (!correctIndex.contains(index)){
-				return false;
+	@Override
+	public int evaluateAnswer(Answer answer){
+		
+		int correctCount = 0;
+		ChoiceSet choices = new ChoiceSet();
+		choices.getChoicesByQuestionId(this.id);
+		
+		for (Pair<String, Boolean> choice: choices.choicesList){
+			if(choice.getValue()) {
+				if(choice.getKey().equals(answer)) {
+					correctCount++;
+				}
 			}
 		}
-		if (indices.size() == correctIndex.size()){
-			return true;
-		}
-		return false;
+		
+		return correctCount;
 	}
 }

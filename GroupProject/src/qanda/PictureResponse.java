@@ -1,25 +1,38 @@
 package qanda;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import database.DatabaseConnection;
 
 public class PictureResponse extends Question {
 	private String imageUrl;
 	private String question;
-	private String correctResponse;
+	private String correctAnswer;
 
-	public PictureResponse(String url, String question, String answer){
-		imageUrl = url;
-		this.question = question;
-		correctResponse = answer;
+	public PictureResponse(int id){
+		this.id = id;
+		DatabaseConnection connection = new DatabaseConnection();
+		ResultSet resultSet = connection.executeQuery("SELECT * FROM " + questionTable + " WHERE id = '" + id + "';");
+		try {
+			resultSet.first();
+			this.question = resultSet.getString("question");
+			this.score = resultSet.getInt("score");
+			this.imageUrl = resultSet.getString("imageUrl");
+			this.correctAnswer = resultSet.getString("correctAnswer");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	
 	@Override
-	boolean isCorrect(Answer answer) {
+	public int evaluateAnswer(Answer answer) {
 		StringAnswer stringAnswer = (StringAnswer) answer;
-		if (stringAnswer.getResponse() == correctResponse){
-			return true;
+		if (stringAnswer.getResponse().equals(correctAnswer)){
+			return this.score;
 		}
-		return false;
+		return 0;
 	}
 
 }

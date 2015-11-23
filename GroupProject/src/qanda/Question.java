@@ -13,25 +13,26 @@ import java.sql.Statement;
 public abstract class Question {
 	
 	//Constants
-	public static String questionTable = "question";
-	public static String choiceTable = "choice";
+	public static String questionTable = "Questions";
 	
-	int score;
+	int id, score;
 	String question;
 	
 	private Statement statement;
 	private DatabaseConnection connection;
 	
 	// This needs to work across multiple questions type
-	static int saveToDatabase(int quizID, String type, String question, String correctAnswer, int questionIndex, String imageUrl){
+	static int saveToDatabase(int quizID, String type, String question, String correctAnswer, String imageUrl){
 		DatabaseConnection connection = new DatabaseConnection();
-		String query = "INSERT INTO questions (quizID, type, question, correctAnswer, questionIndex, imageUrl) VALUES('" +
-			quizID + "', '" + type + "', '" + question + "', '" + correctAnswer + "', '" + questionIndex  + "', '" + imageUrl;
+		String query = "INSERT INTO " + questionTable + " (quizID, type, question, correctAnswer, imageUrl) VALUES('" +
+			quizID + "', '" + type + "', '" + question + "', '" + correctAnswer + "', '" + imageUrl;
 		
 		query += "');";
+		
 		connection.executeUpdate(query);
 		int id = -1;
-		ResultSet resultSet = connection.executeQuery("SELECT * FROM questions;");
+		
+		ResultSet resultSet = connection.executeQuery("SELECT * FROM " + questionTable + ";");
 		try {
 			resultSet.last();
 			id = resultSet.getInt("id");
@@ -43,11 +44,10 @@ public abstract class Question {
 		return id;
 	}
 	
-	// Get quiz
-	static ResultSet getQuestionsByQuizId(int quizID) {
+	// Get all questions given a quiz id
+	static ResultSet getQuestionsByQuizId(int quizId) {
 		DatabaseConnection connection = new DatabaseConnection();
-		ResultSet resultSet = connection.executeQuery("SELECT * FROM questions WHERE quizId = '" + quizID + "');");
-		
+		ResultSet resultSet = connection.executeQuery("SELECT * FROM " + questionTable + " WHERE quizId = '" + quizId + "';");
 		return resultSet;
 		
 	}
@@ -59,6 +59,6 @@ public abstract class Question {
 		return true;
 	}
 	
-	abstract boolean isCorrect(Answer answer);
+	abstract int evaluateAnswer(Answer answer);
 	
 }

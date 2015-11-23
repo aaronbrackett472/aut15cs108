@@ -1,12 +1,30 @@
 package qanda;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import database.DatabaseConnection;
+
 public class FillInTheBlank extends Question {
-	private static final String blankCharacter = "@@@@";//represents a blank in the question
-	private String correctResponse;
+	//represents a blank in the question
+	private static final String blankCharacter = "@@@@";
+	private String correctAnswer;
 	
-	public FillInTheBlank(int score, String question, String response){
-		super(score, question);
-		correctResponse = response;
+	public FillInTheBlank(int id) throws SQLException{
+		DatabaseConnection connection = new DatabaseConnection();
+		ResultSet resultSet = connection.executeQuery("SELECT * FROM " + questionTable + " WHERE id = '" + id + "';");
+		try {
+			// If no question found with this id
+			if(resultSet.first() == false){
+				this.id = -1;
+				return;
+			}
+			this.question = resultSet.getString("question");
+			this.score = resultSet.getInt("score");
+			this.correctAnswer = resultSet.getString("correctAnswer");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
@@ -17,12 +35,12 @@ public class FillInTheBlank extends Question {
 	}
 
 	@Override
-	boolean isCorrect(Answer answer) {
+	public int evaluateAnswer(Answer answer) {
 		StringAnswer stringAnswer = (StringAnswer) answer;
-		if (stringAnswer.getResponse() == correctResponse){
-			return true;
+		if (stringAnswer.getResponse() == correctAnswer){
+			return this.score;
 		}
-		return false;
+		return 0;
 	}
 
 }
