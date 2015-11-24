@@ -1,0 +1,527 @@
+body {
+  margin: 0px;
+}
+.splash {
+  width: 100%;
+  height: 100%;
+  background-image: url('/static/images/notebook1.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.splash-layer {
+  width: 100%;
+  height: 100%;
+  padding: 20px 0px 0px 0px;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+.splash h1 {
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-size: 50px;
+  color: white;
+  font-weight: 500;
+  text-align: center;
+  padding-top: 200px;
+}
+.splash .center {
+  text-align: center;
+}
+#spinner-wrapper {
+  background-color: blue;
+  min-height: 100%;
+  position: absolute;
+  z-index: 10;
+  min-width: 100%;
+  content: " ";
+  top: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+#startbutton {
+  background-color: 8C190E;
+  color: #ffffff;
+  font-size: 20px;
+  font-family: Arial;
+  padding: 15px;
+  border-radius: 6px;
+  vertical-align: middle;
+  text-decoration: none;
+  display: inline-block;
+}
+#login-form {
+  display: inline-block;
+  float: right;
+  margin: 0px 40px;
+}
+#site-header {
+  color: white;
+}
+#site-header #site-banner {
+  background-color: #8c1515;
+  padding: 15px 0px 15px 0px;
+  width: 100%;
+}
+#site-header #site-banner #classpath-title {
+  padding: 0px 15px 0px 15px;
+  font-size: 30px;
+  font-family: Avenir Next;
+  vertical-align: bottom;
+  width: 150px;
+  display: inline-block;
+}
+#site-header #site-banner #login-container {
+  width: 300px;
+  float: right;
+  margin: 10px 40px;
+  font-family: Helvetica;
+  display: inline;
+  text-align: right;
+}
+#site-header nav {
+  background-color: #4c0d07;
+  width: 100%;
+  padding: 0px;
+}
+#site-header nav .nav-item {
+  padding: 7px 13px 7px 13px;
+  display: inline-block;
+  font-family: Helvetica;
+  font-size: 14px;
+  margin: 0px;
+  line-height: 30px;
+  text-decoration: none;
+  color: #ffffff;
+}
+#site-header nav .nav-item:hover {
+  background-color: #8c1515;
+}
+.capstone-selection h4 {
+  text-align: center;
+}
+.capstone-selection .class-btn-list {
+  margin: 0 auto;
+  text-align: center;
+  display: block;
+}
+.capstone-selection .class-btn-list .class-btn {
+  margin: 4px 6px;
+}
+.capstone-selection #submit-capstone-btn {
+  text-decoration: none;
+}
+.default-btn {
+  color: white;
+  border-radius: 2px;
+  border: 1px solid #D1D3D4;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 1px;
+  line-height: 1.5;
+  padding: 6px 14px;
+  text-transform: uppercase;
+}
+.default-btn.go {
+  background: none repeat scroll 0% 0% #8c190e;
+}
+.credential-input {
+  margin: 10px 5px 10px 5px;
+  height: 25px;
+  vertical-align: middle;
+}
+.auth-btn {
+  color: white;
+  border-radius: 2px;
+  border: 1px solid #D1D3D4;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 1px;
+  line-height: 1.5;
+  padding: 6px 14px;
+  text-transform: uppercase;
+  background-color: #981A0E;
+  float: right;
+  margin: 7px;
+  border: 0px;
+  text-transform: none;
+}
+.auth-btn.go {
+  background: none repeat scroll 0% 0% #8c190e;
+}
+.option {
+  color: white;
+  border-radius: 2px;
+  border: 1px solid #D1D3D4;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 1px;
+  line-height: 1.5;
+  padding: 6px 14px;
+  text-transform: uppercase;
+  background-color: #981A0E;
+  float: right;
+  margin: 0px;
+  border: 0px;
+  text-transform: none;
+  font-family: Helvetica, Arial;
+}
+.option.go {
+  background: none repeat scroll 0% 0% #8c190e;
+}
+.class-btn {
+  color: white;
+  border-radius: 2px;
+  border: 1px solid #D1D3D4;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 1px;
+  line-height: 1.5;
+  padding: 6px 14px;
+  text-transform: uppercase;
+  background: none repeat scroll 0% 0% #e6e7e8;
+  color: #484146;
+}
+.class-btn.go {
+  background: none repeat scroll 0% 0% #8c190e;
+}
+.class-btn:hover {
+  background: none repeat scroll 0% 0% #888;
+  color: white;
+}
+.class-btn.selected {
+  background: none repeat scroll 0% 0% #48AA69;
+  border-color: #4AB471;
+  color: white;
+}
+#classGraph {
+  border-top: 1px solid grey;
+  border-right: 1px solid grey;
+  display: inline-box;
+}
+#classTree {
+  height: 800px;
+  vertical-align: top;
+  font-family: Helvetica;
+}
+#classtree-title {
+  font-size: 25px;
+  margin: 15px 0px 0px 5px;
+  font-family: Avenir Next;
+  display: inline-block;
+  width: 350px;
+}
+#barcharts {
+  float: left;
+  height: 40%;
+  font-family: Helvetica;
+  display: inline;
+}
+#barcharts-title {
+  font-size: 25px;
+  margin: 15px 0px 0px 5px;
+  font-family: Avenir Next;
+}
+#punchcardChart {
+  bottom: 0;
+  position: absolute;
+  font-family: Helvetica;
+}
+#punchcardChart-title {
+  font-size: 25px;
+  margin: 15px 0px 0px 5px;
+  font-family: Avenir Next;
+}
+#search-wrapper {
+  padding: 20px 30px 0px;
+  margin-bottom: 30px;
+  height: 100%;
+  font-family: Helvetica;
+  font-size: 20px;
+}
+.track-info {
+  max-height: 200px;
+  margin-top: 20px;
+  margin-left: 10%;
+  margin-right: 10%;
+}
+.class-info {
+  max-height: 400px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 10%;
+  margin-right: 10%;
+}
+#track-and-class-selection-wrapper {
+  padding: 20px 30px 20px 30px;
+  margin-bottom: 30px;
+  height: 100%;
+  font-family: Helvetica;
+  font-size: 18px;
+}
+#search-box {
+  width: 400px;
+  padding: 10px;
+  height: 45px;
+  font-size: 16px;
+  margin: 0 auto;
+  display: block;
+}
+#treeDisplayContainer {
+  padding: 20px 30px 0px;
+  margin-bottom: 30px;
+  height: 100%;
+}
+#treeDisplayContainer #leftDisplayContainer {
+  float: left;
+  width: 50%;
+}
+#treeDisplayContainer #rightDisplayContainer {
+  float: left;
+  width: 50%;
+}
+/* basic positioning */
+.legend {
+  list-style: none;
+}
+.legend li {
+  float: right;
+  margin-right: 10px;
+  font-size: 15px;
+}
+.legend span {
+  border: 0px solid #ccc;
+  float: left;
+  width: 20px;
+  height: 12px;
+  margin: 2px 6px 2px 2px;
+}
+/* your colors */
+.legend .cs-classes {
+  background-color: #CC2414;
+}
+.legend .other-classes {
+  background-color: #B2B2B2;
+}
+#main-browse-container {
+  margin-top: 20px;
+  font-family: Helvetica, Arial;
+}
+#main-browse-container #browse-container {
+  display: inline-block;
+  vertical-align: top;
+}
+#main-browse-container #browse-container #search-box {
+  width: 100%;
+  margin-bottom: 10px;
+}
+#main-browse-container #result-info-container {
+  vertical-align: top;
+  display: inline-block;
+}
+#browse-results-container {
+  padding: 15px 30px;
+  width: 700px;
+}
+#browse-results-container #browse-results-list {
+  margin: 0px;
+  padding: 0px;
+}
+#browse-results-container #browse-results-list #perfect-class-match {
+  background-color: pink;
+}
+#browse-results-container .browse-result {
+  list-style-type: none;
+  padding: 15px 15px;
+}
+
+#browse-results-container .result-selected-class {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+#browse-results-container .browse-result + .browse-result {
+  border-top: 1px solid black;
+}
+.placeholder-text {
+  color: #51302E;
+}
+#result-info-container {
+  width: 40%;
+  padding: 10px 30px;
+}
+#result-info-container .result-selected-class {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+#result-info-container .result-relation-title {
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: bold;
+}
+#result-info-container .placeholder-container {
+  color: #51302E;
+  
+}
+#result-info-container li {
+  cursor: pointer;
+  list-style: none;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+#result-info-container li:hover {
+  font-size: 16px;
+}
+.browse-result {
+  color: #484146;
+}
+.browse-result .title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.browse-result .description {
+  display: block;
+  height: 58.8px;
+  font-size: 14px;
+  line-height: 1.4;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.browse-result:hover {
+  background-color: #f1f2f2;
+  cursor: pointer;
+}
+.expand-result {
+  height: auto !important;
+}
+.expand-result .description {
+  overflow: visible;
+  text-overflow: none;
+  height: auto !important;
+}
+.add-class-container {
+  text-align: left;
+}
+.add-class-container button {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  color: white;
+  border-radius: 2px;
+  border: 1px solid #D1D3D4;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 1px;
+  line-height: 1.5;
+  padding: 6px 14px;
+  text-transform: uppercase;
+  background: none repeat scroll 0% 0% #4ab471;
+}
+.add-class-container button.go {
+  background: none repeat scroll 0% 0% #8c190e;
+}
+#classTreeContainer {
+  font-family: Avenir Next;
+  position: absolute;
+}
+#classTreeContainer .klassContainer:hover path,
+#classTreeContainer .klassContainer:hover rect {
+  stroke: #7EC0EE;
+  stroke-width: 5px;
+}
+#classTreeContainer .deleteBtn:hover {
+  display: block;
+}
+#classTreeContainer .klassContainer:hover .deleteBtn {
+  display: block;
+}
+#classTreeContainer path,
+#classTreeContainer rect {
+  opacity: .5;
+}
+#classTreeContainer .deleteBtn {
+  display: none;
+}
+#classTreeContainer .closeModal {
+  position: absolute;
+}
+#classTreeContainer .descriptionModal {
+  position: absolute;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 25px;
+  overflow: scroll;
+}
+#classTreeContainer .descriptionModal .title {
+  padding: 20px 20px 5px;
+  font-weight: bold;
+}
+#classTreeContainer .descriptionModal .description {
+  padding: 20px 20px 0px;
+}
+#classTreeContainer .invisible {
+  display: none;
+}
+#classTreeContainer .focused {
+  border-color: #7EC0EE;
+  border-width: 3px;
+}
+#treeDisplayContainer #List {
+  font-family: Avenir Next;
+}
+#treeDisplayContainer .quarterContainer {
+  padding: 20px 20px;
+  float: left;
+  width: 200px;
+  height: 100px;
+}
+#treeDisplayContainer .quarterContainer .title {
+  text-decoration: underline;
+}
+#treeDisplayContainer .instructions {
+  padding: 2px 8px 10px;
+}
+#treeDisplayContainer .control {
+  padding-left: 5px;
+  display: inline-block;
+  text-align: right;
+}
+#treeDisplayContainer .control .option {
+  display: inline-block;
+  border-radius: 2px;
+  border: 1px solid #D1D3D4;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 1px;
+  line-height: 1.5;
+  padding: 6px 14px;
+  text-transform: uppercase;
+  background: none repeat scroll 0% 0% #e6e7e8;
+  color: #484146;
+  width: 100px;
+  text-align: center;
+  color: white;
+  background-color: #8c1515;
+}
+#treeDisplayContainer .control .option.go {
+  background: none repeat scroll 0% 0% #8c190e;
+}
+#treeDisplayContainer .control .option:hover {
+  background: none repeat scroll 0% 0% #888;
+  color: white;
+}
+#treeDisplayContainer .control .option.selected {
+  background: none repeat scroll 0% 0% #48AA69;
+  border-color: #4AB471;
+  color: white;
+}
+#treeDisplayContainer .control .option:hover {
+  background-color: #af2525;
+}
