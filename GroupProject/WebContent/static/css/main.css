@@ -350,7 +350,7 @@ body {
   color: #51302E;
 }
 #result-info-container {
-  width: 40%;
+  width: 700px;
   padding: 10px 30px;
 }
 #result-info-container .result-selected-class {
