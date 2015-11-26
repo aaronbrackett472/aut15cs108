@@ -308,6 +308,7 @@ body {
 #main-browse-container {
   margin-top: 20px;
   font-family: Helvetica, Arial;
+  width: 100%;
 }
 #main-browse-container #browse-container {
   display: inline-block;
@@ -321,9 +322,14 @@ body {
   vertical-align: top;
   display: inline-block;
 }
+
+#browse-container {
+	width: 45%;
+}
+
 #browse-results-container {
   padding: 15px 30px;
-  width: 700px;
+  
 }
 #browse-results-container #browse-results-list {
   margin: 0px;
@@ -350,7 +356,7 @@ body {
   color: #51302E;
 }
 #result-info-container {
-  width: 700px;
+  width: 45%;
   padding: 10px 30px;
 }
 #result-info-container .result-selected-class {

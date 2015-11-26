@@ -3,31 +3,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" type="text/css" href="static/css/main.css">
+<jsp:include page="include.jsp"/>
 <title>Cardinal Quiz</title>
 </head>
 <body>
-	<header id="site-header">
-		<div id="site-banner">
-			<div id="classpath-title">CardinalQuiz</div>
-			<div id="login-container">
-       			Welcome Back, pat!
-       		</div>
-       	</div>
-      
-      <nav>
-      	<a class="nav-item" href="/GroupProject/index.jsp">Home</a>
-        <a class="nav-item" href="/GroupProject/browse.jsp">Browse Quizzes</a>
-        <a class="nav-item" href="/GroupProject/notifications.jsp">Notifications</a>
-        <a class="nav-item" href="/GroupProject/friends.jsp">Friends</a>
-       <form id="login-form" method="POST" action="/logout/" class="ng-pristine ng-valid">
-               <button type="submit" class="auth-btn">Logout</button>
-              <input type="hidden" name="csrfmiddlewaretoken" value="nBuwSaDva0fVGB5YLyVgaPsX9cRbUmZV">
-       </form>
-       </nav>
-
-    </header>
+	<jsp:include page="header.jsp"/>
     <main>
     <div>
     	<div id="main-browse-container">
@@ -35,9 +15,13 @@
   
     <div id="browse-results-container">
     <div class="result-selected-class">Latest Quizzes</div>	
-      <input ng-change="searchChange()" ng-model="query" id="search-box" placeholder="Search by keywords or class code (i.e. CS106A)" class="ng-pristine ng-untouched ng-valid">
+      <input id="search-box" placeholder="Search by keywords or class code" class="">
       <ul id="browse-results-list">
-        <!-- ngRepeat: class in classes | filter:query | orderBy:'code' --><li class="browse-result ng-scope" ng-repeat="class in classes | filter:query | orderBy:'code'" ng-click="toggleResult($event)">
+      
+      <% 
+      %>
+      
+        <li class="browse-result ng-scope">
           <div class="title">Math 51 Midterm 1 Quiz</div>
           <div ng-show="class.description" class="description ng-binding">Created by Pat. Taken 25 times</div>
         </li><!-- end ngRepeat: class in classes | filter:query | orderBy:'code' --><li class="browse-result ng-scope" ng-repeat="class in classes | filter:query | orderBy:'code'" ng-click="toggleResult($event)">
@@ -49,7 +33,9 @@
         </li><!-- end ngRepeat: class in classes | filter:query | orderBy:'code' --><li class="browse-result ng-scope" ng-repeat="class in classes | filter:query | orderBy:'code'" ng-click="toggleResult($event)">
           <div class="title ng-binding">CS107 Final Quiz</div>
           <div ng-show="class.description" class="description ng-binding">Created by Pat. Taken 22 times</div>
-        </li><!-- end ngRepeat: class in classes | filter:query | orderBy:'code' -->
+        </li>
+        <%
+        %>
       </ul>
     </div>
   </div>
