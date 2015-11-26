@@ -269,6 +269,20 @@ body {
   margin: 0 auto;
   display: block;
 }
+
+#answer-input-box {
+  width: 400px;
+  padding: 10px;
+  height: 30px;
+  font-size: 16px;
+  margin: 0px;
+  display: block;
+}
+
+.picture-response {
+	padding: 10px 0px 10px 0px;
+}
+
 #treeDisplayContainer {
   padding: 20px 30px 0px;
   margin-bottom: 30px;

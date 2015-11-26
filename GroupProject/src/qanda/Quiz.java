@@ -68,7 +68,7 @@ public class Quiz {
 		}
 		
 		// Populate questions vector.
-		resultSet = connection.executeQuery("SELECT * FROM questions WHERE quizID LIKE " + id + ";");
+		resultSet = connection.executeQuery("SELECT * FROM " + Question.questionTable + " WHERE quizID LIKE " + id + ";");
 		try {
 			while (resultSet.next()) {
 				questions.add(new Question(resultSet.getInt("id")));

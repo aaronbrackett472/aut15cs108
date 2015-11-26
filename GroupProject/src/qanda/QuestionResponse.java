@@ -23,4 +23,5 @@ public class QuestionResponse extends Question {
 		}
 		return 0;
 	}
+	
 }
