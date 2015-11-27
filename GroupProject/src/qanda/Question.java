@@ -87,4 +87,20 @@ public class Question {
 		return 1;
 	};
 	
+	public String getQuestionHTML(int questionOrder) {
+		return "<div class=\"result-selected-class\">" + Integer.toString(questionOrder+1) + ". " + this.question + "</div>";
+	}
+	
+	public String getResponseInputHTML() {
+		return "<input id=\"answer-input-box\" type=\"text\" name=\"response-" + this.id + "\" placeholder=\"Your Answer\" />";
+	}
+	
+	public String getType() {
+		return this.type;
+	}
+	
+	public int getQuestionId(){
+		return this.id;
+	}
+	
 }

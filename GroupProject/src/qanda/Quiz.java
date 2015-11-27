@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import database.DatabaseConnection;
 
@@ -29,8 +30,8 @@ public class Quiz {
 	 */
 	public static int create(String name, boolean random, boolean singlePage, boolean immediateCorrection) {
 		DatabaseConnection connection = new DatabaseConnection();
-		connection.executeUpdate("INSERT INTO quizzes (name, randomorder, singlepage, immediatecorrection) VALUES(" +
-				name + ", " + (random ? 1 : 0) + ", " + (singlePage ? 1 : 0) + ", " + (immediateCorrection ? 1 : 0) + ");");
+		connection.executeUpdate("INSERT INTO quizzes (name, randomorder, singlepage, immediatecorrection) VALUES('" +
+				name + "', '" + (random ? 1 : 0) + "', '" + (singlePage ? 1 : 0) + "', '" + (immediateCorrection ? 1 : 0) + "');");
 		int id = -1;
 		ResultSet resultSet = connection.executeQuery("SELECT * FROM quizzes;");
 		try {
@@ -68,7 +69,7 @@ public class Quiz {
 		}
 		
 		// Populate questions vector.
-		resultSet = connection.executeQuery("SELECT * FROM questions WHERE quizID LIKE " + id + ";");
+		resultSet = connection.executeQuery("SELECT * FROM " + Question.questionTable + " WHERE quizID LIKE " + id + ";");
 		try {
 			while (resultSet.next()) {
 				questions.add(new Question(resultSet.getInt("id")));
@@ -98,5 +99,36 @@ public class Quiz {
 	
 	public Question getQuestionAtIndex(int index) {
 		return questions.get(index);
+	}
+	
+	public String getName() {
+		return this.name;
+	}
+	
+	public int getId() {
+		return this.id;
+	}
+	
+	/*
+	 * New method - return x most recent quizzes
+	 * Used by homepage and the browse quiz page (w/ different limit)
+	 * @param limit - how many quizzes should be returned
+	 * @return List<Quiz> - a list of Quiz objects
+	 */
+	public static List<Quiz> getRecentQuizzes(int limit) {
+		DatabaseConnection connection = new DatabaseConnection();
+		
+		ResultSet resultSet = connection.executeQuery("SELECT * FROM quizzes ORDER BY id DESC LIMIT "+ Integer.toString(limit) + ";");
+		List<Quiz> quizzes = new ArrayList<Quiz>(limit);
+		try {
+			while (resultSet.next()) {
+				quizzes.add(new Quiz(resultSet.getInt("id")));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		connection.close();
+		return quizzes;
 	}
 }

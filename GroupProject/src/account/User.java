@@ -1,7 +1,9 @@
-package QuizProject;
+package account;
+//package QuizProject;
 
 import java.util.*;
-import databaseConnection.*;
+
+import database.DatabaseConnection;
 import java.sql.*;
 
 /**

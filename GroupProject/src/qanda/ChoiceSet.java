@@ -66,12 +66,13 @@ public class ChoiceSet {
 	int saveToDatabase(){
 		
 		int id = -1;
+		int choiceIndex = 0;
 		DatabaseConnection connection = new DatabaseConnection();
 		for(Pair<String, Boolean> choice: choicesList) {
-			String query = "INSERT INTO " + choicesTable + " (questionId, choice, isCorrect) VALUES('" + 
-			this.questionId + "', '" + choice.getKey() + "', '" + convertBooleanToInt(choice.getValue()) + "');";
-			//System.out.println(query);
+			String query = "INSERT INTO " + choicesTable + " (questionId, choice, choiceIndex, isCorrect) VALUES('" + 
+			this.questionId + "', '" + choice.getKey() + "', '" +  choiceIndex + "', '" + convertBooleanToInt(choice.getValue()) + "');";
 			connection.executeUpdate(query);
+			choiceIndex++;
 		}
 		
 		ResultSet resultSet = connection.executeQuery("SELECT * FROM " + choicesTable + " WHERE questionId ='" + this.questionId + "';");

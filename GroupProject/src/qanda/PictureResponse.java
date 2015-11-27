@@ -20,5 +20,10 @@ public class PictureResponse extends Question {
 		}
 		return 0;
 	}
+	
+	@Override
+	public String getQuestionHTML(int questionOrder) {
+		return "<div class=\"result-selected-class\">" + Integer.toString(questionOrder+1) + ". " + this.question + "</div>" + "<img src=\"" + this.imageUrl + "\" class=\"picture-response\" />";
+	}
 
 }
