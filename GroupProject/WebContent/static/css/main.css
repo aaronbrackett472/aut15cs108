@@ -406,7 +406,7 @@ body {
 }
 .browse-result .description {
   display: block;
-  height: 58.8px;
+  height: 30px;
   font-size: 14px;
   line-height: 1.4;
   -webkit-line-clamp: 3;

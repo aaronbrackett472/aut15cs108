@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" %>
+    pageEncoding="UTF-8" import="qanda.*, java.util.List" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -17,21 +17,17 @@
     <div class="result-selected-class">Latest Quizzes</div>	
       <input id="search-box" placeholder="Search by keywords or class code" class="">
       <ul id="browse-results-list">
-
+        <%
+        	List<Quiz> recentQuizzes = Quiz.getRecentQuizzes(10);
+        	for (Quiz q: recentQuizzes) {
+        %>
+        
         <li class="browse-result ng-scope">
-          <div class="title">Math 51 Midterm 1 Quiz</div>
-          <div ng-show="class.description" class="description ng-binding">Created by Pat. Taken 25 times</div>
-        </li><!-- end ngRepeat: class in classes | filter:query | orderBy:'code' --><li class="browse-result ng-scope" ng-repeat="class in classes | filter:query | orderBy:'code'" ng-click="toggleResult($event)">
-          <div class="title ng-binding">Physics 43 Final Quiz</div>
-          <div ng-show="class.description" class="description ng-binding">Created by Pat. Taken 37 times</div>
-        </li><!-- end ngRepeat: class in classes | filter:query | orderBy:'code' --><li class="browse-result ng-scope" ng-repeat="class in classes | filter:query | orderBy:'code'" ng-click="toggleResult($event)">
-          <div class="title ng-binding">CS103 Midterm Quiz</div>
-          <div ng-show="class.description" class="description ng-binding">Created by Pat. Taken 88 times</div>
-        </li><!-- end ngRepeat: class in classes | filter:query | orderBy:'code' --><li class="browse-result ng-scope" ng-repeat="class in classes | filter:query | orderBy:'code'" ng-click="toggleResult($event)">
-          <div class="title ng-binding">CS107 Final Quiz</div>
-          <div ng-show="class.description" class="description ng-binding">Created by Pat. Taken 22 times</div>
+          <div class="title"><a href="showquiz.jsp?id=<% out.print(q.getId()); %>"><% out.print(q.getName()); %></a></div>
+          <div ng-show="class.description" class="description ng-binding">Created by NA on MM/DD/YYYY. Taken XX times</div>
         </li>
         <%
+        	}
         %>
       </ul>
     </div>
