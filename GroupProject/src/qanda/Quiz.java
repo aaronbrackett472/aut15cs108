@@ -12,25 +12,25 @@ public class Quiz {
 	private int numQuestions;
 	private int id;
 	private String name;
-	private boolean random;
+	private boolean randomOrder;
 	private boolean singlePage;
 	private boolean immediateCorrection;
+	private boolean practiceModeAllowed;
 	
 	ArrayList<Question> questions;
 	
 	/**
 	 * Creates a quiz in the database, and returns its database ID.
-	 * 
-	 * @param name
-	 * @param random
-	 * @param singlePage
-	 * @param immediateCorrection
-	 * @return
+	 * @return quiz database ID, -1 on database error
 	 */
-	public static int create(String name, boolean random, boolean singlePage, boolean immediateCorrection) {
+	public static int createQuiz(String name, boolean randomOrder, boolean singlePage, boolean immediateCorrection, boolean practiceModeAllowed) {
 		DatabaseConnection connection = new DatabaseConnection();
-		connection.executeUpdate("INSERT INTO quizzes (name, randomorder, singlepage, immediatecorrection) VALUES(" +
-				name + ", " + (random ? 1 : 0) + ", " + (singlePage ? 1 : 0) + ", " + (immediateCorrection ? 1 : 0) + ");");
+		connection.executeUpdate("INSERT INTO quizzes (name, randomOrder, singlePage, immediateCorrection, practiceModeAllowed) VALUES ("
+				+ "\"" + name + "\", "
+				+ (randomOrder ? 1 : 0) + ", " 
+				+ (singlePage ? 1 : 0) + ", " 
+				+ (immediateCorrection ? 1 : 0) + ", " 
+				+ (practiceModeAllowed ? 1 : 0) + ");");
 		int id = -1;
 		ResultSet resultSet = connection.executeQuery("SELECT * FROM quizzes;");
 		try {
@@ -45,7 +45,7 @@ public class Quiz {
 	}
 	
 	/**
-	 * Constructs a QUiz object using database ID id.
+	 * Constructs a Quiz object using database ID id.
 	 * @param id
 	 */
 	public Quiz(int id) {
@@ -59,9 +59,10 @@ public class Quiz {
 		try {
 			resultSet.first();
 			this.name = resultSet.getString("name");
-			this.random = resultSet.getBoolean("randomorder");
-			this.singlePage = resultSet.getBoolean("singlepage");
-			this.immediateCorrection = resultSet.getBoolean("immediatecorrection");
+			this.randomOrder = resultSet.getBoolean("randomOrder");
+			this.singlePage = resultSet.getBoolean("singlePage");
+			this.immediateCorrection = resultSet.getBoolean("immediateCorrection");
+			this.practiceModeAllowed = resultSet.getBoolean("practiceModeAllowed");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -79,7 +80,7 @@ public class Quiz {
 		}
 		
 		// Shuffle questions if random order specified.
-		if (random) Collections.shuffle(questions);
+		if (randomOrder) Collections.shuffle(questions);
 		
 		connection.close();
 	}
@@ -90,6 +91,10 @@ public class Quiz {
 	
 	public boolean useImmediateCorrection() {
 		return immediateCorrection;
+	}
+	
+	public boolean practiceModeAllowed() {
+		return practiceModeAllowed;
 	}
 	
 	public int getNumQuestions() {
