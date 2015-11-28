@@ -3,11 +3,35 @@ use c_cs108_mateog;
 DROP TABLE IF EXISTS Choices;
 DROP TABLE IF EXISTS Questions;
 DROP TABLE IF EXISTS Quizzes;
+DROP TABLE IF EXISTS History;
+DROP TABLE IF EXISTS Achievement;
+DROP TABLE IF EXISTS Friendship;
 DROP TABLE IF EXISTS Accounts;
 
 CREATE TABLE Accounts (
-	username VARCHAR(64) NOT NULL,
+	username VARCHAR(64) NOT NULL PRIMARY KEY,
 	password VARCHAR(64) NOT NULL
+);
+
+CREATE TABLE Friendship (
+	username1 VARCHAR(64),
+	FOREIGN KEY (username1) REFERENCES Accounts(username),
+	username2 VARCHAR(64),
+	FOREIGN KEY (username2) REFERENCES Accounts(username)
+);
+
+CREATE TABLE Achievement (
+	username VARCHAR(64),
+	FOREIGN KEY (username) REFERENCES Accounts(username),
+	achivementName VARCHAR(64),
+	timeAcquired VARCHAR(64)
+);
+
+CREATE TABLE History (
+	username VARCHAR(64),
+	FOREIGN KEY (username) REFERENCES Accounts(username),
+	score INT,
+	timeAcquired TIMESTAMP
 );
 
 CREATE TABLE Quizzes (
@@ -19,6 +43,7 @@ CREATE TABLE Quizzes (
      practiceModeAllowed BOOL,
      takenCounter INT NOT NULL DEFAULT 0,
      createdBy VARCHAR(64) NOT NULL,
+     FOREIGN KEY (createdBy) REFERENCES Accounts(username),
      createdDate TIMESTAMP
 );
 

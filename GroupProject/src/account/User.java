@@ -18,9 +18,9 @@ public class User{
 	private AccountManager accounts;
 	
 	//Constants
-	private static String friendshipTable = "friendship";
-	private static String achievementsTable = "achivements";
-	private static String historyTable = "history";
+	private static String friendshipTable = "Friendship";
+	private static String achievementsTable = "Achievement";
+	private static String historyTable = "History";
 
 	
 	/**
@@ -32,27 +32,27 @@ public class User{
 		statement = connection.getStatement();
 		accounts =  new AccountManager();
 		
-		//Add a frindship, achivements, history tables if they dont exist
-		String friendshipQuerry = "CREATE TABLE IF NOT EXISTS " + friendshipTable +
-								  " (username1 CHAR(64), " +
-								  " username2 CHAR(64) )";
-		String achievementQuerry = "CREATE TABLE IF NOT EXISTS " + achievementsTable +
-				  				   " (username CHAR(64), " +
-				  				   " achivementName CHAR(64), " +
-				  				   " timeAcquired CHAR(64) )";
-		String historyQuerry = "CREATE TABLE IF NOT EXISTS " + historyTable +
-							   " (username CHAR(64), " +
-							   " score CHAR(64), " +
-							   " timeAcquired CHAR(64) )";
-		
-		try{
-			statement.executeUpdate(friendshipQuerry);
-			statement.executeUpdate(achievementQuerry);
-			statement.executeUpdate(historyQuerry);
-		} catch(SQLException e) {
-			e.printStackTrace();
-		}
-		
+		//Add a friendship, achievements, history tables if they don't exist
+//		String friendshipQuerry = "CREATE TABLE IF NOT EXISTS " + friendshipTable +
+//								  " (username1 CHAR(64), " +
+//								  " username2 CHAR(64) )";
+//		String achievementQuerry = "CREATE TABLE IF NOT EXISTS " + achievementsTable +
+//				  				   " (username CHAR(64), " +
+//				  				   " achivementName CHAR(64), " +
+//				  				   " timeAcquired CHAR(64) )";
+//		String historyQuerry = "CREATE TABLE IF NOT EXISTS " + historyTable +
+//							   " (username CHAR(64), " +
+//							   " score CHAR(64), " +
+//							   " timeAcquired CHAR(64) )";
+//		
+//		try{
+//			statement.executeUpdate(friendshipQuerry);
+//			statement.executeUpdate(achievementQuerry);
+//			statement.executeUpdate(historyQuerry);
+//		} catch(SQLException e) {
+//			e.printStackTrace();
+//		}
+//		
 	}
 
 	/**
@@ -95,7 +95,7 @@ public class User{
 
 	/**
 	 * Returns performance history items of this user
-	 * @return history perfomance history
+	 * @return history performance history
 	 */
 	public ArrayList<HistoryItem> getPerfomanceHistory() {
 		ArrayList<HistoryItem> history =  new ArrayList<HistoryItem>();

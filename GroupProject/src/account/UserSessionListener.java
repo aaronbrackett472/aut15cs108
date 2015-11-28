@@ -1,10 +1,13 @@
 //package QuizProject;
 package account;
 
+import javax.servlet.ServletContext;
 import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
+
+import database.DatabaseConnection;
 
 /**
  * Application Lifecycle Listener implementation class UserSessionListener
@@ -29,9 +32,11 @@ public class UserSessionListener implements HttpSessionListener {
      * @see HttpSessionListener#sessionCreated(HttpSessionEvent)
      */
     public void sessionCreated(HttpSessionEvent arg0)  {
-       accounts = new AccountManager();
-       HttpSession session =  arg0.getSession();
-       session.setAttribute(ACCOUNTS_CONTEXT_ATTRIBUTE, accounts);
+    	
+    	accounts = new AccountManager();
+    	HttpSession session =  arg0.getSession();
+    	session.setAttribute(ACCOUNTS_CONTEXT_ATTRIBUTE, accounts);
+    	System.out.println("Session Created!");
     }
 
 	/**

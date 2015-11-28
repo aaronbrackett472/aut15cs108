@@ -20,8 +20,8 @@ public class AccountManager{
 	 * Constructor
 	 */
 	public AccountManager(){
-//		connection = new DatabaseConnection();
-//		
+		connection = new DatabaseConnection();
+		
 //		//Create tables if they dont already exist
 //		Statement statement =  connection.getStatement();
 //		String accountsQuerry = "CREATE TABLE IF NOT EXISTS " + accountsTable +
