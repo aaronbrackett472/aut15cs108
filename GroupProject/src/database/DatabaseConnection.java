@@ -5,6 +5,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class DatabaseConnection {
 	
@@ -51,6 +54,19 @@ public class DatabaseConnection {
 			e.printStackTrace();
 		}
 		return resultSet;
+	}
+	/**
+	 * Makes sure that SQL statements are valid
+	 * @param input
+	 * @return
+	 */
+	public String escape(String input) {
+		String output = input;
+		if(input != null){
+		//may need to do addition substitutions in addition to single quote...
+			output = input.replace("'", "\\\'");
+		}
+		return output;
 	}
 	
 	public void close() {
