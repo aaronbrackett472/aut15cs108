@@ -11,7 +11,7 @@ import java.sql.*;
  *
  */
 public class User{
-	//Instanc variables
+	//Instance variables
 	private String username;
 	private DatabaseConnection connection;
 	private Statement statement;

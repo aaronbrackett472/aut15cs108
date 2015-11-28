@@ -38,7 +38,7 @@ public class UserSessionListener implements HttpSessionListener {
      * @see HttpSessionListener#sessionDestroyed(HttpSessionEvent)
      */
     public void sessionDestroyed(HttpSessionEvent arg0)  { 
-//        accounts.closeConnections();
+        accounts.closeConnections();
     }
 	
 }
