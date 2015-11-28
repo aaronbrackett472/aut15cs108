@@ -26,9 +26,7 @@ public class Quiz {
 	private Date createdDate;
 	
 	ArrayList<Question> questions;
-	
-	
-	
+
 	/**
 	 * Creates a quiz in the database, and returns its database ID.
 	 * 
@@ -71,7 +69,7 @@ public class Quiz {
 		this.id = id;
 		this.questions = new ArrayList<Question>();
 		
-		//DatabaseConnection connection = new DatabaseConnection();
+		DatabaseConnection connection2 = new DatabaseConnection();
 		ResultSet resultSet = connection.executeQuery("SELECT * FROM " + quizzesTable + " WHERE id LIKE " + id + ";");
 		
 		// Fill in state variables.
@@ -94,7 +92,7 @@ public class Quiz {
 		resultSet = connection.executeQuery("SELECT * FROM " + Question.questionTable + " WHERE quizID LIKE " + id + ";");
 		try {
 			while (resultSet.next()) {
-				questions.add(new Question(connection, resultSet.getInt("id")));
+				questions.add(new Question(connection2, resultSet.getInt("id")));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -104,7 +102,7 @@ public class Quiz {
 		// Shuffle questions if random order specified.
 		if (random) Collections.shuffle(questions);
 		
-		//connection.close();
+		connection2.close();
 	}
 	
 	public boolean useSinglePage() {
@@ -150,19 +148,21 @@ public class Quiz {
 	 * @return List<Quiz> - a list of Quiz objects
 	 */
 	public static List<Quiz> getRecentQuizzes(DatabaseConnection connection, int limit) {
-		//DatabaseConnection connection = new DatabaseConnection();
 		
-		ResultSet resultSet = connection.executeQuery("SELECT * FROM " + quizzesTable + " ORDER BY id DESC LIMIT "+ Integer.toString(limit) + ";");
+		String queryString = "SELECT * FROM " + quizzesTable + " ORDER BY id DESC LIMIT "+ Integer.toString(limit) + ";";
+		DatabaseConnection connection2 = new DatabaseConnection();
+		
+		ResultSet resultSet = connection.executeQuery(queryString);
 		List<Quiz> quizzes = new ArrayList<Quiz>(limit);
 		try {
 			while (resultSet.next()) {
-				quizzes.add(new Quiz(connection, resultSet.getInt("id")));
+				quizzes.add(new Quiz(connection2, resultSet.getInt("id")));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//connection.close();
+		connection2.close();
 		return quizzes;
 	}
 }
