@@ -19,11 +19,12 @@ public class Question {
 	String question, correctAnswer, imageUrl, type;
 	
 	private Statement statement;
-	private DatabaseConnection connection;
+	protected DatabaseConnection connection;
 	
 	// This needs to work across multiple questions type
-	static int saveToDatabase(int quizId, String type, int score, String question, String correctAnswer, String imageUrl){
-		DatabaseConnection connection = new DatabaseConnection();
+	static int saveToDatabase(DatabaseConnection connection, int quizId, String type, int score, String question, String correctAnswer, String imageUrl){
+		//DatabaseConnection connection = new DatabaseConnection();
+		
 		String query = "INSERT INTO " + questionTable + " (quizId, type, score, question, correctAnswer, imageUrl) VALUES('" +
 			quizId + "', '" + type + "', '" + score + "', '" + question + "', '" + correctAnswer + "', '" + imageUrl;
 		
@@ -40,16 +41,14 @@ public class Question {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		connection.close();
+		
 		return id;
 	}
 	
 	// Get all questions given a quiz id
-	static ResultSet getQuestionsByQuizId(int quizId) {
-		DatabaseConnection connection = new DatabaseConnection();
+	static ResultSet getQuestionsByQuizId(DatabaseConnection connection, int quizId) {
 		ResultSet resultSet = connection.executeQuery("SELECT * FROM " + questionTable + " WHERE quizId = '" + quizId + "';");
 		return resultSet;
-		
 	}
 	
 	public Question() {
@@ -60,9 +59,12 @@ public class Question {
 	 * When initialized given an int id, it will fetch other values from the db 
 	 * To use each of the question
 	 */
-	public Question(int id) {
+	public Question(DatabaseConnection connection, int id) {
 		this.id = id;
-		DatabaseConnection connection = new DatabaseConnection();
+		
+		// Storing a connection - is this a good idea? What if it gets closed?
+		this.connection = connection;
+		
 		ResultSet resultSet = connection.executeQuery("SELECT * FROM " + questionTable + " WHERE id = '" + id + "';");
 		try {
 			resultSet.first();

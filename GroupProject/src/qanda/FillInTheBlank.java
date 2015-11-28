@@ -10,8 +10,8 @@ public class FillInTheBlank extends Question {
 	private static final String blankCharacter = "@@@@";
 	private static final String blankReplacementHTML = "_______";
 	
-	public FillInTheBlank(int id) {
-		super(id);
+	public FillInTheBlank(DatabaseConnection connection, int id) {
+		super(connection, id);
 	}
 	
 	@Override

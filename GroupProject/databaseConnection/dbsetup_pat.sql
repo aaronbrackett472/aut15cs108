@@ -2,12 +2,32 @@ use c_cs108_mateog;
 
 DROP TABLE IF EXISTS Choices;
 DROP TABLE IF EXISTS Questions;
+DROP TABLE IF EXISTS Quizzes;
+DROP TABLE IF EXISTS Accounts;
+
+CREATE TABLE Accounts (
+	username VARCHAR(64) NOT NULL,
+	password VARCHAR(64) NOT NULL
+);
+
+CREATE TABLE Quizzes (
+     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+     name VARCHAR(64),
+     randomOrder BOOL,
+     singlePage BOOL,
+     immediateCorrection BOOL,
+     practiceModeAllowed BOOL,
+     takenCounter INT NOT NULL DEFAULT 0,
+     createdBy VARCHAR(64) NOT NULL,
+     createdDate TIMESTAMP
+);
+
 
 -- Represents all questions in the website
 CREATE TABLE Questions (
 	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	quizId BIGINT NOT NULL,
-	FOREIGN KEY (quizId) REFERENCES quizzes(id),
+	quizId INT NOT NULL,
+	FOREIGN KEY (quizId) REFERENCES Quizzes(id),
 	type VARCHAR(255) NOT NULL,
 	score INT NOT NULL,
 	question VARCHAR(255),
@@ -24,6 +44,15 @@ CREATE TABLE Choices (
 	choiceIndex INT NOT NULL,
 	isCorrect BOOLEAN NOT NULL
 );
+
+-- Sample user
+INSERT INTO Accounts (username, password) VALUES("pat", "patpatpat");
+INSERT INTO Accounts (username, password) VALUES("eric", "1234");
+
+-- Sample quiz
+INSERT INTO Quizzes (name, randomOrder, singlePage, immediateCorrection, practiceModeAllowed, takenCounter, createdBy, createdDate) VALUES ("TV Shows Trivia", 0, 1, 0, 0, 0, "pat", "2015-11-23 06:15:00");
+INSERT INTO Quizzes (name, randomOrder, singlePage, immediateCorrection, practiceModeAllowed, takenCounter, createdBy, createdDate) VALUES ("CS 108 Quiz", 0, 1, 0, 0, 0, "eric", "2015-11-24 17:10:00");
+INSERT INTO Quizzes (name, randomOrder, singlePage, immediateCorrection, practiceModeAllowed, takenCounter, createdBy, createdDate) VALUES ("Another Awesome Quiz", 0, 1, 0, 0, 0, "pat", "2015-11-25 16:15:00");
 
 -- Sample question
 INSERT INTO Questions(quizId, type, score, question, correctAnswer, imageUrl) VALUES (1, "Response", 1, "Who is your daddy?", "Pat", "");

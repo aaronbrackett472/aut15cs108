@@ -24,7 +24,7 @@
         
         <li class="browse-result ng-scope">
           <div class="title"><a href="showquiz.jsp?id=<% out.print(q.getId()); %>"><% out.print(q.getName()); %></a></div>
-          <div ng-show="class.description" class="description ng-binding">Created by NA on MM/DD/YYYY. Taken XX times</div>
+          <div class="description ng-binding">Created by <% out.print(q.getCreator()); %> on <% out.print(q.getCreationDate()); %>. Taken <% out.print(q.getTakenCount()); %> times</div>
         </li>
         <%
         	}

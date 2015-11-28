@@ -148,7 +148,7 @@ public class User{
 
 	/**
 	 * Returns the a list of achievement titles held by this user
-	 * @return achivements
+	 * @return achievements
 	 */	
 	public ArrayList<Achievement> getAchievements() {
 		ArrayList<Achievement> achievements = new ArrayList<Achievement>();

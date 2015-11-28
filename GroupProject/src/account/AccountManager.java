@@ -6,32 +6,32 @@ import java.sql.*;
 
 /**
  * Keeps track of all user accounts for the quiz project.
- * Supports registration, acess and verification of acount user information
+ * Supports registration, access and verification of account user information
  *
  */
 
 public class AccountManager{
-	//Instance varibles
+	//Instance variables
 	private DatabaseConnection connection;
-	private static String accountsTable = "accounts";
+	private static String accountsTable = "Accounts";
 	
 
 	/**
 	 * Constructor
 	 */
 	public AccountManager(){
-		connection = new DatabaseConnection();
-		
-		//Create tables if they dont already exist
-		Statement statement =  connection.getStatement();
-		String accountsQuerry = "CREATE TABLE IF NOT EXISTS " + accountsTable +
-								" (username CHAR(64), " +
-								" password CHAR(64) )" ; 
-		try{
-			statement.executeUpdate(accountsQuerry);
-		} catch(SQLException e) {
-			e.printStackTrace();
-		}
+//		connection = new DatabaseConnection();
+//		
+//		//Create tables if they dont already exist
+//		Statement statement =  connection.getStatement();
+//		String accountsQuerry = "CREATE TABLE IF NOT EXISTS " + accountsTable +
+//								" (username CHAR(64), " +
+//								" password CHAR(64) )" ; 
+//		try{
+//			statement.executeUpdate(accountsQuerry);
+//		} catch(SQLException e) {
+//			e.printStackTrace();
+//		}
 		
 	}
 
@@ -122,7 +122,7 @@ public class AccountManager{
 	}
 	
 	/**
-	 * Closes datatbase connections
+	 * Closes database connections
 	 * To be called after the user of Account Manager is done using the 
 	 * this class
 	 */

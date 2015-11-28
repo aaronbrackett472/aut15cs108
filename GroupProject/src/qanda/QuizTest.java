@@ -4,11 +4,14 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import database.DatabaseConnection;
+
 public class QuizTest {
 
 	@Test
 	public void testCreate() {
-		Quiz.create("Just another stupid quiz 1", false, false, false);
+		DatabaseConnection connection = new DatabaseConnection();
+		Quiz.create(connection, "awesome unittest quiz 1", false, false, false, false, "pat");
 		//fail("Not yet implemented");
 	}
 

@@ -8,8 +8,8 @@ import database.DatabaseConnection;
 public class PictureResponse extends Question {
 
 
-	public PictureResponse(int id){
-		super(id);
+	public PictureResponse(DatabaseConnection connection, int id){
+		super(connection, id);
 	}
 		
 	@Override

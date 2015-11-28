@@ -3,11 +3,14 @@ package qanda;
 import java.io.IOException;
 import java.util.Enumeration;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import database.DatabaseConnection;
 
 /**
  * Servlet implementation class QuizGrader
@@ -39,6 +42,8 @@ public class QuizGrader extends HttpServlet {
 		// TODO Auto-generated method stub
 		//doGet(request, response);
 		int totalScore = 0;
+		ServletContext context = request.getServletContext();
+		DatabaseConnection connection = (DatabaseConnection) context.getAttribute("databaseconnection");
 		
 		// Check if logged in
 		Enumeration<String> attrList = request.getParameterNames();
@@ -50,9 +55,9 @@ public class QuizGrader extends HttpServlet {
 				int questionId = Integer.parseInt(attrName.substring(attrName.lastIndexOf("-") + 1));
 				int score;
 				String questionResponse = request.getParameter(attrName);
-				Question currentQuestion = new Question(questionId);
+				Question currentQuestion = new Question(connection, questionId);
 				if(currentQuestion.getType().equals("MultipleChoice")){
-					MultipleChoice q = new MultipleChoice(currentQuestion.getQuestionId());
+					MultipleChoice q = new MultipleChoice(connection, currentQuestion.getQuestionId());
 					score = q.evaluateAnswer(questionResponse);
 				} else {
 					score = currentQuestion.evaluateAnswer(questionResponse);
