@@ -119,4 +119,13 @@ public class AccountManager{
 		}
 		return false;
 	}
+	
+	/**
+	 * Closes datatbase connections
+	 * To be called after the user of Account Manager is done using the 
+	 * this class
+	 */
+	public void closeConnections() {
+		connection.close();
+	}
 }
