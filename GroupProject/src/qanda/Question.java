@@ -82,10 +82,12 @@ public class Question {
 		return true;
 	}
 	
-	// Dummy implementation - will always be overridden
-	int evaluateAnswer(Answer answer) {
-		return 1;
-	};
+	public int evaluateAnswer(String answer) {
+		if (answer.trim().toLowerCase().equals(correctAnswer.trim().toLowerCase())){
+			return this.score;
+		}
+		return 0;
+	}
 	
 	public String getQuestionHTML(int questionOrder) {
 		return "<div class=\"result-selected-class\">" + Integer.toString(questionOrder+1) + ". " + this.question + "</div>";

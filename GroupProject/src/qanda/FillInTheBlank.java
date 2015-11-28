@@ -20,15 +20,6 @@ public class FillInTheBlank extends Question {
 		if (!question.contains(blankCharacter))return false;
 		return true;
 	}
-
-	@Override
-	public int evaluateAnswer(Answer answer) {
-		StringAnswer stringAnswer = (StringAnswer) answer;
-		if (stringAnswer.getResponse().equals(correctAnswer)){
-			return this.score;
-		}
-		return 0;
-	}
 	
 	@Override
 	public String getQuestionHTML(int questionOrder) {

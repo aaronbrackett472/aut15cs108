@@ -15,13 +15,4 @@ public class QuestionResponse extends Question {
 		super(id);
 	}
 	
-	@Override
-	public int evaluateAnswer(Answer answer) {
-		StringAnswer stringAnswer = (StringAnswer) answer;
-		if (stringAnswer.getResponse().equals(correctAnswer)){
-			return this.score;
-		}
-		return 0;
-	}
-	
 }

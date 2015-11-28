@@ -14,7 +14,7 @@ if(request.getParameter("id") == null){
 <html>
 <head>
 	<jsp:include page="include.jsp"/>
-	<title>Quiz: <% out.print(quizId); %></title>
+	<title>Quiz: <% out.print(currentQuiz.getName()); %></title>
 </head>
 <body>
 	<jsp:include page="header.jsp"/>
@@ -24,7 +24,7 @@ if(request.getParameter("id") == null){
   			<div id="browse-container">
   
     			<div id="browse-results-container">
-    			<form action="submitquiz">
+    			<form action="QuizGrader" name="quiz-response" method="POST">
 <%
 
  for (int i = 0; i < currentQuiz.getNumQuestions(); i++) {
@@ -61,7 +61,10 @@ if(request.getParameter("id") == null){
 	
 }  
 %>
-			</form>
+	<div class="add-class-container">
+      <button type="submit" value="Submit">Grade My Quiz!</button>
+    </div>
+    </form>
 			</div>
 		</div>
 	</div>

@@ -396,9 +396,16 @@ body {
 #result-info-container li:hover {
   font-size: 16px;
 }
+
+#choice-list {
+	padding: 4px 2px 4px 0px;
+	list-style-type: none;
+}
+
 .browse-result {
   color: #484146;
 }
+
 .browse-result .title {
   font-size: 16px;
   font-weight: bold;

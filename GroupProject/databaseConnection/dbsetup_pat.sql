@@ -32,7 +32,7 @@ INSERT INTO Questions(quizId, type, score, question, correctAnswer, imageUrl) VA
 INSERT INTO Questions(quizId, type, score, question, correctAnswer, imageUrl) VALUES (1, "Picture", 1, "Who is this actress? (First name)", "Lisa", "https://upload.wikimedia.org/wikipedia/en/f/f6/Friendsphoebe.jpg");
 INSERT INTO Questions(quizId, type, score, question, correctAnswer, imageUrl) VALUES (1, "MultipleChoice", 1, "Who plays Rachel Green in Friends?", "", "");
 
-INSERT INTO Choices(questionId, choice, choiceIndex, isCorrect) VALUES (5, "Lisa Kudrow", 0, 0);
-INSERT INTO Choices(questionId, choice, choiceIndex, isCorrect) VALUES (5, "Jennifer Aniston", 1, 0);
-INSERT INTO Choices(questionId, choice, choiceIndex, isCorrect) VALUES (5, "Courtney Cox", 2, 0);
-INSERT INTO Choices(questionId, choice, choiceIndex, isCorrect) VALUES (5, "Sigourney Weaver", 3, 0);
+INSERT INTO Choices(questionId, choice, choiceIndex, isCorrect) VALUES (9, "Lisa Kudrow", 0, 0);
+INSERT INTO Choices(questionId, choice, choiceIndex, isCorrect) VALUES (9, "Jennifer Aniston", 1, 0);
+INSERT INTO Choices(questionId, choice, choiceIndex, isCorrect) VALUES (9, "Courtney Cox", 2, 0);
+INSERT INTO Choices(questionId, choice, choiceIndex, isCorrect) VALUES (9, "Sigourney Weaver", 3, 0);
