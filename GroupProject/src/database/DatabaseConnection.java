@@ -35,6 +35,9 @@ public class DatabaseConnection {
 	public Statement getStatement() {
 		return statement;
 	}
+	public Connection getConnection() {
+		return connection;
+	}
 	
 	public void executeUpdate(String update) {
 		try {
@@ -54,19 +57,6 @@ public class DatabaseConnection {
 			e.printStackTrace();
 		}
 		return resultSet;
-	}
-	/**
-	 * Makes sure that SQL statements are valid
-	 * @param input
-	 * @return
-	 */
-	public String escape(String input) {
-		String output = input;
-		if(input != null){
-		//may need to do addition substitutions in addition to single quote...
-			output = input.replace("'", "\\\'");
-		}
-		return output;
 	}
 	
 	public void close() {
