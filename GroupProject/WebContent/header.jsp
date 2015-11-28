@@ -12,7 +12,9 @@
        			<form name ="login-form" action="LoginServlet" method="POST">
        				<input id="form-box" type="text" name="username" placeholder="Username">
        				<input id="form-box" type="password" name="password" placeholder="Password">
+       				<a href="newaccount.jsp" class="auth-btn">Sign Up</button></a>
        				<button type="submit" class="auth-btn">Login</button>
+       				
        			</form>
        			<%
        			} else {
