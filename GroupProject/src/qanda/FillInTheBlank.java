@@ -10,8 +10,8 @@ public class FillInTheBlank extends Question {
 	private static final String blankCharacter = "@@@@";
 	private static final String blankReplacementHTML = "_______";
 	
-	public FillInTheBlank(int id) {
-		super(id);
+	public FillInTheBlank(DatabaseConnection connection, int id) {
+		super(connection, id);
 	}
 	
 	@Override
@@ -19,15 +19,6 @@ public class FillInTheBlank extends Question {
 		if (!super.checkValidQuestion()) return false;
 		if (!question.contains(blankCharacter))return false;
 		return true;
-	}
-
-	@Override
-	public int evaluateAnswer(Answer answer) {
-		StringAnswer stringAnswer = (StringAnswer) answer;
-		if (stringAnswer.getResponse().equals(correctAnswer)){
-			return this.score;
-		}
-		return 0;
 	}
 	
 	@Override

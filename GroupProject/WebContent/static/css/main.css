@@ -70,9 +70,9 @@ body {
   display: inline-block;
 }
 #site-header #site-banner #login-container {
-  width: 300px;
+  width: 400px;
   float: right;
-  margin: 10px 40px;
+  margin: 15px 40px 5px 40px;
   font-family: Helvetica;
   display: inline;
   text-align: right;
@@ -261,6 +261,15 @@ body {
   font-family: Helvetica;
   font-size: 18px;
 }
+
+#form-box {
+  width: 80px;
+  padding: 5px;
+  height: 14px;
+  font-size: 12px;
+  margin: 7px;
+}
+
 #search-box {
   width: 400px;
   padding: 10px;
@@ -396,9 +405,16 @@ body {
 #result-info-container li:hover {
   font-size: 16px;
 }
+
+#choice-list {
+	padding: 4px 2px 4px 0px;
+	list-style-type: none;
+}
+
 .browse-result {
   color: #484146;
 }
+
 .browse-result .title {
   font-size: 16px;
   font-weight: bold;

@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" import="qanda.*, java.util.List" %>
+    pageEncoding="UTF-8" import="qanda.*, database.*, java.util.List" %>
+<%
+	ServletContext context = request.getServletContext();
+	DatabaseConnection connection = (DatabaseConnection) context.getAttribute("databaseconnection");
+%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -18,13 +22,13 @@
       <input id="search-box" placeholder="Search by keywords or class code" class="">
       <ul id="browse-results-list">
         <%
-        	List<Quiz> recentQuizzes = Quiz.getRecentQuizzes(10);
+        	List<Quiz> recentQuizzes = Quiz.getRecentQuizzes(connection, 10);
         	for (Quiz q: recentQuizzes) {
         %>
         
-        <li class="browse-result ng-scope">
+        <li class="browse-result">
           <div class="title"><a href="showquiz.jsp?id=<% out.print(q.getId()); %>"><% out.print(q.getName()); %></a></div>
-          <div ng-show="class.description" class="description ng-binding">Created by NA on MM/DD/YYYY. Taken XX times</div>
+          <div class="description">Created by <% out.print(q.getCreator()); %> on <% out.print(q.getCreationDate()); %>. Taken <% out.print(q.getTakenCount()); %> times</div>
         </li>
         <%
         	}
@@ -64,7 +68,7 @@
       <button>Take a Random Quiz</button>
     </div>
     
-    <div class="ng-hide" style="padding-top: 40px;">
+    <div style="padding-top: 40px;">
     <div class="result-selected-class">Achievements</div>	
       <div class="placeholder-container">
       	You don't have any achievements
