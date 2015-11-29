@@ -22,3 +22,7 @@ GroupProject/.DS_Store
 GroupProject/.classpath
 
 *.class
+
+GroupProject/.classpath~
+
+GroupProject/bin/.classpath

@@ -17,9 +17,6 @@
 		String messageToDisplay = request.getParameter("message");
 		if (messageToDisplay.equals("accountcreated")) {
 			out.print(Util.showSuccessMessage("Account Created Successfully. Please Log In to Begin Using CardinalQuiz!"));
-		}
-		if (messageToDisplay.equals("badlogin")) {
-			out.print(Util.showErrorMessage("Invalid Username/Password"));
 		} 
 	} 
 	%>
@@ -29,7 +26,7 @@
   <div id="browse-container">
   
     <div id="browse-results-container">
-    <div class="result-selected-class">Latest Quizzes!</div>	
+    <div class="result-selected-class">Latest Quizzes</div>	
       <input id="search-box" placeholder="Search by keywords or class code" class="">
       <ul id="browse-results-list">
         <%

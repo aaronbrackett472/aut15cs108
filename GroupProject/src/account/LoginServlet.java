@@ -59,8 +59,8 @@ public class LoginServlet extends HttpServlet {
 			session.setAttribute("loggedin_user", username);
 			response.sendRedirect("/GroupProject/");
 		} else {
-			RequestDispatcher  dispatch =  request.getRequestDispatcher("try-again-loggin.jsp");
-			dispatch.forward(request, response);
+			System.out.println("invalid user or password");
+			response.sendRedirect("/GroupProject/?message=badlogin");
 		}
 	}
 
