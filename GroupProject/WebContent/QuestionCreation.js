@@ -16,13 +16,13 @@ function radioOnClick(){
     	'<input type="text" id="score" value="1">' +
     	'<br>' +
     	'How much time should is permitted on this question? (0 for no limit)' +
-    	'<input type="text" name="score" value="0">' +
+    	'<input type="text" name="timeLimit" value="0">' +
     	'<br>';
     var questionBody = document.getElementById('QuestionForm');
     
     switch(+index){
       case 0:
-        document.getElementById('type').setAttribute('value','Question-Response');
+       document.getElementById('type').setAttribute('value','Question-Response');
         break;
       case 1:
     	  

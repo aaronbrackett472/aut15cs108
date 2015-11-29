@@ -7,7 +7,7 @@
 <title>Create Your Own Quiz!</title>
 </head>
 <body>
-	<form name="Question" id="QuestionForm">
+	<form name="Question" id="QuestionForm" action="QuestionCreateServlet" method = "post">
 		What type of Question do you want to make?
     	<br>
     	<input type="radio" name="type" value="0">Question-Response
