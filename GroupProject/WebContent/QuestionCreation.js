@@ -1,51 +1,60 @@
 /**
  * 
  */
-var typeRadios = document.forms['Questions'].elements['type'];
+var typeRadios = document.getElementsByName('type');
 for (var i = 0; i < typeRadios.length; i++){
-  typeRadios[i].onClick = function(i){
-    var questionHTML = 'What Question Would You Like to Ask?\n
-    <input type="text" id="question">\n
-    <br>\n
-    How much is this question worth?
-    <input type="text" id="score" value="1">\n
-    How much time should is permitted on this question? (0 for no limit)
-    <input type="text" name="score" value="0">\n';
-    var questionBody = document.getElementById('Question');
-    switch(i){
+	console.log(typeRadios[i].name);
+	typeRadios[i].onclick = radioOnClick;
+}
+function radioOnClick(){
+	var index = this.value;
+    console.log('ajkdfjaskfjGGGG999Gsaf');
+    var questionHTML = 'What Question Would You Like to Ask?' +
+    	'<br>' +
+    	'<input type="text" id="question">' +
+    	'<br>' +
+    	'How much is this question worth?' +
+    	'<input type="text" id="score" value="1">' +
+    	'<br>' +
+    	'How much time should is permitted on this question? (0 for no limit)' +
+    	'<input type="text" name="score" value="0">' +
+    	'<br>';
+    console.log('fuck this hsit');
+    console.log(index);
+    var questionBody = document.getElementById('QuestionForm');
+    
+    switch(+index){
       case 0:
-        /*questionHTML+='What Answer are you looking for?\n
-        <input type="text" name="answer">\n
-        <br>\n';*/
         document.getElementById('type').setAttribute('value','Question-Response');
         break;
       case 1:
+    	  
         document.getElementById('type').setAttribute('value','Fill in the Blank');
-        questionHTML+='Replace the blanks in your question with "@@@@"\n
-        <br>\n'
+        questionHTML+='Replace the blanks in your question with "@@@@"';
+        questionHTML+='<br>';
         break;
       case 2:
         document.getElementById('type').setAttribute('value','Multiple Choice');
-        questionHTML+='How many choices are there?
-        <input type="text" name="numChoices">\n
-        <br>\n'
+        questionHTML+='How many choices are there?' +
+        '<input type="text" name="numChoices">' +
+        '<br>';
         break;
       case 3:
         document.getElementById('type').setAttribute('value','Picture Response');
-        questionHTML+='What url can we find the image at?\n
-        <input type="text" name="url">\n
-        <br>\n'
+        questionHTML+='What url can we find the image at?' +
+        '<input type="text" name="url">' +
+        '<br>';
         break;
       case 4:
         document.getElementById('type').setAttribute('value','Matching');
-        questionHTML+='How many pairs are there?
-        <input type="text" name="numPairs">\n
-        <br>\n'
+        questionHTML+='How many pairs are there?' +
+        '<input type="text" name="numPairs">' +
+        '<br>';
         break;
       default:
         console.log("Things have gone wrong");
     }
-    questionHTML+='<input type="submit" id="saveQuestion" name="Save Question" value="Save Question">\n'
-    questionBody.innerHTML = questionHTML;
-  }
+    questionHTML+='<input type="submit" id="saveQuestion" name="Save Question" value="Save Question">';
+    var div = document.getElementById('QuestionData');
+    div.innerHTML = questionHTML;
 }

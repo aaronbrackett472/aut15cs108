@@ -7,15 +7,22 @@
 <title>Create Your Own Quiz!</title>
 </head>
 <body>
-	<form name="Question">
+	<form name="Question" id="QuestionForm">
 		What type of Question do you want to make?
-    	<input type="radio" name="type" value="Question-Response">Question-Response
-   	 	<input type="radio" name="type" value="Fill in the Blank">Fill in the Blank
-   		<input type="radio" name="type" value="Multiple Choice">Multiple Choice
-    	<input type="radio" name="type" value="Picture Response">Picture Response
-   		<input type="radio" name="type" value="Matching">Matching
-   		<div id="Question"></div>
+    	<br>
+    	<input type="radio" name="type" value="0">Question-Response
+    	<br>
+   	 	<input type="radio" name="type" value="1">Fill in the Blank
+    	<br>
+   		<input type="radio" name="type" value="2">Multiple Choice
+    	<br>
+    	<input type="radio" name="type" value="3">Picture Response
+    	<br>
+   		<input type="radio" name="type" value="4">Matching
+    	<br>
    		<input type="hidden" id="type">
+   		<br>
+   		<div id="QuestionData"></div>
     </form>
     <script src="QuestionCreation.js"></script>
 </body> 
