@@ -5,6 +5,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class DatabaseConnection {
 	
@@ -31,6 +34,9 @@ public class DatabaseConnection {
 	
 	public Statement getStatement() {
 		return statement;
+	}
+	public Connection getConnection() {
+		return connection;
 	}
 	
 	public void executeUpdate(String update) {
