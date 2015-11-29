@@ -53,7 +53,6 @@ public class LoginServlet extends HttpServlet {
 		String password = request.getParameter("password");
 		
 		ServletContext context = request.getServletContext();
-    	//DatabaseConnection connection = (DatabaseConnection) context.getAttribute("databaseconnection");
 		
 		if(accounts.verifyUser(username, password)) {
 			session.setAttribute("loggedin_user", username);

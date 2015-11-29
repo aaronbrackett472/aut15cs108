@@ -9,8 +9,6 @@ a:link {
 a:visited {
 }
 
-
-
 .row {
     margin-top: 15px;
     margin-bottom: 15px;
@@ -29,6 +27,14 @@ a:visited {
 
 .col-md-12 {
     width: 80%;
+}
+
+.col-md-9 {
+    width: 60%;
+}
+
+.col-md-6 {
+    width: 40%;
 }
 
 .bg-warning {

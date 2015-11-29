@@ -26,7 +26,7 @@ if(request.getParameter("id") == null){
        			if (username == null) {
        				out.print(Util.showWarningMessage("You are not logged in. Please log in/create an account before using CardinalQuiz."));
        			} else {
-       			%>
+      %>
        			
     <main>
     <div>

@@ -107,4 +107,8 @@ public class Question {
 		return this.id;
 	}
 	
+	public int getScore() {
+		return this.score;
+	}
+	
 }
