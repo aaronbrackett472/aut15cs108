@@ -8,7 +8,6 @@ for (var i = 0; i < typeRadios.length; i++){
 }
 function radioOnClick(){
 	var index = this.value;
-    console.log('ajkdfjaskfjGGGG999Gsaf');
     var questionHTML = 'What Question Would You Like to Ask?' +
     	'<br>' +
     	'<input type="text" id="question">' +
@@ -19,8 +18,6 @@ function radioOnClick(){
     	'How much time should is permitted on this question? (0 for no limit)' +
     	'<input type="text" name="score" value="0">' +
     	'<br>';
-    console.log('fuck this hsit');
-    console.log(index);
     var questionBody = document.getElementById('QuestionForm');
     
     switch(+index){
