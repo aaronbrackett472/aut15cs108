@@ -18,6 +18,7 @@ public class Quiz {
 	private int numQuestions;
 	private int id;
 	private String name;
+	private String description;
 	private boolean random;
 	private boolean singlePage;
 	private boolean immediateCorrection;
@@ -76,6 +77,7 @@ public class Quiz {
 		try {
 			resultSet.first();
 			this.name = resultSet.getString("name");
+			this.description = resultSet.getString("description");
 			this.random = resultSet.getBoolean("randomorder");
 			this.singlePage = resultSet.getBoolean("singlepage");
 			this.immediateCorrection = resultSet.getBoolean("immediatecorrection");
@@ -123,6 +125,10 @@ public class Quiz {
 	
 	public String getName() {
 		return this.name;
+	}
+
+	public String getDescription() {
+		return this.description;
 	}
 	
 	public int getId() {

@@ -23,6 +23,7 @@
 		} 
 	} 
 	%>
+	
     <main>
     <div>
     	<div id="main-browse-container">

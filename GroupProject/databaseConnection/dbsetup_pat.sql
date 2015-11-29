@@ -44,7 +44,7 @@ CREATE TABLE Quizzes (
      takenCounter INT NOT NULL DEFAULT 0,
      createdBy VARCHAR(64) NOT NULL,
      FOREIGN KEY (createdBy) REFERENCES Accounts(username),
-     description VARCHAR(64),
+     description VARCHAR(64) NOT NULL DEFAULT '',
      createdDate TIMESTAMP
 );
 
