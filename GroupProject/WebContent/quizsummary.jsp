@@ -38,22 +38,19 @@ if(request.getParameter("id") == null){
       		</div>
   			<div style="padding-top: 40px;"></div>
   			<div class="result-relation-title">
-          		<div class="placeholder-text">Creator: <% out.print(currentQuiz.getCreator()); %></div>
-      		</div>
-      		<div class="result-relation-title">
-          		<div class="placeholder-text">Creation Date: <% out.print(currentQuiz.getCreationDate()); %></div>
-      		</div>
-      		<div class="result-relation-title">
-          		<div class="placeholder-text">Times Taken: <% out.print(currentQuiz.getTakenCount()); %></div>
+          		<div class="placeholder-text">Created by <% out.print(currentQuiz.getCreator()); %> on <% out.print(currentQuiz.getCreationDate()); %>.
+          		Taken <% out.print(currentQuiz.getTakenCount()); %> times.</div>
       		</div>
       		<div style="padding-top: 40px;"></div>
       		<div class="result-selected-class">Your Performance</div>
-    			<form action="QuizGrader" name="quiz-response" method="POST">
-
-	<div class="add-class-container">
-      <button type="submit" value="Submit">Take This Quiz!</button>
-    </div>
-    </form>
+      		<div style="padding-top: 40px;"></div>
+      		<div class="result-selected-class">Top Performers</div>
+    		<form action="TakeQuiz" name="quiz-response" method="GET">
+    			<input type="hidden" name="id" value="<% out.print(currentQuiz.getId()); %>">
+				<div class="add-class-container">
+      				<button type="submit" value="Submit">Take This Quiz!</button>
+    			</div>
+    		</form>
 			</div>
 		</div>
 	</div>

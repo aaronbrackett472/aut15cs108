@@ -76,9 +76,11 @@
       	You haven't done any quiz. Perhaps you want to change that?
       </div>
     </div>
-    <div class="add-class-container">
-      <button>Take a Random Quiz</button>
-    </div>
+    <form action="TakeRandomQuiz" name="quiz-response" method="GET">
+    	<div class="add-class-container">
+      		<button>Take a Random Quiz</button>
+    	</div>
+    </form>
     
     <div style="padding-top: 40px;">
     <div class="result-selected-class">Achievements</div>	
