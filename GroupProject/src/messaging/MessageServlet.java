@@ -46,7 +46,6 @@ public class MessageServlet extends HttpServlet {
 		String subject = request.getParameter("subject");
 		String action = request.getParameter("action");
 		String body = request.getParameter("body");
-		System.out.println(body);
 		String type = request.getParameter("type");
 		String forwardAddress = "MessageStatus.jsp?to="+receiver+"&type="+type+"&action="+action;
 //		NoteMessage draft = (NoteMessage)request.getSession().getAttribute("draft");
@@ -80,12 +79,11 @@ public class MessageServlet extends HttpServlet {
 			mm.addMessage(m);
 			request.getSession().setAttribute("message", m);
 		}else if(action.equals("Discard")){
-			System.out.println(action);
 			if(type == null){
 				m = (Message)request.getSession().getAttribute("message");
 				mm.deleteMessage(m);
 			}else if(type.equals("note")){
-				//mm.deleteMessage(draft);				
+//				mm.deleteMessage(draft);				
 			}else if(type.equals("sent")){
 				m = (Message)request.getSession().getAttribute("sent");
 				mm.deleteMessage((NoteMessage)m);

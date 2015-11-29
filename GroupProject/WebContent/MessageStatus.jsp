@@ -43,87 +43,27 @@
 	ses.removeAttribute("message");
 	ses.removeAttribute("sent");
 	ses.removeAttribute("draft");
+
+	int[] messages = {0, 0, 0}; //notes, friendrequests, challenge
+	ServletContext ctx = getServletContext();
+	MessageManager manager = (MessageManager) ctx.getAttribute("messageManager");
+	messages[0] = manager.numMessages(us, "note");
+	messages[1] = manager.numMessages(us, "friendrequest");
+	messages[2] = manager.numMessages(us, "challenge");
 %>
+<link rel="stylesheet" type="text/css" href="messaging.css">
+
 <title><%=title%></title>
-
-<style type="text/css">
-#apDiv1 {
-	position: absolute;
-	width: 1250px;
-	height: 100px;
-	z-index: 1;
-	left: 0px;
-	top: 0px;
-	background-color: #048;
-}
-
-#apDiv2 {
-	position: absolute;
-	width: 815px;
-	height: 596px;
-	z-index: 3;
-	left: 0px;
-	top: 100px;
-	background-color: #E0E0E0;
-	color: #99F;
-}
-
-.heading {
-	font-family: "Comic Sans MS", cursive;
-	font-size: 28px;
-	font-weight: 100;
-	position: relative;
-	left: 30px;
-	top: 20px;
-	color: white;
-}
-
-.message {
-	color: black;
-	font-weight: bold;
-	position: relative;
-	left: 20px;
-	top: 20px;
-}
-
-.link {
-	text-decoration: none;
-}
-
-.status {
-	color: blue;
-	font-weight: bold;
-	position: relative;
-	left: 20px;
-	top: 20px;
-}
-
-.body {
-	color: black;
-	position: relative;
-	left: 20px;
-	top: 20px;
-}
-
-.quizlinks {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 14px;
-	color: black;
-	position: relative;
-	left: 20px;
-	top: 20px;
-}
-</style>
 <script type="text/javascript">
 	function discardMessage() {
 		document.getElementById('subject').value = "";
-		document.getElementById('message').value = "";
+		document.getElementById('body').value = "";
 		var div = document.getElementById('apDiv3');
 		div.removeChild(document.getElementById('form1'));
-		document.getElementById('heading').innerHTML = "Message Discarded";
+		document.getElementById('heading').innerHTML = "Request Discarded";
 		var label = document.createElement('label');
 		label.className = 'message';
-		label.innerHTML = "<br></br>You message has been discarded.";
+		label.innerHTML = "<br></br>Your request has been discarded.";
 		div.appendChild(label);
 	}
 </script>
@@ -131,6 +71,19 @@
 <body>
 	<div id="apDiv1">
 		<label class="heading" id="heading"><strong><%=title%></strong></label>
+	</div>
+	<%
+		String allNotes = "AllNoteMessages.jsp";
+		String friendrequests = "AllFriendRequests.jsp";
+		String challenges = "AllChallengeMessages.jsp";
+	%>
+	<div id="notifications">
+		<br /> <br /> <br /> <label class="userlinks"><%=messages[0]%>
+			<a class="link" href=<%=allNotes%>>Messages</a><br /> <br /> <%=messages[1]%>
+			<a class="link" href=<%=friendrequests%>>Friend requests</a><br /> <br />
+			<%=messages[2]%> <a class="link" href=<%=challenges%>>Challenges</a><br />
+			<br /> </label>
+
 	</div>
 	<div id="apDiv2">
 		<label class="status"><%=message%></label><br /> <br />

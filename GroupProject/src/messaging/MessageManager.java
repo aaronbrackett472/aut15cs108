@@ -89,7 +89,7 @@ public class MessageManager {
 			st.setString(1, msg.getSenderName());
 			st.setString(2, msg.getReceiverName());
 			st.setString(3, msg.getSubject());
-			st.setDate(4,(Date) msg.getDateSent());
+			st.setDate(4, new java.sql.Date(msg.getDateSent().getTime()));
 			st.setString(5,msg.getQuizName());
 			st.setString(6, msg.getMessageBody());
 			st.setInt(7, isRead);	
@@ -286,13 +286,33 @@ public class MessageManager {
 		
 		return list;
 	}
+	
+	/**
+	 * Returns number of messages of type given
+	 * @param user user
+	 * @param type type of message
+	 * @return number of messages
+	 */
+	public int numMessages(User user, String type) {
+		int num = 0;
+		if (type.equals("note")) {
+			List<NoteMessage> list = new ArrayList<NoteMessage>();
+			num = list.size();
+		} else if (type.equals("challenge")) {
+			List<ChallengeMessage> list = new ArrayList<ChallengeMessage>();
+			num = list.size();
+		} else if (type.equals("friendrequest")) {
+			List<FriendRequest> list = new ArrayList<FriendRequest>();
+			num = list.size();
+		}
+		return num;
+	}
 	/**
 	 * Returns a list of all draft messages
 	 * @param user user 
 	 * @return list of drafts
 	 */
 	public List<NoteMessage>getDrafts(User user) {
-		
 		List<NoteMessage> list = new ArrayList<NoteMessage>();
 		Connection connection = null;
 		ResultSet result = null;

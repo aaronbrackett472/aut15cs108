@@ -2,9 +2,9 @@
 	pageEncoding="UTF-8"%>
 <%@ page import="messaging.*, java.util.*, java.text.*"%>
 
-<!-- Shows a single note message. Linked with AllNoteMessages. 
+<!-- Shows a single challenge message. Linked with AllChallengeMessages. 
 	Assumes that we can get the current user from the set attribute
-	From this page reply to the message(redirected to the SendNote.jsp file)
+	From this page take the message(redirected to the SendNote.jsp file)
      You can also delete the message (redirect to SendMessage servlet which handles deletion of the 
      entry from the friendship table -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -13,23 +13,23 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <%
 	HttpSession ses = request.getSession();
-/* 	User us = (User) ses.getAttribute("user");
- */	User us = new User("alfonce");
+	User us = (User) ses.getAttribute("user");
 	String user = us.getUserName();
 	int id = Integer.parseInt(request.getParameter("ID"));
-	List<NoteMessage> messages = null;
+	List<ChallengeMessage> messages = null;
 	ServletContext ctx = getServletContext();
-	MessageManager manager = (MessageManager) ctx.getAttribute("messageManager");	
-	messages = manager.getNoteMessages(us);
-	NoteMessage note = messages.get(id);
-	String title = "View Note";
-	String sender = note.getSenderName();
-	String subject = note.getSubject();
-	String body = note.getMessageBody();
+	MessageManager manager = (MessageManager) ctx.getAttribute("messageManager");
+	messages = manager.getChallenges(us);
+	ChallengeMessage msg = messages.get(id);
+	String title = "View Challenge";
+	String sender = msg.getSenderName();
+	String subject = msg.getSubject();
+	String body = msg.getMessageBody();
+	String quizname = msg.getQuizName();
 	SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
-	String time = sdf.format(note.getDateSent());
-	ses.setAttribute("message", note);
-	manager.markRead(note);
+	String time = sdf.format(msg.getDateSent());
+	manager.markRead(msg);
+	ses.setAttribute("message", msg);
 	
 	int[] allMessages = {0, 0, 0}; //notes, friendrequests, challenge	
 	allMessages[0] = manager.numMessages(us, "note");
@@ -73,16 +73,16 @@
 	<%
 		String deleteLink = "MessageServlet?action=Discard";
 	%>
+
 	<div id="apDiv2">
-		<p>&nbsp;</p>
-		<label class="message"><%=time%> <%=sender%> wrote:<br /> <br />
-			Subject: <%=subject%><br /> <br /> </label> <label class="body"><%=body%></label><br></br>
-		<br></br>
-		<%
-			String replyLink = "SendNote.jsp?to=" + sender;
-		%><label class="message"><a href=<%=replyLink%>>Reply</a></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<label class="message"><a href=<%=deleteLink%>>Delete this
-				message</a></label>
-	</div>
+		  <p>&nbsp;</p>
+		  <label class="message"><%=time%> <%=sender%> wrote:<br /><br />
+			  Subject: <%=subject%><br /><br />
+		  </label>
+		  <label class="body"><%=body%></label><br></br><br></br>
+		  <%String acceptLink = "quiz-summary.jsp?"; //need to redirect to the quiz page 
+			%><label class="message"><a href=<%=acceptLink%>>Take <%=quizname %></a></label>&nbsp;&nbsp;&nbsp;&nbsp;
+			<label class="message"><a href=<%=deleteLink%>>Delete this message</a></label><br/><br/>
+		</div>
 </body>
 </html>

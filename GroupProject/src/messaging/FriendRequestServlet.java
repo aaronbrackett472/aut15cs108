@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 //@WebServlet("/FriendRequestServlet")
 public class FriendRequestServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private static final String MESSAGE_PAGE = "friendrequestlist.jsp";
+	private static final String MESSAGE_PAGE = "AllFriendRequests.jsp";
        
     /**
      * @see HttpServlet#HttpServlet()

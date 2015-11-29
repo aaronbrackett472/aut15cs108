@@ -17,7 +17,6 @@
 /* 	User us = (User) ses.getAttribute("user");
  */	User us = new User("alfonce");
 	String user = us.getUserName();
-	MessageManager mm = null;
 	String pagen = request.getParameter("page");
 	int pagenum = 1;
 	if (pagen != null) {
@@ -25,108 +24,49 @@
 	}
 	List<NoteMessage> messages = null;
 	ServletContext ctx = getServletContext();
-	mm = (MessageManager) ctx.getAttribute("messageManager");
-	messages = mm.getNoteMessages(us);
+	MessageManager manager = (MessageManager) ctx.getAttribute("messageManager");
+	messages = manager.getNoteMessages(us);
 	String title = "Note Messages";
 	int numMsgs = messages.size();
+	int[] allMessages = {0, 0, 0}; //notes, friendrequests, challenge
+	
+	allMessages[0] = numMsgs;
+	allMessages[1] = manager.numMessages(us, "friendrequest");
+	allMessages[2] = manager.numMessages(us, "challenge");
 %>
-<style type="text/css">
-#apDiv1 {
-	position: absolute;
-	width: 1250px;
-	height: 100px;
-	z-index: 1;
-	left: 0px;
-	top: 0px;
-	background-color: #048;
-}
-
-#apDiv2 {
-	position: absolute;
-	width: 1028px;
-	height: 596px;
-	z-index: 3;
-	left: 0px;
-	top: 100px;
-	background-color: #DBD6E0;
-	color: #99F;
-}
-
-#request {
-	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-	width: 100%;
-	border-collapse: collapse;
-}
-
-#request td, #request th {
-	font-size: 1em;
-	border: 1px solid #98bf21;
-	padding: 3px 7px 2px 7px;
-}
-
-#request th {
-	font-size: 1.1em;
-	text-align: left;
-	padding-top: 5px;
-	padding-bottom: 4px;
-	background-color: #A7C942;
-	color: #ffffff;
-}
-
-.heading {
-	font-family: "Comic Sans MS", cursive;
-	font-size: 28px;
-	font-weight: 100;
-	position: relative;
-	left: 30px;
-	top: 20px;
-	color: white;
-}
-
-.userlinks {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 14px;
-	position: relative;
-	left: 20px;
-	top: 10px;
-}
-
-.unread {
-	font-size: 14px;
-	font-weight: bold;
-	position: relative;
-	left: 20px;
-	color: black;
-}
-
-.read {
-	font-size: 14px;
-	position: relative;
-	left: 20px;
-	color: black;
-}
-
-.headers {
-	font-size: 14px;
-	font-weight: bold;
-	color: blue;
-	position: relative;
-	left: 20px;
-}
-
-.page {
-	text-align: right;
-	font-size: 14px;
-	font-weight: bold;
-}
-</style>
+<link rel = "stylesheet"  type="text/css" href="messaging.css">
 
 <title><%=title%></title>
-
+<script type="text/javascript">
+	function discardMessage() {
+		document.getElementById('subject').value = "";
+		document.getElementById('body').value = "";
+		var div = document.getElementById('apDiv3');
+		div.removeChild(document.getElementById('form1'));
+		document.getElementById('heading').innerHTML = "Request Discarded";
+		var label = document.createElement('label');
+		label.className = 'message';
+		label.innerHTML = "<br></br>Your request has been discarded.";
+		div.appendChild(label);
+	}
+</script>
 </head>
 <body>
 	<div id="apDiv1">
-		<label class="heading"><strong><%=title%></strong></label>
+		<label class="heading" id="heading"><strong><%=title%></strong></label>
+	</div>
+	<%
+		String allNotes = "AllNoteMessages.jsp";
+		String friendrequests = "AllFriendRequests.jsp";
+		String challenges = "AllChallengeMessages.jsp";
+	%>
+	<div id="notifications">
+		<br /> <br /> <br /> <label class="userlinks"><%=allMessages[0]%>
+			<a class="link" href=<%=allNotes%>>Messages</a><br /> <br /> <%=allMessages[1]%>
+			<a class="link" href=<%=friendrequests%>>Friend requests</a><br /> <br />
+			<%=allMessages[2]%> <a class="link" href=<%=challenges%>>Challenges</a><br />
+			<br /> </label>
+
 	</div>
 	<div id="apDiv2">
 		<%

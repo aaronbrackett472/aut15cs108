@@ -7,78 +7,25 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <%
 	HttpSession ses = request.getSession();
-/* 	User us = (User) ses.getAttribute("user");
- */	User us = new User("alfonce");
+	/* 	User us = (User) ses.getAttribute("user");
+	 */ User us = new User("alfonce");
 	String receiverName = (String) request.getParameter("to");
 	String user = us.getUserName();
 	Message m = (Message) ses.getAttribute("message");
 	String action = request.getParameter("action");
 	String title = "Send a friend request";
 	String subject = "I'd like to add you as a Friend";
+
+	int[] messages = {0, 0, 0}; //notes, friendrequests, challenge
+	ServletContext ctx = getServletContext();
+	MessageManager manager = (MessageManager) ctx.getAttribute("messageManager");
+	messages[0] = manager.numMessages(us, "note");
+	messages[1] = manager.numMessages(us, "friendrequest");
+	messages[2] = manager.numMessages(us, "challenge");
 %>
+<link rel = "stylesheet"  type="text/css" href="messaging.css">
 
-<style type="text/css">
-#apDiv1 {
-	position: absolute;
-	width: 1250px;
-	height: 100px;
-	z-index: 1;
-	left: 0px;
-	top: 0px;
-	background-color: #048;
-}
-
-#apDiv2 {
-	position: absolute;
-	width: 815px;
-	height: 800px;
-	z-index: 3;
-	left: 0px;
-	top: 100px;
-	background-color: #E0E0E0;
-	color: #99F;
-}
-
-.heading {
-	font-family: "Comic Sans MS", cursive;
-	font-size: 28px;
-	font-weight: 100;
-	position: relative;
-	left: 30px;
-	top: 20px;
-	color: white;
-}
-
-.userlinks {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 14px;
-	position: relative;
-	left: 20px;
-	top: 20px;
-}
-
-.message {
-	color: black;
-	font-weight: bold;
-	position: relative;
-	left: 20px;
-	top: 20px;
-}
-
-.messagefield {
-	position: relative;
-	left: 20px;
-	top: 20px;
-}
-
-.send {
-	position: relative;
-	left: 20px;
-	top: 20px;
-}
-</style>
 <title><%=title%></title>
-
 <script type="text/javascript">
 	function discardMessage() {
 		document.getElementById('subject').value = "";
@@ -94,9 +41,21 @@
 </script>
 </head>
 <body>
-
 	<div id="apDiv1">
 		<label class="heading" id="heading"><strong><%=title%></strong></label>
+	</div>
+	<%
+		String allNotes = "AllNoteMessages.jsp";
+		String friendrequests = "AllFriendRequests.jsp";
+		String challenges = "AllChallengeMessages.jsp";
+	%>
+	<div id="notifications">
+		<br /> <br /> <br /> <label class="userlinks"><%=messages[0]%>
+			<a class="link" href=<%=allNotes%>>Messages</a><br /> <br /> <%=messages[1]%>
+			<a class="link" href=<%=friendrequests%>>Friend requests</a><br /> <br />
+			<%=messages[2]%> <a class="link" href=<%=challenges%>>Challenges</a><br />
+			<br /> </label>
+
 	</div>
 	<div id="apDiv2">
 		<form id="form1" name="form1" method="post" action="MessageServlet">
