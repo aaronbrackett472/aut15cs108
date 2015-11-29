@@ -23,6 +23,7 @@
    		<input type="hidden" id="type">
    		<br>
    		<div id="QuestionData"></div>
+   		<input type="hidden" name="quizID" value="<%= request.getAttribute("quizID") %>">
     </form>
     <script src="QuestionCreation.js"></script>
 </body> 

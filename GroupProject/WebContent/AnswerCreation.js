@@ -1,5 +1,4 @@
-var answerHTML = '';
-var dataHTML = '';
+var answerHTML = document.getElementById('answerData').innerHTML;
 var type = document.getElementById('type').value;
 if (type == 'Question-Response'){
   answerHTML+='What Answer are you looking for?\
@@ -41,3 +40,6 @@ if (type == 'Matching'){
 		<br>';
 	}
 }
+answerHTML+='<input type="submit" name="answerSumbit" value="Add this Answer!">';
+document.getElementById('answerData').innerHTML = answerHTML;
+

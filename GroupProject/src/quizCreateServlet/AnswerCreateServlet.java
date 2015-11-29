@@ -7,19 +7,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import qanda.String;
 import qanda.*;
-
 /**
- * Servlet implementation class QuestionCreateServlet
+ * Servlet implementation class AnswerCreateServlet
  */
-@WebServlet("/QuestionCreateServlet")
-public class QuestionCreateServlet extends HttpServlet {
+@WebServlet("/AnswerCreateServlet")
+public class AnswerCreateServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
     /**
      * Default constructor. 
      */
-    public QuestionCreateServlet() {
+    public AnswerCreateServlet() {
         // TODO Auto-generated constructor stub
     }
 
@@ -34,15 +34,17 @@ public class QuestionCreateServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String question = request.getParameter("question");
-		int score = Integer.parseInt(request.getParameter("score"));
-		int timeLimit = Integer.parseInt(request.getParameter("timeLimit"));
 		String type = request.getParameter("type");
-		String imageUrl = request.getParameter("url");
-		int quizID = Integer.parseInt(request.getParameter("quizID"));
-		int questionID = Question.saveToDatabase(quizId, type, score, question, imageUrl);
-		RequestDispatcher rd = request.getRequestDispatcher("AnswerCreationPage.jsp");
-		request.setAttribute("questionID", questionID);
+		int questionID = request.getParameter("questionID");
+		String[] answers = request.getParameterValues("answer");
+		int numAnswers = Integer.parseInt(request.getParameter("number"));
+		for (int i = 0; i < numAnswers; i++){
+			String answer = answer[i];
+			int answerID = Answer.saveToDatabase(questionID, answer, i);
+		}
+		String quizID = request.getParameter("quizID");
+		request.setAttribute("quizID", quizID);
+		RequestDispatcher rd = request.getRequestDispatcher("QuestionCreationPage.jsp");
 		rd.forward(request, response);
 	}
 

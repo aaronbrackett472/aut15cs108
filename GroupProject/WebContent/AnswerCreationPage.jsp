@@ -8,7 +8,9 @@
 </head>
 <body>
 <h1>Add an Answer for your <%= request.getAttribute("type") %> Question!</h1>
-<form name="requestData">
+<form name="answerData" id="answerData" action="AnswerCreateServlet" method="post">
+	<input type="hidden" name="quizID" id="quizID" value="<%= request.getAttribute("quizID") %>">
+	<input type="hidden" name="questionID" id="questionID" value="<%= request.getAttribute("questionID") %>">
 	<input type="hidden" name="type" id="type" value="<%= request.getAttribute("type") %>">
 	<input type="hidden" name="number" id="number" value="<%
 	if (request.getParameter("numChoices") != null){
@@ -18,11 +20,9 @@
 		out.print(request.getParameter("numChoices"));
 	}
 	else{
-		out.print("null");
+		out.print("1");
 	}
 	%>">
 </form>
-<form name="answerData" id="answerData"></form>
-<div id="answer"></div>
 </body>
 </html>

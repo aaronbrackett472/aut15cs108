@@ -61,7 +61,9 @@ public class QuizCreateServlet extends HttpServlet {
 			}
 			
 			// Move on to question adding flow.
-			response.getWriter().println("QUIZ ID: " + quizID + "\n[ADD QUESTION PAGE]");
+			request.setAttribute("quizID", quizID);
+			RequestDispatcher rd = request.getRequestDispatcher("QuestionCreationPage.jsp");
+			rd.forward(request, response);
 			
 			/*
 			TODO:
