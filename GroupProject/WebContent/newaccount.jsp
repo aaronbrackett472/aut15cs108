@@ -12,6 +12,14 @@
 </head>
 <body>
 	<jsp:include page="header.jsp"/>
+	<%
+	if (request.getParameter("error") != null){
+		String messageToDisplay = request.getParameter("error");
+		if (messageToDisplay.equals("duplicateusername")) {
+			out.print(Util.showErrorMessage("Username already exists! Please pick a different one"));
+		} 
+	} 
+	%>
     <main>
     <div>
 <div id="main-browse-container-center">

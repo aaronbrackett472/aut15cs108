@@ -12,6 +12,14 @@
 </head>
 <body>
 	<jsp:include page="header.jsp"/>
+	<%
+	if (request.getParameter("message") != null){
+		String messageToDisplay = request.getParameter("message");
+		if (messageToDisplay.equals("accountcreated")) {
+			out.print(Util.showSuccessMessage("Account Created Successfully. Please Log In to Begin Using CardinalQuiz!"));
+		} 
+	} 
+	%>
     <main>
     <div>
     	<div id="main-browse-container">
@@ -27,7 +35,7 @@
         %>
         
         <li class="browse-result">
-          <div class="title"><a href="showquiz.jsp?id=<% out.print(q.getId()); %>"><% out.print(q.getName()); %></a></div>
+          <div class="title"><a href="quizsummary.jsp?id=<% out.print(q.getId()); %>"><% out.print(q.getName()); %></a></div>
           <div class="description">Created by <% out.print(q.getCreator()); %> on <% out.print(q.getCreationDate()); %>. Taken <% out.print(q.getTakenCount()); %> times</div>
         </li>
         <%

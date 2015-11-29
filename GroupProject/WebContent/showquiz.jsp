@@ -23,10 +23,8 @@ if(request.getParameter("id") == null){
 	<jsp:include page="header.jsp"/>
     <main>
     <div>
-    	<div id="main-browse-container">
-  			<div id="browse-container">
-  
-    			<div id="browse-results-container">
+    	<div id="main-browse-container-center">
+  			<div id="result-info-container" style="width:100%;">
     			<form action="QuizGrader" name="quiz-response" method="POST">
 <%
 
@@ -64,7 +62,7 @@ if(request.getParameter("id") == null){
 	
 }  
 %>
-	<div class="add-class-container">
+	<div class="add-class-container" style="text-align:center;">
       <button type="submit" value="Submit">Grade My Quiz!</button>
     </div>
     </form>

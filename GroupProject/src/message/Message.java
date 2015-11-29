@@ -1,4 +1,5 @@
-package messaging;
+package message;
+import account.*;
 
 /**
  * Created by alfonce on 11/11/15.
@@ -21,11 +22,11 @@ public interface Message {
      * @throws SQLException .
      */
 
-    public Account getReceiver() throws SQLException;
+    public User getReceiver() throws SQLException;
     /**
      * Gets account of sender
      * @return The Account of the sender.
      * @throws SQLException .
      */
-    public Account getSender() throws SQLException;
+    public User getSender() throws SQLException;
 }

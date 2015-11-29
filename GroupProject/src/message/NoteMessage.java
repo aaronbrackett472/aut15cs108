@@ -1,8 +1,9 @@
-package messaging;
+package message;
 
+import account.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import databaseConnection.DatabaseConnection;
+import database.DatabaseConnection;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
@@ -63,7 +64,7 @@ public class NoteMessage implements Message {
      * @return list of all messages
      * @throws SQLException if errors
      */
-    public ArrayList<NoteMessage> getNotes(Account account)
+    public ArrayList<NoteMessage> getNotes(User account)
             throws SQLException {
         ArrayList<NoteMessage> messages = new ArrayList<NoteMessage>();
         Statement statement = databaseConnection.getStatement();
@@ -85,7 +86,7 @@ public class NoteMessage implements Message {
      * @return list of messages
      * @throws SQLException
      */
-    public ArrayList<NoteMessage> getSortedNotes(Account account)
+    public ArrayList<NoteMessage> getSortedNotes(User account)
             throws SQLException {
         ArrayList<NoteMessage> messages = new ArrayList<NoteMessage>();
         ArrayList<NoteMessage> unseenMessages = new ArrayList<NoteMessage>();
@@ -126,7 +127,7 @@ public class NoteMessage implements Message {
      * @return
      * @throws SQLException
      */
-    public NoteMessage sendNewNote(Account sender, Account receiver,
+    public NoteMessage sendNewNote(User sender, User receiver,
                                            String contents, String subject) throws SQLException {
 
         if (sender.equals(receiver))
@@ -177,12 +178,12 @@ public class NoteMessage implements Message {
         return subject;
     }
 
-    public Account getSender() throws SQLException {
-        return Account.getAccountById(senderId);
+    public User getSender() throws SQLException {
+        return User.getAccountById(senderId);
     }
 
-    public Account getReceiver() throws SQLException {
-        return Account.getAccountById(receiverId);
+    public User getReceiver() throws SQLException {
+        return User.getAccountById(receiverId);
     }
 
     public int getId() {

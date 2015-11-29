@@ -1,5 +1,5 @@
-package messaging;
-import databaseConnection.DatabaseConnection;
+package message;
+import database.DatabaseConnection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
