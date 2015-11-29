@@ -1,0 +1,9 @@
+CREATE TABLE questions (
+     id MEDIUMINT NOT NULL AUTO_INCREMENT,
+     quizID MEDIUMINT, 
+     question VARCHAR(128), 
+     correctAnswer VARCHAR(128),
+     questionIndex MEDIUMINT,
+     imageUrl VARCHAR(128),
+     PRIMARY KEY (id)
+);
