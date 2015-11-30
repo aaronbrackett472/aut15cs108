@@ -31,7 +31,10 @@ CREATE TABLE History (
 	username VARCHAR(64),
 	FOREIGN KEY (username) REFERENCES Accounts(username),
 	score INT,
-	timeAcquired TIMESTAMP
+	maxScore INT,
+	quizId INT NOT NULL,
+	FOREIGN KEY (quizId) REFERENCES Quizzes(id),
+	dateTaken TIMESTAMP
 );
 
 CREATE TABLE Quizzes (

@@ -37,17 +37,21 @@ public class Quiz {
 	 * @param immediateCorrection
 	 * @return
 	 */
-	public static int create(DatabaseConnection connection, String name, boolean random, boolean singlePage, boolean immediateCorrection, boolean practiceModeAllowed, String createdBy) {
+	public static int createQuiz(DatabaseConnection connection, String name, boolean randomOrder, boolean singlePage, boolean immediateCorrection, boolean practiceModeAllowed, String createdBy) {
 		
 		GregorianCalendar calendar = new GregorianCalendar();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String datestring = format.format(calendar.getTime());
 		
-		//DatabaseConnection connection = new DatabaseConnection();
 		connection.executeUpdate("INSERT INTO " + quizzesTable + " (name, randomorder, singlepage, immediatecorrection, practiceModeAllowed, takenCounter, createdBy, createdDate) VALUES('" +
-				name + "', '" + (random ? 1 : 0) + "', '" + (singlePage ? 1 : 0) + "', '" + 
-				(immediateCorrection ? 1 : 0) + "', '" + (practiceModeAllowed ? 1: 0)  + "', '" + 
-				"0" + "', '" + createdBy + "', '" + datestring + "');");
+				name + "', '"
+				+ (randomOrder ? 1 : 0) + "', '"
+				+ (singlePage ? 1 : 0) + "', '"
+				+ (immediateCorrection ? 1 : 0) + "', '"
+				+ (practiceModeAllowed ? 1: 0)  + "', '"
+				+ "0" + "', '"
+				+ createdBy + "', '"
+				+ datestring + "');");
 		
 		int id = -1;
 		ResultSet resultSet = connection.executeQuery("SELECT * FROM " + quizzesTable + ";");
