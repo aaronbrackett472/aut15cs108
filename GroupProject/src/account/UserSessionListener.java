@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSessionListener;
 @WebListener
 public class UserSessionListener implements HttpSessionListener {
 	//Constants
-	public static String ACCOUNTS_CONTEXT_ATTRIBUTE =  "accounts";
+	public static String USERNAME_SESSION_ATTRIBUTE =  "username";
 	
 	//instance variables
 	private AccountManager accounts;
@@ -29,16 +29,12 @@ public class UserSessionListener implements HttpSessionListener {
      * @see HttpSessionListener#sessionCreated(HttpSessionEvent)
      */
     public void sessionCreated(HttpSessionEvent arg0)  {
-       accounts = new AccountManager();
-       HttpSession session =  arg0.getSession();
-       session.setAttribute(ACCOUNTS_CONTEXT_ATTRIBUTE, accounts);
     }
 
 	/**
      * @see HttpSessionListener#sessionDestroyed(HttpSessionEvent)
      */
     public void sessionDestroyed(HttpSessionEvent arg0)  { 
-        accounts.closeConnections();
     }
 	
 }

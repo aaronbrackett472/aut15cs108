@@ -26,11 +26,11 @@ public class User{
 	/**
 	 * Constructor
 	 */
-	public User(String username){
+	public User(String username, DatabaseConnection connection){
 		this.username = username;
-		connection = new DatabaseConnection();
+		this.connection = connection;
 		statement = connection.getStatement();
-		accounts =  new AccountManager();
+		accounts =  new AccountManager(connection);
 		
 		//Add a frindship, achivements, history tables if they dont exist
 		String friendshipQuerry = "CREATE TABLE IF NOT EXISTS " + friendshipTable +

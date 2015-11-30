@@ -18,20 +18,20 @@ public class AccountManager{
 
 	/**
 	 * Constructor
+	 * Requires an open database connection
 	 */
-	public AccountManager(){
-//		connection = new DatabaseConnection();
-//		
-//		//Create tables if they dont already exist
-//		Statement statement =  connection.getStatement();
-//		String accountsQuerry = "CREATE TABLE IF NOT EXISTS " + accountsTable +
-//								" (username CHAR(64), " +
-//								" password CHAR(64) )" ; 
-//		try{
-//			statement.executeUpdate(accountsQuerry);
-//		} catch(SQLException e) {
-//			e.printStackTrace();
-//		}
+	public AccountManager(DatabaseConnection connection){
+		this.connection =  connection;	
+		//Create tables if they dont already exist
+		Statement statement =  connection.getStatement();
+		String accountsQuerry = "CREATE TABLE IF NOT EXISTS " + accountsTable +
+								" (username CHAR(64), " +
+								" password CHAR(64) )" ; 
+		try{
+			statement.executeUpdate(accountsQuerry);
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
 		
 	}
 
@@ -61,9 +61,7 @@ public class AccountManager{
 		}catch(SQLException e){
 			e.printStackTrace();
 		}
-				
-		
-		
+					
 	}
 
 	/**
@@ -74,7 +72,7 @@ public class AccountManager{
 	 * @return user the user object which matches the username
 	 */
 	public User getUser(String username){	
-		return new User(username);
+		return new User(username, connection);
 	}
 
 	/**
@@ -121,12 +119,13 @@ public class AccountManager{
 		return false;
 	}
 	
-	/**
-	 * Closes database connections
-	 * To be called after the user of Account Manager is done using the 
-	 * this class
-	 */
-	public void closeConnections() {
-		connection.close();
-	}
+//	/**
+//	 * Closes database connections
+//	 * To be called after the user of Account Manager is done using the 
+//	 * this class
+//	 */
+//	public void closeConnections() {
+//		connection.close();
+//	}
+	
 }

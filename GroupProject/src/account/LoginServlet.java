@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import database.DBContextListener;
+import database.DatabaseConnection;
+
 /**
  * Servlet implementation class LoginServlet
  */
@@ -37,14 +40,16 @@ public class LoginServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		AccountManager accounts = (AccountManager)request.getSession().getAttribute(UserSessionListener.ACCOUNTS_CONTEXT_ATTRIBUTE);
+		DatabaseConnection connection = (DatabaseConnection)request.getServletContext().getAttribute(DBContextListener.DATABASE_CONTEXT_ATTRIBUTE);	
+		AccountManager accounts =  new AccountManager(connection);
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		if(accounts.verifyUser(username, password)) {
-			RequestDispatcher dispatch =  request.getRequestDispatcher("create-account-welcome.jsp");
+//			RequestDispatcher dispatch =  request.getRequestDispatcher("create-account-welcome.jsp");
+			RequestDispatcher dispatch =  request.getRequestDispatcher("index.jsp");
 			dispatch.forward(request, response);
 		} else {
-			RequestDispatcher  dispatch =  request.getRequestDispatcher("try-again-loggin.jsp");
+			RequestDispatcher  dispatch =  request.getRequestDispatcher("try-again-login.html");
 			dispatch.forward(request, response);
 		}
 	}
