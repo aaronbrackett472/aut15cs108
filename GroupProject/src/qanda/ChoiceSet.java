@@ -35,8 +35,8 @@ public class ChoiceSet {
 	 * After constructing the ChoiceSet instance o
 	 * Invoke o.getChoicesByQuestionId(int questionId) to populate the instance with choices from db 
 	 */
-	void getChoicesByQuestionId(int questionId) {
-		DatabaseConnection connection = new DatabaseConnection();
+	void getChoicesByQuestionId(DatabaseConnection connection, int questionId) {
+		//DatabaseConnection connection = new DatabaseConnection();
 		ResultSet resultSet = connection.executeQuery("SELECT * FROM " + choicesTable + " WHERE questionId = '" + questionId + "';");
 		this.choicesList.clear();
 		try {
@@ -61,17 +61,20 @@ public class ChoiceSet {
 	}
 	
 	/*
+	 * if the ChoiceSet instance is newly created and choice values are added manually by the client
+	 * Invoke saveToDatabase(connection) to save it to the ChoiceSet table
 	 * return -1 if save fail
 	 */
-	int saveToDatabase(){
+	int saveToDatabase(DatabaseConnection connection){
 		
 		int id = -1;
-		DatabaseConnection connection = new DatabaseConnection();
+		int choiceIndex = 0;
+		//DatabaseConnection connection = new DatabaseConnection();
 		for(Pair<String, Boolean> choice: choicesList) {
-			String query = "INSERT INTO " + choicesTable + " (questionId, choice, isCorrect) VALUES('" + 
-			this.questionId + "', '" + choice.getKey() + "', '" + convertBooleanToInt(choice.getValue()) + "');";
-			//System.out.println(query);
+			String query = "INSERT INTO " + choicesTable + " (questionId, choice, choiceIndex, isCorrect) VALUES('" + 
+			this.questionId + "', '" + choice.getKey() + "', '" +  choiceIndex + "', '" + convertBooleanToInt(choice.getValue()) + "');";
 			connection.executeUpdate(query);
+			choiceIndex++;
 		}
 		
 		ResultSet resultSet = connection.executeQuery("SELECT * FROM " + choicesTable + " WHERE questionId ='" + this.questionId + "';");
@@ -83,7 +86,7 @@ public class ChoiceSet {
 			e.printStackTrace();
 		}
 		
-		connection.close();
+		//connection.close();
 		return id;
 	}
 	

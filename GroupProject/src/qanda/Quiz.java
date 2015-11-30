@@ -2,12 +2,18 @@ package qanda;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 import database.DatabaseConnection;
 
 public class Quiz {
+	
+	private static String quizzesTable = "Quizzes";
 	
 	private int numQuestions;
 	private int id;
@@ -15,14 +21,21 @@ public class Quiz {
 	private boolean randomOrder;
 	private boolean singlePage;
 	private boolean immediateCorrection;
+<<<<<<< HEAD
 	private boolean practiceModeAllowed;
+=======
+	private int taken_count;
+	private String createdBy;
+	private Date createdDate;
+>>>>>>> master
 	
 	ArrayList<Question> questions;
-	
+
 	/**
 	 * Creates a quiz in the database, and returns its database ID.
 	 * @return quiz database ID, -1 on database error
 	 */
+<<<<<<< HEAD
 	public static int createQuiz(String name, boolean randomOrder, boolean singlePage, boolean immediateCorrection, boolean practiceModeAllowed) {
 		DatabaseConnection connection = new DatabaseConnection();
 		connection.executeUpdate("INSERT INTO quizzes (name, randomOrder, singlePage, immediateCorrection, practiceModeAllowed) VALUES ("
@@ -31,8 +44,22 @@ public class Quiz {
 				+ (singlePage ? 1 : 0) + ", " 
 				+ (immediateCorrection ? 1 : 0) + ", " 
 				+ (practiceModeAllowed ? 1 : 0) + ");");
+=======
+	public static int create(DatabaseConnection connection, String name, boolean random, boolean singlePage, boolean immediateCorrection, boolean practiceModeAllowed, String createdBy) {
+		
+		GregorianCalendar calendar = new GregorianCalendar();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String datestring = format.format(calendar.getTime());
+		
+		//DatabaseConnection connection = new DatabaseConnection();
+		connection.executeUpdate("INSERT INTO " + quizzesTable + " (name, randomorder, singlepage, immediatecorrection, practiceModeAllowed, takenCounter, createdBy, createdDate) VALUES('" +
+				name + "', '" + (random ? 1 : 0) + "', '" + (singlePage ? 1 : 0) + "', '" + 
+				(immediateCorrection ? 1 : 0) + "', '" + (practiceModeAllowed ? 1: 0)  + "', '" + 
+				"0" + "', '" + createdBy + "', '" + datestring + "');");
+		
+>>>>>>> master
 		int id = -1;
-		ResultSet resultSet = connection.executeQuery("SELECT * FROM quizzes;");
+		ResultSet resultSet = connection.executeQuery("SELECT * FROM " + quizzesTable + ";");
 		try {
 			resultSet.last();
 			id = resultSet.getInt("id");
@@ -40,7 +67,7 @@ public class Quiz {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		connection.close();
+		//connection.close();
 		return id;
 	}
 	
@@ -48,31 +75,41 @@ public class Quiz {
 	 * Constructs a Quiz object using database ID id.
 	 * @param id
 	 */
-	public Quiz(int id) {
+	public Quiz(DatabaseConnection connection, int id) {
 		this.id = id;
 		this.questions = new ArrayList<Question>();
 		
-		DatabaseConnection connection = new DatabaseConnection();
-		ResultSet resultSet = connection.executeQuery("SELECT * FROM quizzes WHERE id LIKE " + id + ";");
+		DatabaseConnection connection2 = new DatabaseConnection();
+		ResultSet resultSet = connection.executeQuery("SELECT * FROM " + quizzesTable + " WHERE id LIKE " + id + ";");
 		
 		// Fill in state variables.
 		try {
 			resultSet.first();
 			this.name = resultSet.getString("name");
+<<<<<<< HEAD
 			this.randomOrder = resultSet.getBoolean("randomOrder");
 			this.singlePage = resultSet.getBoolean("singlePage");
 			this.immediateCorrection = resultSet.getBoolean("immediateCorrection");
 			this.practiceModeAllowed = resultSet.getBoolean("practiceModeAllowed");
+=======
+			this.random = resultSet.getBoolean("randomorder");
+			this.singlePage = resultSet.getBoolean("singlepage");
+			this.immediateCorrection = resultSet.getBoolean("immediatecorrection");
+			this.createdBy = resultSet.getString("createdBy");
+			this.taken_count = resultSet.getInt("takenCounter");
+			this.createdDate = resultSet.getDate("createdDate");
+			
+>>>>>>> master
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		// Populate questions vector.
-		resultSet = connection.executeQuery("SELECT * FROM questions WHERE quizID LIKE " + id + ";");
+		resultSet = connection.executeQuery("SELECT * FROM " + Question.questionTable + " WHERE quizID LIKE " + id + ";");
 		try {
 			while (resultSet.next()) {
-				questions.add(new Question(resultSet.getInt("id")));
+				questions.add(new Question(connection2, resultSet.getInt("id")));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -82,7 +119,7 @@ public class Quiz {
 		// Shuffle questions if random order specified.
 		if (randomOrder) Collections.shuffle(questions);
 		
-		connection.close();
+		connection2.close();
 	}
 	
 	public boolean useSinglePage() {
@@ -103,5 +140,50 @@ public class Quiz {
 	
 	public Question getQuestionAtIndex(int index) {
 		return questions.get(index);
+	}
+	
+	public String getName() {
+		return this.name;
+	}
+	
+	public int getId() {
+		return this.id;
+	}
+	
+	public String getCreationDate() {
+		return this.createdDate.toString();
+	}
+	
+	public int getTakenCount() {
+		return this.taken_count;
+	}
+	
+	public String getCreator() {
+		return this.createdBy;
+	}
+	
+	/*
+	 * New method - return x most recent quizzes
+	 * Used by the homepage and the browse quiz page (w/ different limit)
+	 * @param limit - how many quizzes should be returned
+	 * @return List<Quiz> - a list of Quiz objects
+	 */
+	public static List<Quiz> getRecentQuizzes(DatabaseConnection connection, int limit) {
+		
+		String queryString = "SELECT * FROM " + quizzesTable + " ORDER BY id DESC LIMIT "+ Integer.toString(limit) + ";";
+		DatabaseConnection connection2 = new DatabaseConnection();
+		
+		ResultSet resultSet = connection.executeQuery(queryString);
+		List<Quiz> quizzes = new ArrayList<Quiz>(limit);
+		try {
+			while (resultSet.next()) {
+				quizzes.add(new Quiz(connection2, resultSet.getInt("id")));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		connection2.close();
+		return quizzes;
 	}
 }

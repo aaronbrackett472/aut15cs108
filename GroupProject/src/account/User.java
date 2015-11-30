@@ -1,7 +1,9 @@
-package QuizProject;
+package account;
+//package QuizProject;
 
 import java.util.*;
-import databaseConnection.*;
+
+import database.DatabaseConnection;
 import java.sql.*;
 
 /**
@@ -9,7 +11,7 @@ import java.sql.*;
  *
  */
 public class User{
-	//Instanc variables
+	//Instance variables
 	private String username;
 	private DatabaseConnection connection;
 	private Statement statement;
@@ -146,7 +148,7 @@ public class User{
 
 	/**
 	 * Returns the a list of achievement titles held by this user
-	 * @return achivements
+	 * @return achievements
 	 */	
 	public ArrayList<Achievement> getAchievements() {
 		ArrayList<Achievement> achievements = new ArrayList<Achievement>();

@@ -8,9 +8,10 @@ import database.DatabaseConnection;
 public class FillInTheBlank extends Question {
 	//represents a blank in the question
 	private static final String blankCharacter = "@@@@";
+	private static final String blankReplacementHTML = "_______";
 	
-	public FillInTheBlank(int id) {
-		super(id);
+	public FillInTheBlank(DatabaseConnection connection, int id) {
+		super(connection, id);
 	}
 	
 	@Override
@@ -19,14 +20,11 @@ public class FillInTheBlank extends Question {
 		if (!question.contains(blankCharacter))return false;
 		return true;
 	}
-
+	
 	@Override
-	public int evaluateAnswer(Answer answer) {
-		StringAnswer stringAnswer = (StringAnswer) answer;
-		if (stringAnswer.getResponse().equals(correctAnswer)){
-			return this.score;
-		}
-		return 0;
+	public String getQuestionHTML(int questionOrder) {
+		String questionHTML = this.question.replace(blankCharacter, blankReplacementHTML);
+		return "<div class=\"result-selected-class\">" + Integer.toString(questionOrder+1) + ". " + questionHTML + "</div>";
 	}
 
 }
