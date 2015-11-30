@@ -1,4 +1,5 @@
 package messaging;
+import account.*;
 
 import java.io.IOException;
 
@@ -79,6 +80,9 @@ public class MessageServlet extends HttpServlet {
 			}else if(type.equals("sent")){
 				m = (Message)request.getSession().getAttribute("sent");
 				mm.deleteMessage((NoteMessage)m);
+			} else if (type.equals("request")) {
+				FriendRequest msg = (FriendRequest)request.getSession().getAttribute("message");
+				mm.deleteMessage(msg);	
 			}
 		}
 		RequestDispatcher rd = request.getRequestDispatcher(forwardAddress);

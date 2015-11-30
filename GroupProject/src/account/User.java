@@ -167,5 +167,14 @@ public class User{
 		return achievements;
 	}
 
+	public String getUserName() {
+		// TODO Auto-generated method stub
+		return username;
+	}
+
+	//perhaps we should have an image for every user, 
+	public String getImageFile() {
+		return null;
+	}
 
 }

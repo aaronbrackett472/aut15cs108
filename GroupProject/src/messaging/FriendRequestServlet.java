@@ -1,4 +1,5 @@
 package messaging;
+import account.*;
 
 import java.io.IOException;
 import javax.servlet.RequestDispatcher;
@@ -37,12 +38,12 @@ public class FriendRequestServlet extends HttpServlet {
 		String friend = request.getParameter("whose");
 //		User us = (User)request.getSession().getAttribute("user"); //request send to them?
 //		String userName = us.getUserName();
+		User us = new User("alfonce");
 		
 		FriendRequest msg = (FriendRequest)request.getSession().getAttribute("message");
 		MessageManager mm = (MessageManager)getServletContext().getAttribute("messageManager");	
 		if (accept.equals("yes")) {
-			AccountManager manager = new AccountManager();
-			manager.addFriend(friend);
+//			us.addFriend(friend);
 			request.setAttribute("successMessage", "You are now "
 					+ "friends with " + friend);
 		} else if (accept.equals("no")) {

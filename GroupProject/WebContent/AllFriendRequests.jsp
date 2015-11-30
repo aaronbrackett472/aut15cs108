@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="java.util.*, messaging.*, java.sql.Timestamp"%>
+<%@ page import="java.util.*, messaging.*, java.sql.Timestamp, account.*"%>
 
 <!-- This page lists all the friendrequests for a particular user
 	One way to use this page would be to create a link in the user's home page 
@@ -28,42 +28,21 @@
 	String title = "Friend Requests";
 	messages = manager.getFriendRequests(user);
 	int numMsgs = messages.size();
-	int[] allmessages = {0, 0, 0}; //notes, friendrequests, challenge
-	allmessages[0] = manager.numMessages(user, "note");
-	allmessages[1] = numMsgs;
-	allmessages[2] = manager.numMessages(user, "challenge");
 %>
 
-<link rel="stylesheet" type="text/css" href="messaging.css">
+<jsp:include page="cssfile.jsp" />
 
 <title><%=title%></title>
 </head>
 <body>
+<jsp:include page="copyheader.jsp" />
+
 	<div id="apDiv1">
 		<label class="heading"><strong><%=title%></strong></label>
 	</div>
 
-	<%
-		String allNotes = "AllNoteMessages.jsp";
-		String friendrequests = "AllFriendRequests.jsp";
-		String challenges = "AllChallengeMessages.jsp";
-		String sentLink = "AllSentMessages.jsp";
-		String draftsLink = "AllDraftMessages.jsp";
-		String accountLink = "userhome.jsp";
-		String friendsLink = "friendlist.jsp";
-	%>
-	<div id="notifications">
-		<br /> <br /> <br /> <label class="userlinks"><%=allmessages[0]%>
-			<a class="link" href=<%=allNotes%>>Inbox</a><br /> <br /> <%=allmessages[1]%>
-			<a class="link" href=<%=friendrequests%>>Friend requests</a><br /> <br />
-			<%=allmessages[2]%> <a class="link" href=<%=challenges%>>Challenges</a><br />
-			<br /> <a class="link" href=<%=sentLink%>>Sent Messages</a><br /> <br />
-			<a class="link" href=<%=draftsLink%>>Drafts</a><br /> <br /> <br />
-			<br /> <br /> <a class="link" href=<%=friendsLink%>>Friends</a><br />
-			<br /> <a class="link" href=<%=accountLink%>>My account</a><br /> <br />
-			<a class="link" href="sitehome.jsp?action=logout">Sign out</a><br />
-			<br /> </label>
-	</div>
+	<jsp:include page="notifications.jsp" />
+	
 	<div id="apDiv2">
 		<%
 			String olderLink = "AllFriendRequests.jsp?page=" + (pagenum + 1);
@@ -83,10 +62,7 @@
 			}
 		%>
 		<table id="request">
-			<tr>
-				<th>From</th>
-				<th>Subject</th>
-			</tr>
+
 			<%
 				if (messages != null) {
 					int messageStart = (pagenum - 1) * messagesPerPage;

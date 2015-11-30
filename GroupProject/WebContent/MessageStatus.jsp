@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="messaging.*, java.util.*, java.text.SimpleDateFormat, java.sql.Timestamp"%>
+<%@ page import="messaging.*, java.util.*, java.text.SimpleDateFormat, java.sql.Timestamp, account.*"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -48,15 +48,10 @@
 	ses.removeAttribute("message");
 	ses.removeAttribute("sent");
 	ses.removeAttribute("draft");
+	ses.removeAttribute("request");
 
-	int[] messages = {0, 0, 0}; //notes, friendrequests, challenge
-	ServletContext ctx = getServletContext();
-	MessageManager manager = (MessageManager) ctx.getAttribute("messageManager");
-	messages[0] = manager.numMessages(us, "note");
-	messages[1] = manager.numMessages(us, "friendrequest");
-	messages[2] = manager.numMessages(us, "challenge");
 %>
-<link rel="stylesheet" type="text/css" href="messaging.css">
+<jsp:include page="cssfile.jsp" />
 
 <title><%=title%></title>
 <script type="text/javascript">
@@ -74,32 +69,13 @@
 </script>
 </head>
 <body>
+<jsp:include page="copyheader.jsp" />
+
 	<div id="apDiv1">
 		<label class="heading" id="heading"><strong><%=title%></strong></label>
 	</div>
-	<%
-		String allNotes = "AllNoteMessages.jsp";
-		String friendrequests = "AllFriendRequests.jsp";
-		String challenges = "AllChallengeMessages.jsp";
-		String sentLink = "AllSentMessages.jsp";
-		String draftsLink = "AllDraftMessages.jsp";
-		String accountLink = "userhome.jsp";
-		String friendsLink = "friendlist.jsp";
-	%>
-	<div id="notifications">
-		<br /> <br /> <br /> <label class="userlinks"><%=messages[0]%>
-			<a class="link" href=<%=allNotes%>>Inbox</a><br /> <br /> <%=messages[1]%>
-			<a class="link" href=<%=friendrequests%>>Friend requests</a><br /> <br />
-			<%=messages[2]%> <a class="link" href=<%=challenges%>>Challenges</a><br />
-			<br /> <a class="link" href=<%=sentLink%>>Sent Messages</a><br /> <br />
-			<a class="link" href=<%=draftsLink%>>Drafts</a><br /> <br /> <br />
-			<br /> <br /> <a class="link" href=<%=friendsLink%>>Friends</a><br />
-			<br /> <a class="link" href=<%=accountLink%>>My account</a><br /> <br />
-			<a class="link" href="sitehome.jsp?action=logout">Sign out</a><br />
-			<br /> </label>
-
-	</div>
- 
+	<jsp:include page="notifications.jsp" />
+	
 	<div id="apDiv2">
 		<%
 			if (request.getAttribute("successMessage") != null) {

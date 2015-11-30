@@ -27,14 +27,6 @@ public class WebsiteListener implements ServletContextListener {
     	messageManager = new MessageManager();
     }
     
- 
-	/**
-     * @see ServletContextAttributeListener#attributeRemoved(ServletContextAttributeEvent)
-     */
-    public void attributeRemoved(ServletContextAttributeEvent arg0)  { 
-         // TODO Auto-generated method stub
-    }
-
 	/**
      * @see ServletContextListener#contextDestroyed(ServletContextEvent)
      */

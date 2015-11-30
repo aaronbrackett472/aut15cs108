@@ -1,4 +1,4 @@
-<%-- <%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" import="qanda.*, database.*, java.util.List" %>
 <%
 	ServletContext context = request.getServletContext();
@@ -12,7 +12,7 @@
 </head>
 <body>
 	<jsp:include page="header.jsp"/>
-    <main>
+   <!--  <main> -->
     <div>
     	<div id="main-browse-container">
   <div id="browse-container">
@@ -81,4 +81,4 @@
 </div>
 </main>
 </body>
- --%></html>
+</html>
