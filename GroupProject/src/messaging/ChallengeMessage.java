@@ -1,5 +1,5 @@
 package messaging;
-import java.util.Date;
+import java.sql.Timestamp;;
 /**
  * Created by alfonce on 11/11/15.
  */
@@ -28,7 +28,7 @@ public class ChallengeMessage extends Message {
      * @param quizId id of the quiz (foreign key in Challenges which references Id field
      *               in Accounts table
      */
-    public ChallengeMessage(String sender , String receiver, String subject, Date date, String body,String quizname) {
+    public ChallengeMessage(String sender , String receiver, String subject, Timestamp date, String body,String quizname) {
        super(sender, receiver, subject, date, body);
        this.quizname = quizname;
        this.setMessageType("challenge");

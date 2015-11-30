@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="java.util.*, messaging.*"%>
+<%@ page import="java.util.*, messaging.*, java.sql.Timestamp"%>
 
 <!-- This page lists all the challenge messages for a particular user
 	One way to use this page would be to create a link in the user's home page 
@@ -14,7 +14,7 @@
 <%
 	HttpSession ses = request.getSession();
 /* 	User us = (User) ses.getAttribute("user");
- */	User us = new User("alfonce");
+ */	User us = new User("nzioka");
 	String user = us.getUserName();
 	String pagen = request.getParameter("page");
 	int pagenum = 1;
@@ -46,12 +46,21 @@
 		String allNotes = "AllNoteMessages.jsp";
 		String friendrequests = "AllFriendRequests.jsp";
 		String challenges = "AllChallengeMessages.jsp";
+		String sentLink = "AllSentMessages.jsp";
+		String draftsLink = "AllDraftMessages.jsp";
+		String accountLink = "userhome.jsp";
+		String friendsLink = "friendlist.jsp";
 	%>
 	<div id="notifications">
 		<br /> <br /> <br /> <label class="userlinks"><%=allmessages[0]%>
-			<a class="link" href=<%=allNotes%>>Messages</a><br /> <br /> <%=allmessages[1]%>
+			<a class="link" href=<%=allNotes%>>Inbox</a><br /> <br /> <%=allmessages[1]%>
 			<a class="link" href=<%=friendrequests%>>Friend requests</a><br /> <br />
 			<%=allmessages[2]%> <a class="link" href=<%=challenges%>>Challenges</a><br />
+			<br /> <a class="link" href=<%=sentLink%>>Sent Messages</a><br /> <br />
+			<a class="link" href=<%=draftsLink%>>Drafts</a><br /> <br /> <br />
+			<br /> <br /> <a class="link" href=<%=friendsLink%>>Friends</a><br />
+			<br /> <a class="link" href=<%=accountLink%>>My account</a><br /> <br />
+			<a class="link" href="sitehome.jsp?action=logout">Sign out</a><br />
 			<br /> </label>
 	</div>
 
@@ -92,7 +101,7 @@
 						String body = "body";
 						boolean isRead = m.isRead();
 						String labelClass = isRead ? "read" : "unread";
-						String viewLink = "ViewNote.jsp?ID=" + i;
+						String viewLink = "ViewChallenge.jsp?ID=" + i;
 			%><tr>
 				<td><label class=<%=labelClass%>> <%=senderName%>
 				</label></td>

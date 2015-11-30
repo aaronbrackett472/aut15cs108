@@ -1,10 +1,8 @@
 package messaging;
 
 import java.io.IOException;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,35 +27,29 @@ public class FriendRequestServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String accept = request.getParameter("accept");
-		String friend = request.getParameter("whose");
-//		User user = (User)request.getSession().getAttribute("user");
-		User user = new User("alfonce");
-		String username = user.getUserName();
-		if(accept.equals("yes")){
-			AccountManager am = null;
-			am = new AccountManager();
-			am.addFriend(friend);
-		} else if (accept.equals("no")) {
-			//decline request
-		}
-		RequestDispatcher rd = request.getRequestDispatcher(MESSAGE_PAGE);
-		rd.forward(request, response);
+		doPost(request,response);
 	}
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		User us = (User)request.getSession().getAttribute("user");
-		String user = us.getUserName();
-		String friend = request.getParameter("friend");
-		AccountManager am = null;
-		synchronized(getServletContext()){
-			am = (AccountManager)getServletContext().getAttribute("accountManager");
+		String accept = request.getParameter("accept");
+		String friend = request.getParameter("whose");
+//		User us = (User)request.getSession().getAttribute("user"); //request send to them?
+//		String userName = us.getUserName();
+		
+		FriendRequest msg = (FriendRequest)request.getSession().getAttribute("message");
+		MessageManager mm = (MessageManager)getServletContext().getAttribute("messageManager");	
+		if (accept.equals("yes")) {
+			AccountManager manager = new AccountManager();
+			manager.addFriend(friend);
+			request.setAttribute("successMessage", "You are now "
+					+ "friends with " + friend);
+		} else if (accept.equals("no")) {
+			request.setAttribute("failureMessage", "Friend request removed");
 		}
-		System.out.println("removing");
-		am.removeFriends(user, friend);
-		RequestDispatcher rd = request.getRequestDispatcher("friendlist.jsp");
+		mm.deleteMessage(msg);
+		RequestDispatcher rd = request.getRequestDispatcher("MessageStatus.jsp");
 		if(rd != null)
 			rd.forward(request, response);
 	}

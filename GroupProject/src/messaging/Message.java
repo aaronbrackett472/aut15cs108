@@ -1,17 +1,18 @@
 package messaging;
 
+import java.sql.Date;
 /**
  * Created by alfonce on 11/11/15.
  * Represents received messages.
  */
-import java.util.Date;
+import java.sql.Timestamp;
 
 public abstract class Message {
 	private String sender, receiver, type, subject, body, quizname;
-	private Date date;
+	private Timestamp date;
 	boolean seen;
 	
-	public Message(String sender, String receiver, String subject,Date date,String body) {
+	public Message(String sender, String receiver, String subject,Timestamp date,String body) {
 		this.sender = sender;
 		this.receiver = receiver;
 		this.subject = subject;
@@ -43,7 +44,7 @@ public abstract class Message {
 		return type;
 	}
 	
-	public Date getDateSent() {
+	public Timestamp getDateSent() {
 		return date;
 	}
 	public boolean isRead() {

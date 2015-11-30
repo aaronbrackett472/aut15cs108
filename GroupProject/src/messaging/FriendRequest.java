@@ -1,5 +1,5 @@
 package messaging;
-import java.util.Date;
+import java.sql.Timestamp;
 
 
 /**
@@ -29,7 +29,7 @@ public class FriendRequest extends Message{
 	 * @param sentDate date when request was made
 	 * @param body optional text
 	 */
-    public FriendRequest(String sender, String receiver, String subject, Date sentDate, String body) {
+    public FriendRequest(String sender, String receiver, String subject, Timestamp sentDate, String body) {
     	super(sender, receiver, subject, sentDate, body);
     	this.setMessageType("friendrequest");
     }

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="java.util.*, messaging.*"%>
+<%@ page import="java.util.*, java.sql.Timestamp, messaging.*"%>
 
 <!-- This page lists all the note messages for a particular user
 	One way to use this page would be to create a link in the user's home page 
@@ -11,11 +11,10 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<%
-	
+<%	
 	HttpSession ses = request.getSession();
 /* 	User us = (User) ses.getAttribute("user");
- */	User us = new User("alfonce");
+ */	User us = new User("nzioka");
 	String user = us.getUserName();
 	String pagen = request.getParameter("page");
 	int pagenum = 1;
@@ -25,10 +24,10 @@
 	List<NoteMessage> messages = null;
 	ServletContext ctx = getServletContext();
 	MessageManager manager = (MessageManager) ctx.getAttribute("messageManager");
-	messages = manager.getNoteMessages(us);
+	messages = manager.getNoteMessages(us, "received");
 	String title = "Note Messages";
 	int numMsgs = messages.size();
-	int[] allMessages = {0, 0, 0}; //notes, friendrequests, challenge
+	int[] allMessages = {0, 0, 0,}; //notes, friendrequests, challenge
 	
 	allMessages[0] = numMsgs;
 	allMessages[1] = manager.numMessages(us, "friendrequest");
@@ -59,13 +58,23 @@
 		String allNotes = "AllNoteMessages.jsp";
 		String friendrequests = "AllFriendRequests.jsp";
 		String challenges = "AllChallengeMessages.jsp";
+		String sentLink = "AllSentMessages.jsp";
+		String draftsLink = "AllDraftMessages.jsp";
+		String accountLink = "userhome.jsp";
+		String friendsLink = "friendlist.jsp";
 	%>
 	<div id="notifications">
 		<br /> <br /> <br /> <label class="userlinks"><%=allMessages[0]%>
-			<a class="link" href=<%=allNotes%>>Messages</a><br /> <br /> <%=allMessages[1]%>
+			<a class="link" href=<%=allNotes%>>Inbox</a><br /> <br /> <%=allMessages[1]%>
 			<a class="link" href=<%=friendrequests%>>Friend requests</a><br /> <br />
 			<%=allMessages[2]%> <a class="link" href=<%=challenges%>>Challenges</a><br />
-			<br /> </label>
+			<br /> 
+			<a class="link" href=<%=sentLink%>>Sent Messages</a><br /><br />
+			  <a class="link" href=<%=draftsLink%>>Drafts</a><br /><br /><br /><br /><br />
+			  <a class="link" href=<%=friendsLink%>>Friends</a><br /><br />
+			  <a class="link" href=<%=accountLink%>>My account</a><br /><br />
+			  <a class="link" href="sitehome.jsp?action=logout">Sign out</a><br /><br />
+			</label>
 
 	</div>
 	<div id="apDiv2">

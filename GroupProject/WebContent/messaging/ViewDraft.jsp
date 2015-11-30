@@ -1,30 +1,40 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="java.util.*, messaging.*, java.sql.Timestamp"%>
+<%@ page import="messaging.*, java.util.*, java.text.*, java.sql.Timestamp"%>
+
+<!-- Shows a single note message. Linked with AllNoteMessages. 
+	Assumes that we can get the current user from the set attribute
+	From this page reply to the message(redirected to the SendNote.jsp file)
+     You can also delete the message (redirect to SendMessage servlet which handles deletion of the 
+     entry from the friendship table -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
 <%
 	HttpSession ses = request.getSession();
-	User us = new User("nzioka");
-/* 	User us = (User) ses.getAttribute("user");
- */	String receiverName = (String) request.getParameter("to");
+	/* 	User us = (User) ses.getAttribute("user");
+	 */ User us = new User("nzioka");
 	String user = us.getUserName();
-	Message m = (Message) ses.getAttribute("message");
-	String action = request.getParameter("action");
-	String title = "New Message";
-	String subject = "";
-	if ( m!= null) {
-		subject = "Re:" +m.getSubject();	
-	}
-	int[] messages = {0, 0, 0}; //notes, friendrequests, challenge
+	int id = Integer.parseInt(request.getParameter("ID"));
+	List<NoteMessage> messages = new ArrayList<NoteMessage>();
 	ServletContext ctx = getServletContext();
 	MessageManager manager = (MessageManager) ctx.getAttribute("messageManager");
-	messages[0] = manager.numMessages(us, "note");
-	messages[1] = manager.numMessages(us, "friendrequest");
-	messages[2] = manager.numMessages(us, "challenge");
+	messages = manager.getDrafts(us);
+	NoteMessage note = messages.get(id);
+	String title = "View Draft";
+	String sender = note.getSenderName();
+	String subject = note.getSubject();
+	String body = note.getMessageBody();
+	String receiverName = note.getReceiverName();
+	SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+	String time = sdf.format(note.getDateSent());
+	ses.setAttribute("draft", note);
+
+	int[] allMessages = {0, 0, 0}; //notes, friendrequests, challenge	
+	allMessages[0] = manager.numMessages(us, "note");
+	allMessages[1] = manager.numMessages(us, "friendrequest");
+	allMessages[2] = manager.numMessages(us, "challenge");
 %>
 <link rel="stylesheet" type="text/css" href="messaging.css">
 
@@ -57,27 +67,29 @@
 		String friendsLink = "friendlist.jsp";
 	%>
 	<div id="notifications">
-		<br /> <br /> <br /> <label class="userlinks"><%=messages[0]%>
-			<a class="link" href=<%=allNotes%>>Inbox</a><br /> <br /> <%=messages[1]%>
+		<br /> <br /> <br /> <label class="userlinks"><%=allMessages[0]%>
+			<a class="link" href=<%=allNotes%>>Inbox</a><br /> <br /> <%=allMessages[1]%>
 			<a class="link" href=<%=friendrequests%>>Friend requests</a><br /> <br />
-			<%=messages[2]%> <a class="link" href=<%=challenges%>>Challenges</a><br />
-			<br /> 
-			<a class="link" href=<%=sentLink%>>Sent Messages</a><br /><br />
-			  <a class="link" href=<%=draftsLink%>>Drafts</a><br /><br /><br /><br /><br />
-			  <a class="link" href=<%=friendsLink%>>Friends</a><br /><br />
-			  <a class="link" href=<%=accountLink%>>My account</a><br /><br />
-			  <a class="link" href="sitehome.jsp?action=logout">Sign out</a><br /><br />
-			</label>
-
+			<%=allMessages[2]%> <a class="link" href=<%=challenges%>>Challenges</a><br />
+			<br /> <a class="link" href=<%=sentLink%>>Sent Messages</a><br /> <br />
+			<a class="link" href=<%=draftsLink%>>Drafts</a><br /> <br /> <br />
+			<br /> <br /> <a class="link" href=<%=friendsLink%>>Friends</a><br />
+			<br /> <a class="link" href=<%=accountLink%>>My account</a><br /> <br />
+			<a class="link" href="sitehome.jsp?action=logout">Sign out</a><br />
+			<br /> </label>
 	</div>
+	<%
+		String deleteLink = "MessageServlet?action=Discard";
+	%>
 	<div id="apDiv2">
 		<form id="form1" name="form1" method="post" action="MessageServlet">
-			<input type="hidden" name="type" value="note"></input> <label
+			<input type="hidden" name="type" id="type" value="note" /> <label
 				class="message"><b>From:</b></label> <input class="messagefield"
-				type="text" name="fromname" id="from" value="<%=user%>" size=30 />
+				type="text" name="fromname" id="from" value="<%=sender%>" size=30 />
 			<label class="message"><b>To:</b></label> <input class="messagefield"
 				type="text" name="toname" id="toname" value="<%=receiverName%>"
-				size=30 /> <input type="hidden" name="to" value="<%=receiverName%>"></input>
+				size=30 /> <input type="hidden" name="to"
+				value="<%=receiverName%>"></input>
 			<p>
 				<label class="message"><b>Subject</b></label>
 			</p>
@@ -90,15 +102,13 @@
 			</p>
 			<p>
 				<textarea class="messagefield" name="body" id="body" cols="90"
-					rows="22"></textarea>
+					rows="22"><%=body%></textarea>
 			</p>
 			<input class="send" type="submit" name="action" id="action"
 				value="Send" /> <input class="send" type="submit" name="action"
-				id="action" value="Save" /> <input class="send" type="button"
-				name="discard" id="discard" value="Discard"
-				onclick="discardMessage();" />
+				id="action" value="Save" /> <input class="send" type="submit"
+				name="action" id="action" value="Discard" />
 		</form>
 	</div>
-
 </body>
 </html>

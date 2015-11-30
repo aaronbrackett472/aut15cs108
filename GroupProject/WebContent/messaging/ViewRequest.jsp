@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="java.text.SimpleDateFormat, java.util.*, messaging.*"%>
+<%@ page import="java.text.SimpleDateFormat, java.util.*, messaging.*, java.sql.Timestamp"%>
 
 <!-- Shows a single friend request. Link this page to the page that contains all 
      friendship request message. From this page you can confirm or decline a request(
@@ -14,14 +14,14 @@
 
 <%
 	HttpSession ses = request.getSession();
-	User us = (User) ses.getAttribute("user");
+/* 	User us = (User) ses.getAttribute("user");
+ */	User us = new User("nzioka");
 	String user = us.getUserName();
 	int id = Integer.parseInt(request.getParameter("ID"));
 	List<FriendRequest> messages = null;
 	ServletContext ctx = getServletContext();
-	MessageManager mm = null;
-	mm = (MessageManager) ctx.getAttribute("messageManager");
-	messages = mm.getFriendRequests(us);
+	MessageManager manager = (MessageManager) ctx.getAttribute("messageManager");
+	messages = manager.getFriendRequests(us);
 	FriendRequest friend = messages.get(id);
 
 	String title = "View Request";
@@ -30,79 +30,74 @@
 	String body = friend.getMessageBody();
 	SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
 	String time = sdf.format(friend.getDateSent());
-	mm.markRead(friend);
+	manager.markRead(friend);
 	ses.setAttribute("message", friend);
+	
+	int[] allMessages = {0, 0, 0}; //notes, friendrequests, challenge	
+	allMessages[0] = manager.numMessages(us, "note");
+	allMessages[1] = manager.numMessages(us, "friendrequest");
+	allMessages[2] = manager.numMessages(us, "challenge");
+	
 %>
+<link rel="stylesheet" type="text/css" href="messaging.css">
+
 <title><%=title%></title>
-
-<style type="text/css">
-#apDiv1 {
-	position: absolute;
-	width: 1250px;
-	height: 100px;
-	z-index: 1;
-	left: 0px;
-	top: 0px;
-	background-color: #048;
-}
-
-#apDiv2 {
-	position: absolute;
-	width: 815px;
-	height: 596px;
-	overflow: scroll;
-	z-index: 3;
-	left: 0px;
-	top: 100px;
-	background-color: #DDDDDD;
-	color: #99F;
-}
-
-.heading {
-	font-family: "Comic Sans MS", cursive;
-	font-size: 32px;
-	font-weight: 100;
-	position: relative;
-	left: 30px;
-	top: 20px;
-	color: white;
-}
-
-.message {
-	color: black;
-	font-weight: bold;
-	position: relative;
-	left: 20px;
-	top: 20px;
-}
-
-.body {
-	color: black;
-	position: relative;
-	left: 20px;
-	top: 20px;
-}
-
-</style>
-
+<script type="text/javascript">
+	function discardMessage() {
+		document.getElementById('subject').value = "";
+		document.getElementById('body').value = "";
+		var div = document.getElementById('apDiv3');
+		div.removeChild(document.getElementById('form1'));
+		document.getElementById('heading').innerHTML = "Request Discarded";
+		var label = document.createElement('label');
+		label.className = 'message';
+		label.innerHTML = "<br></br>Your request has been discarded.";
+		div.appendChild(label);
+	}
+</script>
 </head>
 <body>
 	<div id="apDiv1">
-		<label class="heading"><strong><%=title%></strong></label>
+		<label class="heading" id="heading"><strong><%=title%></strong></label>
 	</div>
 	<%
-		String deleteLink = "SendMessage?action=Discard";
+		String allNotes = "AllNoteMessages.jsp";
+		String friendrequests = "AllFriendRequests.jsp";
+		String challenges = "AllChallengeMessages.jsp";
+		String sentLink = "AllSentMessages.jsp";
+		String draftsLink = "AllDraftMessages.jsp";
+		String accountLink = "userhome.jsp";
+		String friendsLink = "friendlist.jsp";
+	%>
+	<div id="notifications">
+		<br /> <br /> <br /> <label class="userlinks"><%=allMessages[0]%>
+			<a class="link" href=<%=allNotes%>>Inbox</a><br /> <br /> <%=allMessages[1]%>
+			<a class="link" href=<%=friendrequests%>>Friend requests</a><br /> <br />
+			<%=allMessages[2]%> <a class="link" href=<%=challenges%>>Challenges</a><br />
+			<br /> <a class="link" href=<%=sentLink%>>Sent Messages</a><br /> <br />
+			<a class="link" href=<%=draftsLink%>>Drafts</a><br /> <br /> <br />
+			<br /> <br /> <a class="link" href=<%=friendsLink%>>Friends</a><br />
+			<br /> <a class="link" href=<%=accountLink%>>My account</a><br /> <br />
+			<a class="link" href="sitehome.jsp?action=logout">Sign out</a><br />
+			<br /> </label>
+
+	</div>
+	<%
+		String deleteLink = "MessageServlet?action=Discard";
+		/* String rejectLink = "FriendRequestServlet?action=reject";
+		String acceptLink = "FriendRequestServlet?action=reject"; */
 	%>
 	<div id="apDiv2">
 		<p>&nbsp;</p>
-		<label class="message"><%=time%> <%=sender%> wrote:<br />
-		<br /> Subject: <%=subject%><br />
-		<br /> </label> <label class="body"><%=body%></label><br></br>
+		
+		<label class="message"><%=time%> <%=sender%> wrote:<br /> <br />
+			Subject: <%=subject%><br /> <br /> </label> <label class="body"><%=body%></label><br></br>
 		<br></br>
 		<%
 			String acceptLink = "FriendRequestServlet?whose=" + sender + "&accept=yes";
 			String declineLink = "FriendRequestServlet?whose=" + sender + "&accept=no";
 		%><label class="message"><a href=<%=acceptLink%>>Accept</a></label>&nbsp;&nbsp;&nbsp;&nbsp;
+		<input type="hidden" name="type" value="request"></input>
 		<label class="message"><a href=<%=declineLink%>>Decline</a></label>&nbsp;&nbsp;&nbsp;&nbsp;
 		<label class="message"><a href=<%=deleteLink%>>Delete this
 				message</a></label>

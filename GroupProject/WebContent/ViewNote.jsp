@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="messaging.*, java.util.*, java.text.*"%>
+<%@ page import="messaging.*, java.util.*, java.sql.Timestamp, java.text.*"%>
 
 <!-- Shows a single note message. Linked with AllNoteMessages. 
 	Assumes that we can get the current user from the set attribute
@@ -14,13 +14,13 @@
 <%
 	HttpSession ses = request.getSession();
 /* 	User us = (User) ses.getAttribute("user");
- */	User us = new User("alfonce");
+ */	User us = new User("nzioka");
 	String user = us.getUserName();
 	int id = Integer.parseInt(request.getParameter("ID"));
-	List<NoteMessage> messages = null;
+	List<NoteMessage> messages = new ArrayList<NoteMessage>();
 	ServletContext ctx = getServletContext();
 	MessageManager manager = (MessageManager) ctx.getAttribute("messageManager");	
-	messages = manager.getNoteMessages(us);
+	messages = manager.getNoteMessages(us, "received");
 	NoteMessage note = messages.get(id);
 	String title = "View Note";
 	String sender = note.getSenderName();
@@ -30,13 +30,12 @@
 	String time = sdf.format(note.getDateSent());
 	ses.setAttribute("message", note);
 	manager.markRead(note);
-	
 	int[] allMessages = {0, 0, 0}; //notes, friendrequests, challenge	
 	allMessages[0] = manager.numMessages(us, "note");
 	allMessages[1] = manager.numMessages(us, "friendrequest");
 	allMessages[2] = manager.numMessages(us, "challenge");
 %>
-<link rel = "stylesheet"  type="text/css" href="messaging.css">
+<link rel="stylesheet" type="text/css" href="messaging.css">
 
 <title><%=title%></title>
 <script type="text/javascript">
@@ -61,12 +60,21 @@
 		String allNotes = "AllNoteMessages.jsp";
 		String friendrequests = "AllFriendRequests.jsp";
 		String challenges = "AllChallengeMessages.jsp";
+		String sentLink = "AllSentMessages.jsp";
+		String draftsLink = "AllDraftMessages.jsp";
+		String accountLink = "userhome.jsp";
+		String friendsLink = "friendlist.jsp";
 	%>
 	<div id="notifications">
 		<br /> <br /> <br /> <label class="userlinks"><%=allMessages[0]%>
-			<a class="link" href=<%=allNotes%>>Messages</a><br /> <br /> <%=allMessages[1]%>
+			<a class="link" href=<%=allNotes%>>Inbox</a><br /> <br /> <%=allMessages[1]%>
 			<a class="link" href=<%=friendrequests%>>Friend requests</a><br /> <br />
 			<%=allMessages[2]%> <a class="link" href=<%=challenges%>>Challenges</a><br />
+			<br /> <a class="link" href=<%=sentLink%>>Sent Messages</a><br /> <br />
+			<a class="link" href=<%=draftsLink%>>Drafts</a><br /> <br /> <br />
+			<br /> <br /> <a class="link" href=<%=friendsLink%>>Friends</a><br />
+			<br /> <a class="link" href=<%=accountLink%>>My account</a><br /> <br />
+			<a class="link" href="sitehome.jsp?action=logout">Sign out</a><br />
 			<br /> </label>
 
 	</div>

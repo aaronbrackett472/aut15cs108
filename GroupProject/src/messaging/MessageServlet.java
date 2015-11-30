@@ -2,11 +2,9 @@ package messaging;
 
 import java.io.IOException;
 
-import java.util.Date;
-
+import java.sql.Timestamp;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,40 +39,34 @@ public class MessageServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 //		User user = (User)request.getSession().getAttribute("user");
 		
-		User user = new User("alfonce");
+		User user = new User("nzioka");
 		String receiver = request.getParameter("to");
 		String subject = request.getParameter("subject");
 		String action = request.getParameter("action");
 		String body = request.getParameter("body");
 		String type = request.getParameter("type");
 		String forwardAddress = "MessageStatus.jsp?to="+receiver+"&type="+type+"&action="+action;
-//		NoteMessage draft = (NoteMessage)request.getSession().getAttribute("draft");
-//		draft.setMessageType("draft");
-		MessageManager mm = (MessageManager)getServletContext().getAttribute("messageManager");
-//		synchronized(getServletContext()){
-//			mm = (MessageManager)getServletContext().getAttribute("messageManager");
-//		}
-		
-		
+		NoteMessage draft = (NoteMessage)request.getSession().getAttribute("draft");
+		MessageManager mm = (MessageManager)getServletContext().getAttribute("messageManager");		
 		Message m = null;
 		
 		if(action.equals("Send")){ //send three types of messages(add them to table)
 			if(type.equals("note")){
-//				if (draft != null) {
-//					//discard draft (message has been sent)
-//					mm.deleteMessage(draft);
-//				}
-				m = new NoteMessage(user.getUserName(), receiver, subject, new Date(System.currentTimeMillis()), body);
+				if (draft != null) {
+					draft.setMessageType("draft");
+					mm.deleteMessage(draft);
+				}
+				m = new NoteMessage(user.getUserName(), receiver, subject, new Timestamp(System.currentTimeMillis()), body);
 			}else if(type.equals("challenge")){
 				String quiz = request.getParameter("quiz");
-				m = new ChallengeMessage(user.getUserName(), receiver, subject, new Date(System.currentTimeMillis()), body, quiz);
+				m = new ChallengeMessage(user.getUserName(), receiver, subject, new Timestamp(System.currentTimeMillis()), body, quiz);
 			}else if(type.equals("friendrequest")){
-				m = new FriendRequest(user.getUserName(), receiver, subject, new Date(System.currentTimeMillis()), body);
+				m = new FriendRequest(user.getUserName(), receiver, subject, new Timestamp(System.currentTimeMillis()), body);
 			}
 			request.getSession().setAttribute("message", m);
 			mm.addMessage(m);
 		}else if(action.equals("Save")){
-			m = new NoteMessage(user.getUserName(), receiver, subject, new Date(System.currentTimeMillis()), body);
+			m = new NoteMessage(user.getUserName(), receiver, subject, new Timestamp(System.currentTimeMillis()), body);
 			m.setMessageType("draft");
 			mm.addMessage(m);
 			request.getSession().setAttribute("message", m);

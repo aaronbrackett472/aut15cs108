@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="messaging.*, java.util.*, java.text.*"%>
+<%@ page import="messaging.*, java.util.*, java.text.*, java.sql.Timestamp"%>
 
 <!-- Shows a single challenge message. Linked with AllChallengeMessages. 
 	Assumes that we can get the current user from the set attribute
@@ -13,7 +13,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <%
 	HttpSession ses = request.getSession();
-	User us = (User) ses.getAttribute("user");
+/* 	User us = (User) ses.getAttribute("user");
+ */	User us = new User("nzioka");
 	String user = us.getUserName();
 	int id = Integer.parseInt(request.getParameter("ID"));
 	List<ChallengeMessage> messages = null;
@@ -36,7 +37,7 @@
 	allMessages[1] = manager.numMessages(us, "friendrequest");
 	allMessages[2] = manager.numMessages(us, "challenge");
 %>
-<link rel = "stylesheet"  type="text/css" href="messaging.css">
+<link rel="stylesheet" type="text/css" href="messaging.css">
 
 <title><%=title%></title>
 <script type="text/javascript">
@@ -61,12 +62,21 @@
 		String allNotes = "AllNoteMessages.jsp";
 		String friendrequests = "AllFriendRequests.jsp";
 		String challenges = "AllChallengeMessages.jsp";
+		String sentLink = "AllSentMessages.jsp";
+		String draftsLink = "AllDraftMessages.jsp";
+		String accountLink = "userhome.jsp";
+		String friendsLink = "friendlist.jsp";
 	%>
 	<div id="notifications">
 		<br /> <br /> <br /> <label class="userlinks"><%=allMessages[0]%>
-			<a class="link" href=<%=allNotes%>>Messages</a><br /> <br /> <%=allMessages[1]%>
+			<a class="link" href=<%=allNotes%>>Inbox</a><br /> <br /> <%=allMessages[1]%>
 			<a class="link" href=<%=friendrequests%>>Friend requests</a><br /> <br />
 			<%=allMessages[2]%> <a class="link" href=<%=challenges%>>Challenges</a><br />
+			<br /> <a class="link" href=<%=sentLink%>>Sent Messages</a><br /> <br />
+			<a class="link" href=<%=draftsLink%>>Drafts</a><br /> <br /> <br />
+			<br /> <br /> <a class="link" href=<%=friendsLink%>>Friends</a><br />
+			<br /> <a class="link" href=<%=accountLink%>>My account</a><br /> <br />
+			<a class="link" href="sitehome.jsp?action=logout">Sign out</a><br />
 			<br /> </label>
 
 	</div>
@@ -75,14 +85,14 @@
 	%>
 
 	<div id="apDiv2">
-		  <p>&nbsp;</p>
-		  <label class="message"><%=time%> <%=sender%> wrote:<br /><br />
-			  Subject: <%=subject%><br /><br />
-		  </label>
-		  <label class="body"><%=body%></label><br></br><br></br>
-		  <%String acceptLink = "quiz-summary.jsp?"; //need to redirect to the quiz page 
+		<p>&nbsp;</p>
+		<label class="message"><%=time%> <%=sender%> wrote:<br /> <br />
+			Subject: <%=subject%><br /> <br /> </label> <label class="body"><%=body%></label><br></br>
+		<br></br>
+		<%String acceptLink = "quiz-summary.jsp?"; //need to redirect to the quiz page 
 			%><label class="message"><a href=<%=acceptLink%>>Take <%=quizname %></a></label>&nbsp;&nbsp;&nbsp;&nbsp;
-			<label class="message"><a href=<%=deleteLink%>>Delete this message</a></label><br/><br/>
-		</div>
+		<label class="message"><a href=<%=deleteLink%>>Delete this
+				message</a></label><br /> <br />
+	</div>
 </body>
 </html>

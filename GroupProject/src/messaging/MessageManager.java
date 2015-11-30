@@ -3,6 +3,7 @@ package messaging;
 import java.sql.Date;
 
 
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,7 +21,6 @@ import database.DatabaseConnection;
  */
 public class MessageManager {
 	private DatabaseConnection con; 
-	private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	public MessageManager( ) {
 		con = new DatabaseConnection();	
 	}
@@ -57,7 +57,7 @@ public class MessageManager {
 			st.setString(1, msg.getSenderName());
 			st.setString(2, msg.getReceiverName());
 			st.setString(3, msg.getSubject());
-			st.setDate(4, new java.sql.Date(msg.getDateSent().getTime()));
+			st.setTimestamp(4, msg.getDateSent());
 			st.setString(5, msg.getMessageBody());
 			st.setInt(6, isRead);	
 			st.executeUpdate();
@@ -89,7 +89,7 @@ public class MessageManager {
 			st.setString(1, msg.getSenderName());
 			st.setString(2, msg.getReceiverName());
 			st.setString(3, msg.getSubject());
-			st.setDate(4, new java.sql.Date(msg.getDateSent().getTime()));
+			st.setTimestamp(4, msg.getDateSent());
 			st.setString(5,msg.getQuizName());
 			st.setString(6, msg.getMessageBody());
 			st.setInt(7, isRead);	
@@ -229,12 +229,14 @@ public class MessageManager {
 	 * @param user user whose messages are to be obtained
 	 * @return list of all unread notes messages
 	 */
-	public List<NoteMessage>getNoteMessages(User user) {
+	public List<NoteMessage>getNoteMessages(User user, String type) {
 		List<NoteMessage> list = new ArrayList<NoteMessage>();
 		Connection connection = null;
 		ResultSet result = null;
 		PreparedStatement st = null;
-		String sql =  "SELECT * FROM  NoteMessage WHERE Sender ='"+user.getUserName()+"'";	
+		String sql = null;
+		if (type.equals("sent")) sql = "SELECT * FROM  NoteMessage WHERE Sender ='"+user.getUserName()+"'";
+		if (type.equals("received")) sql = "SELECT * FROM  NoteMessage WHERE Receiver ='"+user.getUserName()+"' AND IsRead = '"+0+"'";
 		try {
 			connection = (Connection)con.getConnection();
 			st = connection.prepareStatement("USE c_cs108_mateog");
@@ -245,7 +247,7 @@ public class MessageManager {
 				list.add(new NoteMessage(result.getString("Sender"), 
 						result.getString("Receiver"),
 						result.getString("Subject"), 
-						result.getDate("TimeSent"), 
+						result.getTimestamp("TimeSent"), 
 						result.getString("MessageBody")));
 			}
 		} catch (SQLException e) {
@@ -265,7 +267,7 @@ public class MessageManager {
 		Connection connection = null;
 		ResultSet result = null;
 		PreparedStatement st = null;
-		String sql =  "SELECT * FROM  FriendRequest WHERE Sender ='"+user.getUserName()+"'";
+		String sql =  "SELECT * FROM  FriendRequest WHERE Receiver ='"+user.getUserName()+"'";
 		
 		try {
 			connection = (Connection)con.getConnection();
@@ -277,7 +279,7 @@ public class MessageManager {
 				list.add(new FriendRequest(result.getString("Sender"), 
 						result.getString("Receiver"),
 						result.getString("Subject"), 
-						result.getDate("TimeSent"), 
+						result.getTimestamp("TimeSent"), 
 						result.getString("MessageBody")));
 			}
 		} catch (SQLException e) {
@@ -296,19 +298,19 @@ public class MessageManager {
 	public int numMessages(User user, String type) {
 		int num = 0;
 		if (type.equals("note")) {
-			List<NoteMessage> list = new ArrayList<NoteMessage>();
+			List<NoteMessage> list = getNoteMessages(user, "received");
 			num = list.size();
 		} else if (type.equals("challenge")) {
-			List<ChallengeMessage> list = new ArrayList<ChallengeMessage>();
+			List<ChallengeMessage> list = getChallenges(user);
 			num = list.size();
 		} else if (type.equals("friendrequest")) {
-			List<FriendRequest> list = new ArrayList<FriendRequest>();
+			List<FriendRequest> list = getFriendRequests(user);
 			num = list.size();
 		}
 		return num;
 	}
 	/**
-	 * Returns a list of all draft messages
+	 * Returns a list of all draft messages that the user has saved 
 	 * @param user user 
 	 * @return list of drafts
 	 */
@@ -328,7 +330,7 @@ public class MessageManager {
 				list.add(new NoteMessage(result.getString("Sender"), 
 						result.getString("Receiver"),
 						result.getString("Subject"), 
-						result.getDate("TimeSent"), 
+						result.getTimestamp("TimeSent"), 
 						result.getString("MessageBody")));
 			}
 		} catch (SQLException e) {
@@ -346,7 +348,7 @@ public class MessageManager {
 		Connection connection = null;
 		ResultSet result = null;
 		PreparedStatement st = null;
-		String sql =  "SELECT * FROM  ChallengeMessage WHERE Sender ='"+user.getUserName()+"'";
+		String sql =  "SELECT * FROM  ChallengeMessage WHERE Receiver ='"+user.getUserName()+"'";
 		try {
 			connection = (Connection)con.getConnection();
 			st = connection.prepareStatement("USE c_cs108_mateog");
@@ -357,7 +359,7 @@ public class MessageManager {
 				list.add(new ChallengeMessage(result.getString("Sender"), 
 						result.getString("Receiver"),
 						result.getString("Subject"), 
-						result.getDate("TimeSent"), 
+						result.getTimestamp("TimeSent"), 
 						result.getString("MessageBody"),
 						result.getString("QuizName")));
 			}

@@ -1,5 +1,6 @@
 package messaging;
-import java.util.Date;
+import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  * Created by alfonce on 11/11/15.
@@ -26,11 +27,11 @@ public class NoteMessage extends Message {
      * @param sender - name of sender
      * @param receiver - name of receiver
      * @param subject - subject of message
-     * @param sentDate - date message sent
+     * @param stamp - date message sent
      * @param body - body/contents of message
      */
-    public NoteMessage(String sender, String receiver, String subject, Date sentDate,  String body) {
-        super(sender, receiver,  subject, sentDate, body);
+    public NoteMessage(String sender, String receiver, String subject, Timestamp stamp,  String body) {
+        super(sender, receiver,  subject, stamp, body);
         this.setMessageType("note");        
     }
 }
