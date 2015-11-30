@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" import="qanda.*, database.*, java.util.List" %>
+    pageEncoding="UTF-8" import="qanda.*, database.*, account.*, java.util.List" %>
 <%
 	ServletContext context = request.getServletContext();
 	DatabaseConnection connection = (DatabaseConnection) context.getAttribute("databaseconnection");
@@ -12,13 +12,25 @@
 </head>
 <body>
 	<jsp:include page="header.jsp"/>
+	<%
+	if (request.getParameter("message") != null){
+		String messageToDisplay = request.getParameter("message");
+		if (messageToDisplay.equals("accountcreated")) {
+			out.print(Util.showSuccessMessage("Account Created Successfully. Please Log In to Begin Using CardinalQuiz!"));
+		}
+		if (messageToDisplay.equals("badlogin")) {
+			out.print(Util.showErrorMessage("Invalid Username/Password"));
+		} 
+	} 
+	%>
+	
     <main>
     <div>
     	<div id="main-browse-container">
   <div id="browse-container">
   
     <div id="browse-results-container">
-    <div class="result-selected-class">Latest Quizzes</div>	
+    <div class="result-selected-class">Latest Quizzes!</div>	
       <input id="search-box" placeholder="Search by keywords or class code" class="">
       <ul id="browse-results-list">
         <%
@@ -27,7 +39,7 @@
         %>
         
         <li class="browse-result">
-          <div class="title"><a href="showquiz.jsp?id=<% out.print(q.getId()); %>"><% out.print(q.getName()); %></a></div>
+          <div class="title"><a href="quizsummary.jsp?id=<% out.print(q.getId()); %>"><% out.print(q.getName()); %></a></div>
           <div class="description">Created by <% out.print(q.getCreator()); %> on <% out.print(q.getCreationDate()); %>. Taken <% out.print(q.getTakenCount()); %> times</div>
         </li>
         <%
@@ -64,9 +76,11 @@
       	You haven't done any quiz. Perhaps you want to change that?
       </div>
     </div>
-    <div class="add-class-container">
-      <button>Take a Random Quiz</button>
-    </div>
+    <form action="TakeRandomQuiz" name="quiz-response" method="GET">
+    	<div class="add-class-container">
+      		<button>Take a Random Quiz</button>
+    	</div>
+    </form>
     
     <div style="padding-top: 40px;">
     <div class="result-selected-class">Achievements</div>	

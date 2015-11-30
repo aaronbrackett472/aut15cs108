@@ -33,7 +33,11 @@ public class MultipleChoice extends Question {
 			}
 		}
 		
-		return correctCount;
+		if (correctCount > 0) {
+			return this.score;
+		} else {
+			return 0;
+		}
 	}
 	
 	@Override

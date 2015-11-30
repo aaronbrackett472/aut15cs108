@@ -10,8 +10,6 @@ if(request.getParameter("id") == null){
 	out.println("Invalid Quiz ID supplied");
 } else {
 	int quizId = Integer.parseInt( request.getParameter("id") );
-	
-	//ServletContext context = request.getServletContext();
 	Quiz currentQuiz = new Quiz(connection, quizId);
 %>
 <html>
@@ -21,12 +19,16 @@ if(request.getParameter("id") == null){
 </head>
 <body>
 	<jsp:include page="header.jsp"/>
+	<%
+       			String username = (String)session.getAttribute("loggedin_user");
+       			if (username == null) {
+       				out.print(Util.showWarningMessage("You are not logged in. Please log in/create an account before using CardinalQuiz."));
+       			} else {
+      %>
     <main>
     <div>
-    	<div id="main-browse-container">
-  			<div id="browse-container">
-  
-    			<div id="browse-results-container">
+    	<div id="main-browse-container-center">
+  			<div id="result-info-container" style="width:100%;">
     			<form action="QuizGrader" name="quiz-response" method="POST">
 <%
 
@@ -64,8 +66,9 @@ if(request.getParameter("id") == null){
 	
 }  
 %>
-	<div class="add-class-container">
+	<div class="add-class-container" style="text-align:center;">
       <button type="submit" value="Submit">Grade My Quiz!</button>
+      <input type="hidden" name="id" value="<% out.print(quizId); %>" />
     </div>
     </form>
 			</div>
@@ -76,5 +79,6 @@ if(request.getParameter("id") == null){
 </html>
 
 <%
+       			}
 }
 %>
