@@ -43,7 +43,7 @@ public class QuizCreateServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		System.out.println("posting");
 		HttpSession session = request.getSession();
 		
 		ServletContext context = request.getServletContext();
