@@ -14,6 +14,9 @@ import javax.servlet.http.HttpSession;
 
 import database.DatabaseConnection;
 
+import database.DBContextListener;
+import database.DatabaseConnection;
+
 /**
  * Servlet implementation class LoginServlet
  */
@@ -41,14 +44,11 @@ public class LoginServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		HttpSession session = request.getSession();
-		AccountManager accounts = (AccountManager)session.getAttribute(UserSessionListener.ACCOUNTS_CONTEXT_ATTRIBUTE);
-		if (accounts == null) {
-			accounts = new AccountManager();
-			session.setAttribute(UserSessionListener.ACCOUNTS_CONTEXT_ATTRIBUTE, accounts);
-		}
-		
+		DatabaseConnection connection = (DatabaseConnection)request.getServletContext().getAttribute(DBContextListener.DATABASE_CONTEXT_ATTRIBUTE);	
+		AccountManager accounts =  new AccountManager(connection);
+
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		

@@ -2,6 +2,7 @@
 package account;
 
 import java.io.IOException;
+import database.*;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -13,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import database.DatabaseConnection;
+
+import database.DBContextListener;
 
 /**
  * Servlet implementation class CreateAccountServlet
@@ -40,18 +43,10 @@ public class CreateAccountServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		HttpSession session = request.getSession();
-		AccountManager accounts = (AccountManager)session.getAttribute(UserSessionListener.ACCOUNTS_CONTEXT_ATTRIBUTE);
-		if (accounts == null) {
-			accounts = new AccountManager();
-			session.setAttribute(UserSessionListener.ACCOUNTS_CONTEXT_ATTRIBUTE, accounts);
-		}
-		
-		ServletContext context = request.getServletContext();
-    	//DatabaseConnection connection = (DatabaseConnection) context.getAttribute("databaseconnection");
-		
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException  {
+		DatabaseConnection connection = (DatabaseConnection)request.getServletContext().getAttribute(DBContextListener.DATABASE_CONTEXT_ATTRIBUTE);
+		AccountManager accounts =  new AccountManager(connection);
 		String username =  request.getParameter("username");
 		String password = request.getParameter("password");
 		if(accounts.checkAccountExists(username)) {
