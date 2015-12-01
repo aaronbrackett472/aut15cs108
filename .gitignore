@@ -1,4 +1,11 @@
+GroupProject/build/classes/qanda/Question.class
 
-*.class
+GroupProject/build/classes/qanda/MultipleChoice.class
 
 GroupProject/.DS_Store
+
+GroupProject/.settings/org.eclipse.wst.common.project.facet.core.xml
+
+GroupProject/.classpath
+
+*.class
