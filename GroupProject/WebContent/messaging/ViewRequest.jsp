@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="java.text.SimpleDateFormat, java.util.*, messaging.*, java.sql.Timestamp"%>
+<%@ page import="java.text.SimpleDateFormat, java.util.*, messaging.*, java.sql.Timestamp, account.*"%>
 
 <!-- Shows a single friend request. Link this page to the page that contains all 
      friendship request message. From this page you can confirm or decline a request(
@@ -33,13 +33,8 @@
 	manager.markRead(friend);
 	ses.setAttribute("message", friend);
 	
-	int[] allMessages = {0, 0, 0}; //notes, friendrequests, challenge	
-	allMessages[0] = manager.numMessages(us, "note");
-	allMessages[1] = manager.numMessages(us, "friendrequest");
-	allMessages[2] = manager.numMessages(us, "challenge");
-	
 %>
-<link rel="stylesheet" type="text/css" href="messaging.css">
+<jsp:include page="cssfile.jsp" />
 
 <title><%=title%></title>
 <script type="text/javascript">
@@ -57,31 +52,13 @@
 </script>
 </head>
 <body>
+<jsp:include page="copyheader.jsp" />
+
 	<div id="apDiv1">
 		<label class="heading" id="heading"><strong><%=title%></strong></label>
 	</div>
-	<%
-		String allNotes = "AllNoteMessages.jsp";
-		String friendrequests = "AllFriendRequests.jsp";
-		String challenges = "AllChallengeMessages.jsp";
-		String sentLink = "AllSentMessages.jsp";
-		String draftsLink = "AllDraftMessages.jsp";
-		String accountLink = "userhome.jsp";
-		String friendsLink = "friendlist.jsp";
-	%>
-	<div id="notifications">
-		<br /> <br /> <br /> <label class="userlinks"><%=allMessages[0]%>
-			<a class="link" href=<%=allNotes%>>Inbox</a><br /> <br /> <%=allMessages[1]%>
-			<a class="link" href=<%=friendrequests%>>Friend requests</a><br /> <br />
-			<%=allMessages[2]%> <a class="link" href=<%=challenges%>>Challenges</a><br />
-			<br /> <a class="link" href=<%=sentLink%>>Sent Messages</a><br /> <br />
-			<a class="link" href=<%=draftsLink%>>Drafts</a><br /> <br /> <br />
-			<br /> <br /> <a class="link" href=<%=friendsLink%>>Friends</a><br />
-			<br /> <a class="link" href=<%=accountLink%>>My account</a><br /> <br />
-			<a class="link" href="sitehome.jsp?action=logout">Sign out</a><br />
-			<br /> </label>
-
-	</div>
+	<jsp:include page="notifications.jsp" />
+	
 	<%
 		String deleteLink = "MessageServlet?action=Discard";
 		/* String rejectLink = "FriendRequestServlet?action=reject";
