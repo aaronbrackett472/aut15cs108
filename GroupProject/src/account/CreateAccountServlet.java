@@ -17,6 +17,8 @@ import database.DatabaseConnection;
 
 import database.DBContextListener;
 
+import database.DBContextListener;
+
 /**
  * Servlet implementation class CreateAccountServlet
  */
@@ -43,7 +45,6 @@ public class CreateAccountServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException  {
 		DatabaseConnection connection = (DatabaseConnection)request.getServletContext().getAttribute(DBContextListener.DATABASE_CONTEXT_ATTRIBUTE);
 		AccountManager accounts =  new AccountManager(connection);

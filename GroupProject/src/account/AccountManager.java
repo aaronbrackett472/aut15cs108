@@ -21,7 +21,7 @@ public class AccountManager{
 	 * Requires an open database connection
 	 */
 	public AccountManager(DatabaseConnection connection){
-		this.connection =  connection;	
+		this.connection =  connection;
 		
 	}
 
@@ -108,5 +108,5 @@ public class AccountManager{
 		}
 		return false;
 	}
-	
+
 }

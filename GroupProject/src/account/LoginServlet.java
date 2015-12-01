@@ -17,6 +17,9 @@ import database.DatabaseConnection;
 import database.DBContextListener;
 import database.DatabaseConnection;
 
+import database.DBContextListener;
+import database.DatabaseConnection;
+
 /**
  * Servlet implementation class LoginServlet
  */
@@ -51,8 +54,6 @@ public class LoginServlet extends HttpServlet {
 
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
-		
-		ServletContext context = request.getServletContext();
 		
 		if(accounts.verifyUser(username, password)) {
 			session.setAttribute("loggedin_user", username);
