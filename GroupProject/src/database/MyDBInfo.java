@@ -8,9 +8,9 @@ package database;
  */
 public class MyDBInfo {
 	
-	public static final String MYSQL_USERNAME = "ccs108emusyoka";
-	public static final String MYSQL_PASSWORD = "qSg4pgNTdwz5qzSJ";
-	public static final String MYSQL_DATABASE_SERVER = "mysql-user-master.stanford.edu";
-	public static final String MYSQL_DATABASE_NAME = "c_cs108_emusyoka";
+	public static final String MYSQL_USERNAME = "ccs108mateog";
+	public static final String MYSQL_PASSWORD = "sZTmgpzR6Zs7qdD2";
+	public static final String MYSQL_DATABASE_SERVER = "mysql-user.stanford.edu";
+	public static final String MYSQL_DATABASE_NAME = "c_cs108_mateog";
 
 }
