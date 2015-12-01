@@ -4,12 +4,15 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import database.DatabaseConnection;
 import qanda.Quiz;
 
 /**
@@ -40,6 +43,19 @@ public class QuizCreateServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		HttpSession session = request.getSession();
+		
+		ServletContext context = request.getServletContext();
+		DatabaseConnection connection = (DatabaseConnection) context.getAttribute("databaseconnection");
+		
+		// Check if logged in
+		String quizCreatorUsername = (String)session.getAttribute("loggedin_user");
+		if (quizCreatorUsername == null) {
+			// Do something
+			response.getWriter().append("Not logged in!");
+		} 
+		
 		String name = request.getParameter("name");
 		if (name.length() == 0 || name.length() > maxQuizNameLength) {
 			RequestDispatcher dispatch = request.getRequestDispatcher("try-again.html");
@@ -49,11 +65,11 @@ public class QuizCreateServlet extends HttpServlet {
 			String quizStyle = request.getParameter("quizStyle");
 			String correctionStyle = request.getParameter("correctionStyle");
 			String practiceModeEnabled = request.getParameter("practiceModeEnabled");
-			int quizID = Quiz.createQuiz(name,
+			int quizID = Quiz.createQuiz(connection, name,
 					questionOrder.equals("random"),
 					quizStyle.equals("singlePage"),
 					correctionStyle.equals("immediateCorrection"),
-					practiceModeEnabled.equals("yes"));
+					practiceModeEnabled.equals("yes"), quizCreatorUsername);
 			
 			// Database error.
 			if (quizID < 0) {

@@ -22,8 +22,9 @@ public class Question {
 	protected DatabaseConnection connection;
 	
 	// This needs to work across multiple questions type
-	static int saveToDatabase(DatabaseConnection connection, int quizId, String type, int score, String question, String correctAnswer, String imageUrl){
+	public static int saveToDatabase(DatabaseConnection connection, int quizId, String type, int score, String question, String imageUrl){
 		//DatabaseConnection connection = new DatabaseConnection();
+		String correctAnswer = "";
 		
 		String query = "INSERT INTO " + questionTable + " (quizId, type, score, question, correctAnswer, imageUrl) VALUES('" +
 			quizId + "', '" + type + "', '" + score + "', '" + question + "', '" + correctAnswer + "', '" + imageUrl;

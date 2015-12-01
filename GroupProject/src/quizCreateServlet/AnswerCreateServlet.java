@@ -1,13 +1,14 @@
 package quizCreateServlet;
 
 import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import qanda.String;
 import qanda.*;
 /**
  * Servlet implementation class AnswerCreateServlet
@@ -35,11 +36,11 @@ public class AnswerCreateServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String type = request.getParameter("type");
-		int questionID = request.getParameter("questionID");
+		int questionID = Integer.parseInt(request.getParameter("questionID"));
 		String[] answers = request.getParameterValues("answer");
 		int numAnswers = Integer.parseInt(request.getParameter("number"));
 		for (int i = 0; i < numAnswers; i++){
-			String answer = answer[i];
+			String answer = answers[i];
 			int answerID = Answer.saveToDatabase(questionID, answer, i);
 		}
 		String quizID = request.getParameter("quizID");

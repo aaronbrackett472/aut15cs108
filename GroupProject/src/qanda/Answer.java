@@ -10,7 +10,7 @@ public class Answer {
 	
 	//-1 for no index (i.e. not multiple choice)
 	
-	static int saveToDatabase(int questionID, String answer, int answerIndex){
+	public static int saveToDatabase(int questionID, String answer, int answerIndex){
 		DatabaseConnection connection = new DatabaseConnection();
 		String query = "INSERT INTO answers (questionID, answer, answerIndex) VALUES(" +
 			questionID + ", " + answer + ", " + answerIndex + ";";
