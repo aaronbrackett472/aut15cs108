@@ -36,7 +36,7 @@ if(request.getParameter("id") == null){
 	Question currentQuestion = currentQuiz.getQuestionAtIndex(i);
 	
 	out.println("<div style=\"padding-top: 40px;\">");
-	if(currentQuestion.getType().equals("Question-Response")){
+	if(currentQuestion.getType().equals("Response")){
 		QuestionResponse q = new QuestionResponse(connection, currentQuestion.getQuestionId());
 		
 		out.println(q.getQuestionHTML(i));
