@@ -44,10 +44,10 @@ public class ReportedQuizReviewServlet extends HttpServlet {
 				+ request.getParameter("id") + ";");
 		if (request.getParameter("suspendAuthor") != null) {
 			int days = Integer.parseInt(request.getParameter("suspension"));
-			connection.executeUpdate("UPDATE QuizReports SET suspended = 1 WHERE username = "
-					+ request.getParameter("author") + ";");
-			connection.executeUpdate("UPDATE QuizReports SET suspensionEnd = " + Utilities.getFutureDateInDays(days) + " WHERE username = "
-					+ request.getParameter("author") + ";");
+			connection.executeUpdate("UPDATE Accounts SET suspended = 1 WHERE username = \""
+					+ request.getParameter("author") + "\";");
+			connection.executeUpdate("UPDATE Accounts SET suspensionEnd = \"" + Utilities.getFutureDateInDays(days)
+					+ "\" WHERE username = \"" + request.getParameter("author") + "\";");
 		}
 		connection.close();
 		
