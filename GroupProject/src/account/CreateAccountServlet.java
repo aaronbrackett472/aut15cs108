@@ -2,22 +2,17 @@
 package account;
 
 import java.io.IOException;
-import database.*;
-
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import database.DatabaseConnection;
 
 import database.DBContextListener;
 
-import database.DBContextListener;
 
 /**
  * Servlet implementation class CreateAccountServlet
@@ -56,8 +51,6 @@ public class CreateAccountServlet extends HttpServlet {
 		} else {
 			accounts.registerUser(username, password);
 			response.sendRedirect("/GroupProject/index.jsp?message=accountcreated");
-//			RequestDispatcher dispatch = request.getRequestDispatcher("index.jsp?message=accountcreated");
-//			dispatch.forward(request, response);
 		}
 		
 		

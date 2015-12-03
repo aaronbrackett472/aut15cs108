@@ -17,8 +17,9 @@ public class Answer {
 		
 	public static void saveToDatabase(int questionID, String answer, int answerIndex, boolean correct, String prompt){
 		DatabaseConnection connection = new DatabaseConnection();
-		String query = "INSERT INTO " + answerTable + " (questionID, answer, answerIndex, correct, prompt) VALUES(" +
-			questionID + ", " + answer + ", " + answerIndex + ", " + correct + ", " + prompt + ";";
+		String query = "INSERT INTO Answers (questionID, answer, answerIndex, correct, prompt) VALUES(" +
+			questionID + ", \"" + answer + "\", " + answerIndex + ", " + (correct?1:0) + ", \"" + prompt + "\");";
+		System.out.println(query);
 		connection.executeUpdate(query);
 		connection.close();
 	}

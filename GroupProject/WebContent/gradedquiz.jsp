@@ -32,7 +32,7 @@ if(request.getAttribute("id") == null){
     	<div id="main-browse-container-center">
   			<div id="result-info-container" style="width:100%;">
   			<div class="result-selected-class">Your Score: <% out.print(totalScore); %> / <% out.print(perfectScore); %></div>
-    			<form action="index.jsp" name="quiz-response" method="POST">
+    			
 <%
 
  for (int i = 0; i < currentQuiz.getNumQuestions(); i++) {
@@ -93,6 +93,7 @@ if(request.getAttribute("id") == null){
 	
 }  
 %>
+	<form action="index.jsp" name="quiz-response" method="GET">
 	<div class="add-class-container" style="text-align:center;">
       <button type="submit" value="Submit">Back to Homepage</button>
     </div>

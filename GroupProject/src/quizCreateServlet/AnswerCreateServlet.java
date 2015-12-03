@@ -45,7 +45,9 @@ public class AnswerCreateServlet extends HttpServlet {
 		}
 		else{
 			String[] answers = request.getParameterValues("answer");
-			if (type == "Matching"){
+
+			if (type.equals("Matching")){
+
 				String[] prompts = request.getParameterValues("prompt");
 				for (int i = 0; i < numAnswers; i++){
 					String answer = answers[i];
@@ -53,7 +55,8 @@ public class AnswerCreateServlet extends HttpServlet {
 					Answer.saveToDatabase(questionID, answer, i, true, prompt);
 				}
 			}
-			if (type == "Multiple Choice"){
+			if (type.equals("Multiple Choice")){
+
 				String correctChoicesString = request.getParameter("correctChoices");
 				String[] correctChoicesArr = correctChoicesString.split(";");
 				for (int i = 0; i < numAnswers; i++){

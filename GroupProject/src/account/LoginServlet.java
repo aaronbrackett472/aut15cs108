@@ -3,22 +3,15 @@ package account;
 
 import java.io.IOException;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import database.DatabaseConnection;
-
 import database.DBContextListener;
-import database.DatabaseConnection;
 
-import database.DBContextListener;
-import database.DatabaseConnection;
 
 /**
  * Servlet implementation class LoginServlet
@@ -57,11 +50,15 @@ public class LoginServlet extends HttpServlet {
 		
 		if(accounts.verifyUser(username, password)) {
 			
-			//User userToLogin = new User(username, connection);
-			
-			
-			session.setAttribute("loggedin_user", username);
-			response.sendRedirect("/GroupProject/");
+			User userObject = new User(username, connection);
+			if(!userObject.isSuspended())
+			{
+				session.setAttribute("loggedin_user", username);
+				session.setAttribute("userobject", userObject);
+				response.sendRedirect("/GroupProject/");
+			} else {
+				response.sendRedirect("/GroupProject/?message=suspended");
+			}
 		} else {
 			System.out.println("invalid user or password");
 			response.sendRedirect("/GroupProject/?message=badlogin");

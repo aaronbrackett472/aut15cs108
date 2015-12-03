@@ -1,7 +1,10 @@
 package qanda;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Enumeration;
+import java.util.GregorianCalendar;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -13,6 +16,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import database.DatabaseConnection;
+import account.History;
+import account.HistoryItem;
+import account.Achievement;
+import account.AchievementItem;
 
 /**
  * Servlet implementation class QuizGrader
@@ -65,7 +72,7 @@ public class QuizGrader extends HttpServlet {
 		request.setAttribute("id", quizId);
 		
 		Enumeration<String> attrList = request.getParameterNames();
-		while(attrList.hasMoreElements()){
+		while (attrList.hasMoreElements()) {
 			String attrName = attrList.nextElement();
 			
 			// If this POST variable is a response to a question
@@ -92,8 +99,21 @@ public class QuizGrader extends HttpServlet {
 			}
 		}
 		
-		// Also add to history
+//		GregorianCalendar calendar = new GregorianCalendar();
+//		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//		String curDateString = format.format(calendar.getTime());
 		
+		// Store result in history
+		System.out.println("adding to history");
+		History historyClass = new History(connection);
+		historyClass.storeItem(new HistoryItem(username, totalScore, perfectScore, quizId, new Date()));
+		
+		// Increment the taken counter
+		Quiz.incrementQuizId(connection, quizId);
+		
+		// Need a script to check if any achievement is unlocked
+		
+		// Store this in request
 		request.setAttribute("totalScore", totalScore);
 		request.setAttribute("perfectScore", perfectScore);
 		

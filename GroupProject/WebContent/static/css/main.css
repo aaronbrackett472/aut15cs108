@@ -379,6 +379,22 @@ td, th {
   margin: 0 auto;
 }
 
+.small-box {
+  width: 250px;
+  padding: 10px;
+  height: 20px;
+  font-size: 14px;
+  margin: 0 auto;
+}
+
+.med-box {
+  width: 400px;
+  padding: 10px;
+  height: 25px;
+  font-size: 16px;
+  margin: 0 auto;
+}
+
 #search-box {
   width: 400px;
   padding: 10px;
