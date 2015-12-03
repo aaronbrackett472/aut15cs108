@@ -56,6 +56,10 @@ public class LoginServlet extends HttpServlet {
 		String password = request.getParameter("password");
 		
 		if(accounts.verifyUser(username, password)) {
+			
+			//User userToLogin = new User(username, connection);
+			
+			
 			session.setAttribute("loggedin_user", username);
 			response.sendRedirect("/GroupProject/");
 		} else {

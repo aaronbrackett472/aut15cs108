@@ -1,14 +1,26 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="administration.QuizReport, java.util.ArrayList"%>
-<!DOCTYPE html>
+<%@ page import="administration.QuizReport, java.util.ArrayList, database.*"%>
+
+
+<%
+	ServletContext context = request.getServletContext();
+	DatabaseConnection connection = (DatabaseConnection) context.getAttribute("databaseconnection");
+%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Reported Quizzes</title>
+	<jsp:include page="include.jsp"/>
+	<title>Reported Quizzes</title>
 </head>
 <body>
-<h1>Reported Quizzes</h1>
-<table style="width:100%">
+	<jsp:include page="header.jsp"/>
+    <main>
+<div>
+<div id="main-browse-container-center" style="width:80%;">
+  <div id="result-info-container" style="width:100%;">
+    <div class="result-selected-class">Reported Quizzes</div>	
+      <div id="browse-results-list">
+	<table class="table table-hover table-striped" style="width:100%">
 	<tr>
 		<th>Report ID</th>
 		<th>Quiz ID</th>		
@@ -46,5 +58,11 @@
 	}
 	%>
 </table>
+      </div>
+    </div>
+  </div>
+  
+</div>
+</main>
 </body>
 </html>

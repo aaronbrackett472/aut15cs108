@@ -17,6 +17,36 @@ a:visited {
     font-size: 16px;
 }
 
+.table {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 20px;
+}
+
+.col-name {
+    font-weight: bold;
+}
+
+tr {
+    display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;
+}
+
+.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td
+{
+    padding: 8px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    border-top: 1px solid #ddd;
+}
+
+td, th {
+    display: table-cell;
+    vertical-align: inherit;
+    text-align: left;
+}
+
 [class*="col-"] {
   padding-top: 5px;
   padding-bottom: 5px;

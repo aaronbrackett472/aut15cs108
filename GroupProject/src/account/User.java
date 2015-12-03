@@ -1,7 +1,7 @@
 package account;
-//package QuizProject;
 
 import java.util.*;
+import java.util.Date;
 
 import database.DatabaseConnection;
 import java.sql.*;
@@ -16,21 +16,46 @@ public class User{
 	private DatabaseConnection connection;
 	private Statement statement;
 	private AccountManager accounts;
+	private boolean isAdmin, isSuspended;
+	private Date suspensionEnd;
 	
 	//Constants
 	private static String friendshipTable = "Friendship";
 	private static String achievementsTable = "Achievement";
 	private static String historyTable = "History";
+	private static String accountTable = "Accounts";
 
 	
 	/**
 	 * Constructor
 	 */
 	public User(String username, DatabaseConnection connection){
-		this.username = username;
-		this.connection = connection;
-		this.statement = connection.getStatement();
-		this.accounts =  new AccountManager(connection);
+
+		
+		ResultSet resultSet = connection.executeQuery("SELECT * FROM " + accountTable + " WHERE username = '" + username + "';");
+		try {
+			
+			if(resultSet.next()){
+				this.username = username;
+				this.connection = connection;
+				this.statement = connection.getStatement();
+				this.accounts =  new AccountManager(connection);
+			
+				resultSet.first();
+				this.isAdmin = resultSet.getBoolean("isAdmin");
+				this.isSuspended = resultSet.getBoolean("suspended");
+
+				this.suspensionEnd = resultSet.getDate("suspensionEnd");
+				
+			} else {
+				
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
 	}
 
 	/**
@@ -118,9 +143,9 @@ public class User{
 	 */	
 	public ArrayList<Achievement> getAchievements() {
 		ArrayList<Achievement> achievements = new ArrayList<Achievement>();
-		String querry = "SELECT * FROM " + achievementsTable + " WHERE username='"+ username + "'";
+		String query = "SELECT * FROM " + achievementsTable + " WHERE username='"+ username + "'";
 		try{
-			ResultSet rs = statement.executeQuery(querry);	
+			ResultSet rs = statement.executeQuery(query);	
 			while(rs.next()) {
 				String name = rs.getString(2);
 				String time = rs.getString(3);
@@ -131,6 +156,19 @@ public class User{
 			e.printStackTrace();
 		}				
 		return achievements;
+	}
+	
+	public boolean isAdmin(){
+		return this.isAdmin;
+	}
+	
+	public boolean isSuspended() {
+		if(this.isSuspended) {
+			Date curDate = new Date();
+			if(this.suspensionEnd.after(curDate)) {
+				return true;
+			} else return false;
+		} else return false;
 	}
 
 }

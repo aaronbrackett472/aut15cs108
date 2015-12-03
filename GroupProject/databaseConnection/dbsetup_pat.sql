@@ -79,7 +79,7 @@ CREATE TABLE Choices (
 );
 
 -- Sample user
-INSERT INTO Accounts (username, password, isAdmin, suspended) VALUES("pat", "patpatpat", 0, 0);
+INSERT INTO Accounts (username, password, isAdmin, suspended) VALUES("pat", "patpatpat", 1, 0);
 INSERT INTO Accounts (username, password, isAdmin, suspended) VALUES("eric", "1234", 0, 0);
 
 -- Sample quiz
