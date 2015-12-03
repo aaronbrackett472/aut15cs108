@@ -67,7 +67,7 @@ public class Quiz {
 	}
 	
 	/**
-	 * Constructs a QUiz object using database ID id.
+	 * Constructs a Quiz object using database ID id.
 	 * @param id
 	 */
 	public Quiz(DatabaseConnection connection, int id) {
