@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" import="qanda.*, database.*, account.*, java.util.List" %>
+    pageEncoding="UTF-8" import="qanda.*, database.*, account.*, administration.*, java.util.List" %>
 <%
 	ServletContext context = request.getServletContext();
 	DatabaseConnection connection = (DatabaseConnection) context.getAttribute("databaseconnection");
@@ -57,23 +57,23 @@
   <div id="result-info-container">
     <div class="result-selected-class">Announcements</div>
     <div>
-      <div class="result-relation-title">ClassQuiz is Now Live! (12/4)</div>
+    
+        <%
+        	List<Announcement> recentAnnouncements = Announcement.getRecentAnnouncements(connection, 10);
+        	for (Announcement a: recentAnnouncements) {
+        %>   
+    
+      <div class="result-relation-title"><%= a.header %> (<%= a.createdAt.toString() %>) by <%= a.author %></div>
       <div class="prereqs">
         <ul>
           <div class="placeholder-text">
-            After weeks of hard work, CardinalQuiz is now live. We hope everyone enjoys it!  
+            <%= a.body %>  
           </div>
         </ul>
       </div>
-
-      <div class="result-relation-title">Updated Site Rules (11/23)</div>
-      <div class="leads-to-classes">
-        <ul>
-          <div class="placeholder-text">
-            Please don't post any NSFW quiz on CardinalQuiz!
-          </div>
-        </ul>
-      </div>
+      <%
+        	}
+      %>
     </div>
     
     <div style="padding-top: 40px;">
