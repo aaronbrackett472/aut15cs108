@@ -1,6 +1,7 @@
 package quizCreateServlet;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -37,11 +38,34 @@ public class AnswerCreateServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String type = request.getParameter("type");
 		int questionID = Integer.parseInt(request.getParameter("questionID"));
-		String[] answers = request.getParameterValues("answer");
 		int numAnswers = Integer.parseInt(request.getParameter("number"));
-		for (int i = 0; i < numAnswers; i++){
-			String answer = answers[i];
-			int answerID = Answer.saveToDatabase(questionID, answer, i);
+		if (numAnswers == 1){
+			String answer = request.getParameter("answer");
+			Answer.saveToDatabase(questionID, answer, 0, true, "");
+		}
+		else{
+			String[] answers = request.getParameterValues("answer");
+			if (type == "Matching"){
+				String[] prompts = request.getParameterValues("prompt");
+				for (int i = 0; i < numAnswers; i++){
+					String answer = answers[i];
+					String prompt = prompts[i];
+					Answer.saveToDatabase(questionID, answer, i, true, prompt);
+				}
+			}
+			if (type == "Multiple Choice"){
+				String correctChoicesString = request.getParameter("correctChoices");
+				String[] correctChoicesArr = correctChoicesString.split(";");
+				for (int i = 0; i < numAnswers; i++){
+					String answer = answers[i];
+					if (Arrays.asList(correctChoicesArr).contains(Integer.toString(i))){
+						Answer.saveToDatabase(questionID, answer, i, true, "");
+					}
+					else{
+						Answer.saveToDatabase(questionID, answer, i, false, "");
+					}
+				}
+			}
 		}
 		String quizID = request.getParameter("quizID");
 		request.setAttribute("quizID", quizID);
