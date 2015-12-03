@@ -41,7 +41,7 @@ public class Quiz {
 		
 		GregorianCalendar calendar = new GregorianCalendar();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String datestring = format.format(calendar.getTime());
+		String dateString = format.format(calendar.getTime());
 		
 		connection.executeUpdate("INSERT INTO " + quizzesTable + " (name, randomorder, singlepage, immediatecorrection, practiceModeAllowed, takenCounter, createdBy, createdDate) VALUES('" +
 				name + "', '"
@@ -51,7 +51,7 @@ public class Quiz {
 				+ (practiceModeAllowed ? 1: 0)  + "', '"
 				+ "0" + "', '"
 				+ createdBy + "', '"
-				+ datestring + "');");
+				+ dateString + "');");
 		
 		int id = -1;
 		ResultSet resultSet = connection.executeQuery("SELECT * FROM " + quizzesTable + ";");
@@ -64,6 +64,10 @@ public class Quiz {
 		}
 		//connection.close();
 		return id;
+	}
+	
+	public static void incrementQuizId(DatabaseConnection connection, int quizId) {
+		connection.executeUpdate("UPDATE " + quizzesTable + " SET takenCounter=takenCounter+1 WHERE id = '" + quizId + "';");
 	}
 	
 	/**

@@ -1,6 +1,8 @@
 //package QuizProject;
 package account;
 
+import java.util.Date;
+
 /**
  * Holds a single history record
  */
@@ -10,12 +12,12 @@ public class HistoryItem {
 	private int score;
 	private int maxScore;
 	private int quizId;
-	private String time;
+	private Date time;
 	
 	/**
 	 * Constructor
 	 */
-	public HistoryItem(String username, int score, int maxScore, int quizId, String time) {
+	public HistoryItem(String username, int score, int maxScore, int quizId, Date time) {
 		this.username = username;
 		this.score = score;
 		this.maxScore = maxScore;
@@ -54,7 +56,7 @@ public class HistoryItem {
 	/**
 	 * Returns the time the score of the history item was achieved
 	 */
-	public String getTime() {
+	public Date getTime() {
 		return time;
 	}
 	

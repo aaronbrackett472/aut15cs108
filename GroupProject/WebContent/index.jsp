@@ -3,6 +3,8 @@
 <%
 	ServletContext context = request.getServletContext();
 	DatabaseConnection connection = (DatabaseConnection) context.getAttribute("databaseconnection");
+	
+	String username = (String)session.getAttribute("loggedin_user");
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -77,19 +79,58 @@
     <div style="padding-top: 40px;">
     <div class="result-selected-class">Previous Quizzes</div>	
       <div class="placeholder-container">
-      	You haven't done any quiz. Perhaps you want to change that?
+      <%
+      if (username == null) {
+      	out.println("You are not logged in. Please log in to see previous quizzes taken")	;
+      } else {
+    	  History historyForHomepage = new History(connection);
+    	  List<HistoryItem> prevQuiz = historyForHomepage.getHistoryByUsername(username);
+    	  if ( prevQuiz.size() == 0 ) {
+    		  out.println("You haven't done any quiz. Perhaps you want to change that?");
+    	  } else {
+    		  for(HistoryItem hItem: prevQuiz) {
+    			  Quiz qItem = new Quiz(connection, hItem.getQuizId());
+      %>
+      	<div><a href="quizsumamry.jsp?id=<%= hItem.getQuizId() %>"><%= qItem.getName() %></a> taken on <%= hItem.getTime() %>, Score: <%= hItem.getScore() %>/<%= hItem.getMaxScore() %></div>
+      	<%
+      		}
+      	}
+      }
+      	%>
       </div>
     </div>
+    <%
+    if (username != null) {
+    %>
     <form action="TakeRandomQuiz" name="quiz-response" method="GET">
     	<div class="add-class-container">
       		<button>Take a Random Quiz</button>
     	</div>
     </form>
+    <% 
+    }
+    %>
     
     <div style="padding-top: 40px;">
     <div class="result-selected-class">Achievements</div>	
       <div class="placeholder-container">
-      	You don't have any achievements
+      <%
+      if (username == null) {
+      	out.println("You are not logged in. Please log in to see your achievements");
+      } else {
+    	  Achievement ac = new Achievement(connection);
+    	  List<AchievementItem> acItems = ac.getAchievementByUser(username);
+    	  if ( acItems.size() == 0 ) {
+    		  out.print("You don't have any achievements :(");
+    	  } else {
+    		  for(AchievementItem aItem: acItems) {
+      %>
+      	<div><%= aItem.getAchievementName() %>, <%= aItem.getDescription() %></div>
+      	<%
+      		}
+      	}
+      }
+      	%>
       </div>
     </div> 
     

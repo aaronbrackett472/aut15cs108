@@ -4,6 +4,7 @@ import database.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -32,13 +33,19 @@ public class History {
 	 * @param item history item
 	 */
 	public void storeItem(HistoryItem item) {
-		String querry = "INSERT INTO "+ HISTORY_TABLE + " (username, score, quizId, time) " + 
-						"VALUES('" + item.getUserName() + "', '" + item.getScore()+ "', '"+ item.getQuizId()+ "', '" + item.getTime()+ "')" ;
-		connection.executeUpdate(querry);
+		
+		GregorianCalendar calendar = new GregorianCalendar();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String dateString = format.format(item.getTime());
+		
+		String query = "INSERT INTO "+ HISTORY_TABLE + " (username, score, maxScore, quizId, dateTaken) " + 
+						"VALUES('" + item.getUserName() + "', '" + item.getScore()+ "', '" + item.getMaxScore()+ "', '" + item.getQuizId()+ "', '" + dateString + "')" ;
+		System.out.println(query);
+		connection.executeUpdate(query);
 	}
 	
 	/**
-	 * Gets all histoy items from the database
+	 * Gets all history items from the database
 	 * @return history  all history items
 	 */
 	public ArrayList<HistoryItem> getAllHistory() {
@@ -47,11 +54,11 @@ public class History {
 		try{
 			ResultSet rs = connection.executeQuery(querry);	
 			while(rs.next()) {
-				String username = rs.getString(1);
-				int score  =  rs.getInt(2);
-				int maxScore =  rs.getInt(3);
-				int quizId = rs.getInt(4);
-				String time = rs.getString(5);
+				String username = rs.getString("username");
+				int score  =  rs.getInt("score");
+				int maxScore =  rs.getInt("maxScore");
+				int quizId = rs.getInt("quizId");
+				Date time = rs.getDate("dateTaken");
 				HistoryItem item = new HistoryItem(username, score, maxScore, quizId, time);
 				history.add(item);		
 			}
@@ -69,15 +76,15 @@ public class History {
 	 */
 	public ArrayList<HistoryItem> getHistoryByField(String fieldName, String fieldValue) {
 		ArrayList<HistoryItem> history =  new ArrayList<HistoryItem>();
-		String querry = "SELECT * FROM " + HISTORY_TABLE + " WHERE '" + fieldName + "' = '"+ fieldValue + "'";
+		String querry = "SELECT * FROM " + HISTORY_TABLE + " WHERE " + fieldName + "='"+ fieldValue + "';";
 		try{
 			ResultSet rs = connection.executeQuery(querry);	
 			while(rs.next()) {
-				String username = rs.getString(1);
-				int score  =  rs.getInt(2);
-				int maxScore =  rs.getInt(3);
-				int quizId = rs.getInt(4);
-				String time = rs.getString(5);
+				String username = rs.getString("username");
+				int score  =  rs.getInt("score");
+				int maxScore =  rs.getInt("maxScore");
+				int quizId = rs.getInt("quizId");
+				Date time = rs.getDate("dateTaken");
 				HistoryItem item = new HistoryItem(username, score, maxScore, quizId, time);
 				history.add(item);		
 			}
