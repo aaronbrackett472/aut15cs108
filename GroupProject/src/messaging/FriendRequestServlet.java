@@ -34,22 +34,22 @@ public class FriendRequestServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String accept = request.getParameter("accept");
-		String friend = request.getParameter("whose");
+		String friend = request.getParameter("sender");
+		String confirm = request.getParameter("confirmMsg");
+		String reject = request.getParameter("ignoreMsg");
+		
+
 //		User us = (User)request.getSession().getAttribute("user"); //request send to them?
 //		String userName = us.getUserName();
-		User us = new User("alfonce");
-		
-		FriendRequest msg = (FriendRequest)request.getSession().getAttribute("message");
+		User us = new User("nzioka");	
 		MessageManager mm = (MessageManager)getServletContext().getAttribute("messageManager");	
-		if (accept.equals("yes")) {
-//			us.addFriend(friend);
+		
+		if (confirm != null) {
 			request.setAttribute("successMessage", "You are now "
 					+ "friends with " + friend);
-		} else if (accept.equals("no")) {
+		} else if (reject != null) {
 			request.setAttribute("failureMessage", "Friend request removed");
 		}
-		mm.deleteMessage(msg);
 		RequestDispatcher rd = request.getRequestDispatcher("MessageStatus.jsp");
 		if(rd != null)
 			rd.forward(request, response);

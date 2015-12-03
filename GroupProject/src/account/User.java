@@ -23,6 +23,11 @@ public class User{
 	private static String historyTable = "history";
 
 	
+	//temporarry to get ride of errors on code
+	public User(String username, DatabaseConnection con) {
+		this.username = username;
+		this.connection = con;
+	}
 	/**
 	 * Constructor
 	 */
@@ -176,5 +181,7 @@ public class User{
 	public String getImageFile() {
 		return null;
 	}
+	
+	
 
 }

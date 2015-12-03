@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="messaging.*, java.util.*, account.*"%>
+<%@ page import="messaging.*, java.util.*, account.*, database.*"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 
@@ -16,12 +16,12 @@
 	if (pagen != null) {
 		pagenum = Integer.parseInt(pagen);
 	}
-	User us = new User("alfonce");
-	/* 	User us = (User) request.getAttribute("user");
-	 */ String userName = "";
-	if (us != null) {
-		userName = us.getUserName();
-	}
+	HttpSession ses = request.getSession();
+	ServletContext context = request.getServletContext();
+	DatabaseConnection connection = (DatabaseConnection) context.getAttribute("databaseconnection");
+	String userName = (String)session.getAttribute("loggedin_user");
+
+	User us = new User(userName, connection);
 	List<User> users = new ArrayList<User>();
 	//need a way to get the all user accounts
 	/* 	AccountManager manager = (AccountManager)request.getAttribute("user");
@@ -58,7 +58,7 @@
 	<p>&nbsp;</p>
 	<div id="show">
 		<%
-			if (us != null) {
+			if (userName != null) {
 				String accountLink = "userhome.jsp";
 		%>
 		<label class="userlinks"><a href=<%=accountLink%>>My
@@ -101,7 +101,7 @@
 					String friend = usr.getUserName();
 					if (!userName.equals(friend)) {
 						String friendLink = "userpage.jsp?who=" + friend;
-						if (us == null)
+						if (userName == null)
 							friendLink = "sitehome.html";
 
 						String imageLink = usr.getImageFile();

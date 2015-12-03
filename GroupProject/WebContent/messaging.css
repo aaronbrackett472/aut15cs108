@@ -1,0 +1,168 @@
+@CHARSET "UTF-8";
+
+#apDiv1 {
+	position: absolute;
+	width: 100%;
+	height: 70px;
+	z-index: 1;
+	left: 0px;
+	top: 140px;
+	background-color: #966363;
+}
+
+#apDiv2 {
+	position: relative;
+	width: 100%;
+	height: 800px;
+	top: 50px;
+	z-index: 3;
+	background-color: #E0E0E0;
+	color: #99F;
+}
+
+
+.search_user_container {
+	margin-bottom:10px;
+	margin-right:30px;
+	margin-left:30px;
+}		
+.search_user_right {
+	float:right;
+	font-size:12px;
+	line-height:15px;
+	text-align:left;
+}
+.search_user_name {
+	font-size:16px;
+	font-weight:bold;
+}
+#show {
+	position: absolute;
+	width: 200px;
+	height: 1280px;
+	z-index: 2;
+	overflow: scroll;
+	background-color: #99CCFF;
+	left: 11px;
+	top: 141px;
+}
+
+#show2 {
+	position: absolute;
+	width: 415px;
+	height: 1280px;
+	z-index: 3;
+	overflow: scroll;
+	left: 219px;
+	top: 140px;
+	background-color: #F5F6CE;
+	color: #99F;
+}
+
+#apDiv4 {
+	position: absolute;
+	width: 405px;
+	height: 1280px;
+	z-index: 3;
+	overflow: scroll;
+	left: 630px;
+	top: 140px;
+	background-color: #CCCFFF;
+	color: #99F;
+}
+
+.heading {
+	font-family: "Comic Sans MS", cursive;
+	font-size: 28px;
+	font-weight: 100;
+	position: relative;
+	left: 30px;
+	top: 20px;
+	color: white;
+}
+
+.userlinks {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	position: relative;
+	left: 20px;
+	top: 10px;
+}
+
+.unread {
+	font-size: 14px;
+	font-weight: bold;
+	position: relative;
+	left: 20px;
+	color: black;
+}
+
+.read {
+	font-size: 14px;
+	position: relative;
+	left: 20px;
+	color: black;
+}
+
+.headers {
+	font-size: 14px;
+	font-weight: bold;
+	color: blue;
+	position: relative;
+	left: 20px;
+}
+
+.page {
+	text-align: right;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.search {
+	position: absolute;
+	left: 690px;
+	top: 80px;
+	color: white;
+	font-weight: bold;
+}
+
+.link {
+	text-decoration: none;
+}
+
+#request {
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+	width: 100%;
+	border-collapse: collapse;
+}
+
+#request td, #request th {
+	font-size: 1em;
+	border: 1px solid #98bf21;
+	padding: 3px 7px 2px 7px;
+}
+
+.firstLabel {
+    margin-right: 100px;
+}
+.firstLabel {
+    margin-right: 200px;
+}
+#request th {
+	font-size: 1.1em;
+	text-align: left;
+	padding-top: 5px;
+	padding-bottom: 4px;
+	background-color: #A7C942;
+	color: #ffffff;
+}
+
+#notifications {
+	position: absolute;
+	width: 200px;
+	height: 800px;
+	z-index: 2;
+	background-color: #DCC9C9;
+	left: 0px;
+	top: 141px;
+}

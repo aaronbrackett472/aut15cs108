@@ -38,54 +38,53 @@ public class MessageServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		User user = (User)request.getSession().getAttribute("user");
-		
-		User user = new User("nzioka");
+		String sender = request.getParameter("sender");
 		String receiver = request.getParameter("to");
 		String subject = request.getParameter("subject");
 		String action = request.getParameter("action");
 		String body = request.getParameter("body");
 		String type = request.getParameter("type");
-		String forwardAddress = "MessageStatus.jsp?to="+receiver+"&type="+type+"&action="+action;
-		NoteMessage draft = (NoteMessage)request.getSession().getAttribute("draft");
 		MessageManager mm = (MessageManager)getServletContext().getAttribute("messageManager");		
 		Message m = null;
 		
-		if(action.equals("Send")){ //send three types of messages(add them to table)
-			if(type.equals("note")){
-				if (draft != null) {
-					draft.setMessageType("draft");
-					mm.deleteMessage(draft);
+		if (action != null) {
+			if(action.equals("Send")){ //send three types of messages(add them to table)
+				m = new Message(0, "note",sender, receiver, subject, new Timestamp(System.currentTimeMillis()), body, 0);
+				mm.addMessage(m);
+				request.setAttribute("send", "Your message has been sent");
+	
+			} else if (action.equals("Discard")) {
+				String id = request.getParameter("msg_id");
+				mm.deleteMessage(Integer.parseInt(id));
+				request.setAttribute("delete", "Message has been deleted");
+			}
+		} else if (request.getParameter("inbox_update") != null) {
+			String update = request.getParameter("update_type");
+			String[] checkedIds = request.getParameterValues("check");
+			if (checkedIds != null) {
+				if (update.equals("delete")) {
+					for (String id: checkedIds) {
+						int msg_id = Integer.parseInt(id);
+						mm.deleteMessage(msg_id);
+						response.sendRedirect("AllNoteMessages.jsp");
+					}
+				} else if (update.equals("unread")) {
+					for (String id: checkedIds) {
+						int msg_id = Integer.parseInt(id);
+						mm.markUnread(msg_id);
+						response.sendRedirect("AllNoteMessages.jsp");
+					}
+				} else {
+					for (String id: checkedIds) {
+						int msg_id = Integer.parseInt(id);
+						mm.markRead(msg_id);
+						response.sendRedirect("AllNoteMessages.jsp");
+					}
 				}
-				m = new NoteMessage(user.getUserName(), receiver, subject, new Timestamp(System.currentTimeMillis()), body);
-			}else if(type.equals("challenge")){
-				String quiz = request.getParameter("quiz");
-				m = new ChallengeMessage(user.getUserName(), receiver, subject, new Timestamp(System.currentTimeMillis()), body, quiz);
-			}else if(type.equals("friendrequest")){
-				m = new FriendRequest(user.getUserName(), receiver, subject, new Timestamp(System.currentTimeMillis()), body);
 			}
-			request.getSession().setAttribute("message", m);
-			mm.addMessage(m);
-		}else if(action.equals("Save")){
-			m = new NoteMessage(user.getUserName(), receiver, subject, new Timestamp(System.currentTimeMillis()), body);
-			m.setMessageType("draft");
-			mm.addMessage(m);
-			request.getSession().setAttribute("message", m);
-		}else if(action.equals("Discard")){
-			if(type == null){
-				m = (Message)request.getSession().getAttribute("message");
-				mm.deleteMessage(m);
-			}else if(type.equals("note")){
-//				mm.deleteMessage(draft);				
-			}else if(type.equals("sent")){
-				m = (Message)request.getSession().getAttribute("sent");
-				mm.deleteMessage((NoteMessage)m);
-			} else if (type.equals("request")) {
-				FriendRequest msg = (FriendRequest)request.getSession().getAttribute("message");
-				mm.deleteMessage(msg);	
-			}
+		
 		}
-		RequestDispatcher rd = request.getRequestDispatcher(forwardAddress);
+		RequestDispatcher rd = request.getRequestDispatcher("MessageStatus.jsp");
 		if(rd != null)
 			rd.forward(request, response);
 	}

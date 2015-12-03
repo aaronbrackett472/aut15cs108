@@ -7,10 +7,10 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 import com.mysql.jdbc.Connection;
+
 
 import database.DatabaseConnection;
 
@@ -21,8 +21,11 @@ import database.DatabaseConnection;
  */
 public class MessageManager {
 	private DatabaseConnection con; 
+	private Connection connection;
 	public MessageManager( ) {
 		con = new DatabaseConnection();	
+		connection = (Connection) con.getConnection();
+
 	}
 
 	/**
@@ -36,63 +39,22 @@ public class MessageManager {
 	 */
 	@SuppressWarnings("resource")
 	public void addMessage(Message msg) {
-		String tableName = "";
-		if(msg.getMessageType().equals("note")) tableName = "NoteMessage";
-		if(msg.getMessageType().equals("friendrequest")) tableName = "FriendRequest";
-		if (msg.getMessageType().equals("draft"))tableName = "NoteDraft";
-		if(msg.getMessageType().equals("challenge")){	
-			updateChallengeTable((ChallengeMessage)msg);
-			return;
-		}
-		String sql = "INSERT INTO " + tableName + " (Sender, Receiver, Subject, TimeSent, MessageBody, IsRead) VALUES (?,?,?,?,?,?)" ;
-		Connection connection = null;
+		String sql = "INSERT INTO messages (MsgType, Sender, Receiver, Subject, TimeSent, MessageBody, IsRead, QuizId) VALUES (?,?,?,?,?,?,?,?)" ;
 		PreparedStatement st = null;
         int isRead = 0;
 		if(msg.isRead()) isRead = 1;
 		try {
-			connection = (Connection) con.getConnection();
 			st = connection.prepareStatement("USE c_cs108_mateog");
 			st.executeQuery();	
 			st = connection.prepareStatement(sql);
-			st.setString(1, msg.getSenderName());
-			st.setString(2, msg.getReceiverName());
-			st.setString(3, msg.getSubject());
-			st.setTimestamp(4, msg.getDateSent());
-			st.setString(5, msg.getMessageBody());
-			st.setInt(6, isRead);	
-			st.executeUpdate();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		} finally {
-			if (st != null) {
-				try {
-					st.close();
-				} catch (SQLException e2) {
-					e2.printStackTrace();
-				}
-			}
-		}
-	}
-	@SuppressWarnings("resource")
-	private void updateChallengeTable( ChallengeMessage msg) {	
-		String sql = "INSERT INTO ChallengeMessage (Sender, Receiver, Subject, TimeSent, QuizName, MessageBody, "
-				+ "IsRead) VALUES (?,?,?,?,?,?,?)" ;		
-		Connection connection = null;
-		PreparedStatement st = null;
-        int isRead = 0;
-		if(msg.isRead()) isRead = 1;
-		try {
-			connection = (Connection) con.getConnection();
-			st = connection.prepareStatement("USE c_cs108_mateog");
-			st.executeQuery();	
-			st = connection.prepareStatement(sql);
-			st.setString(1, msg.getSenderName());
-			st.setString(2, msg.getReceiverName());
-			st.setString(3, msg.getSubject());
-			st.setTimestamp(4, msg.getDateSent());
-			st.setString(5,msg.getQuizName());
+			st.setString(1, msg.getMessageType());
+			st.setString(2, msg.getSenderName());
+			st.setString(3, msg.getReceiverName());
+			st.setString(4, msg.getSubject());
+			st.setTimestamp(5, msg.getDateSent());
 			st.setString(6, msg.getMessageBody());
-			st.setInt(7, isRead);	
+			st.setInt(7, isRead);
+			st.setInt(8, msg.getQuizId());
 			st.executeUpdate();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
@@ -106,29 +68,83 @@ public class MessageManager {
 			}
 		}
 	}
-
+	
+	
+	@SuppressWarnings("resource")
+	public void sendRequest(FriendRequest msg) {
+		String sql = "INSERT INTO FriendRequest (Sender, Receiver,TimeSent) VALUES (?,?,?)" ;
+		PreparedStatement st = null;
+		try {
+			st = connection.prepareStatement("USE c_cs108_mateog");
+			st.executeQuery();	
+			st = connection.prepareStatement(sql);
+			st.setString(1, msg.sender);
+			st.setString(2, msg.receiver);
+			st.setTimestamp(3, msg.stamp);
+			st.executeUpdate();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		} finally {
+			if (st != null) {
+				try {
+					st.close();
+				} catch (SQLException e2) {
+					e2.printStackTrace();
+				}
+			}
+		}
+	}
+	public List<Message>getUserMessages(String user) {
+		List<Message>list = new ArrayList<Message>();
+		ResultSet result = null;
+		Message msg = null;
+		PreparedStatement st = null;
+		String sql = "SELECT * FROM  messages WHERE Receiver ='"+user+"'";
+		try {
+			connection = (Connection)con.getConnection();
+			st = connection.prepareStatement("USE c_cs108_mateog");
+			st.executeQuery();
+			st = connection.prepareStatement(sql);
+			result = st.executeQuery();
+			while (result.next()) {
+						msg = new Message(
+						result.getInt("ID"),
+						result.getString("MsgType"),
+						result.getString("Sender"), 
+						result.getString("Receiver"),
+						result.getString("Subject"), 
+						result.getTimestamp("TimeSent"), 
+						result.getString("MessageBody"),
+						result.getInt("QuizId"));
+						list.add(msg);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+		
+	}
+	
+	
+	public int getNumMessages(String user){
+		List<Message>list = getUserMessages(user);
+		return list.size();
+	}
 	/**
 	 * Deletes a message (friendship request, note, challenge or draft) from the
 	 * relevant table
 	 * @param msg
 	 * @param status specifies whether to store as draft or regular note
 	 */
-	public void deleteMessage(Message msg) {
-		Connection connection = null;
-		PreparedStatement st = null;
-		String tableName = "";
-		
-		if(msg.getMessageType().equals("note")) tableName = "NoteMessage";
-		if(msg.getMessageType().equals("friendrequest")) tableName = "FriendRequest";
-		if(msg.getMessageType().equals("challenge")) tableName = "ChallengeMessage";
-		if (msg.getMessageType().equals("draft")) tableName = "NoteDraft";	
-		String sql = "DELETE FROM " + tableName + " WHERE ID =?";
+	public void deleteMessage(int id) {
+		PreparedStatement st = null;		
+		String sql = "DELETE FROM messages WHERE ID =?";
 		try {
 			connection = (Connection)con.getConnection();
 			st = connection.prepareStatement("USE c_cs108_mateog");
 			st.executeQuery();
 			st = connection.prepareStatement(sql);
-			st.setInt(1,getId(msg));
+			st.setInt(1,id);
 			st.executeUpdate();
 					
 		} catch (SQLException e) {
@@ -136,61 +152,19 @@ public class MessageManager {
 		}
 		
 	}
-	
-	/**
-	 * Returns a unique Id of the message as identified by the field ID in the relevant table
-	 * @param msg message whose ID is to be returned
-	 * @return
-	 */
-	public int getId(Message msg) {
-		Connection connection = null;
-		PreparedStatement st = null;
-		ResultSet result = null;	
-		String tableName = "";
-		int id = 0;
-		if(msg.getMessageType().equals("draft")) tableName = "NoteDraft";
-		if(msg.getMessageType().equals("note")) tableName = "NoteMessage";
-		if(msg.getMessageType().equals("friendrequest")) tableName = "FriendRequest";
-		if(msg.getMessageType().equals("challenge")) tableName = "ChallengeMessage";
-		String sql = "SELECT * FROM " + tableName + " WHERE "
-				+ "Sender ='"+ msg.getSenderName() + "' AND TimeSent ='"+ msg.getDateSent() + "'" ;
-		try {
-			connection = (Connection)con.getConnection();
-			st = connection.prepareStatement("USE c_cs108_mateog");
-			st.executeQuery();
-			st = connection.prepareStatement(sql);
-			result = st.executeQuery();
-			
-			while(result.next()) {
-				id = result.getInt("ID");
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return id;
-	}
-
 	/**
 	 * Marks a message as unread. Updates the IsRead field on the relevant table
 	 * @param msg message to be marked unread
 	 */
-	public void markUnread(Message msg) {
-		Connection connection = null;
+	public void markUnread(int id) {
 		PreparedStatement st = null;
-		String tableName = "";
-		
-		if(msg.getMessageType().equals("note")) tableName = "NoteMessage";
-		if(msg.getMessageType().equals("friendrequest")) tableName = "FriendRequest";
-		if(msg.getMessageType().equals("challenge")) tableName = "ChallengeMessage";
-		if (msg.getMessageType().equals("draft")) tableName = "NoteDraft";	
-		
-		String sql = "UPDATE " + tableName + " SET IsRead = 0 WHERE ID =?";
+		String sql = "UPDATE messages SET IsRead = 0 WHERE ID =?";
 		try {
 			connection = (Connection)con.getConnection();
 			st = connection.prepareStatement("USE c_cs108_mateog");
 			st.executeQuery();
 			st = connection.prepareStatement(sql);
-			st.setInt(1,getId(msg));
+			st.setInt(1,id);
 			st.executeUpdate();
 					
 		} catch (SQLException e) {
@@ -201,42 +175,29 @@ public class MessageManager {
 	 * Marks a message as read
 	 * @param msg message to be marked read
 	 */
-	public void markRead(Message msg) {
+	public void markRead(int id) {
 		Connection connection = null;
 		PreparedStatement st = null;
-		String tableName = "";
-		
-		if(msg.getMessageType().equals("note")) tableName = "NoteMessage";
-		if(msg.getMessageType().equals("friendrequest")) tableName = "FriendRequest";
-		if(msg.getMessageType().equals("challenge")) tableName = "ChallengeMessage";
-		if (msg.getMessageType().equals("draft")) tableName = "NoteDraft";	
-		
-		String sql = "UPDATE " + tableName + " SET IsRead = 1 WHERE ID =?";
+		String sql = "UPDATE messages SET IsRead = 1 WHERE ID =?";
 		try {
 			connection = (Connection)con.getConnection();
 			st = connection.prepareStatement("USE c_cs108_mateog");
 			st.executeQuery();
 			st = connection.prepareStatement(sql);
-			st.setInt(1,getId(msg));
+			st.setInt(1,id);
 			st.executeUpdate();
 					
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-	/**
-	 * Lists all unread note messages for a particular user 
-	 * @param user user whose messages are to be obtained
-	 * @return list of all unread notes messages
-	 */
-	public List<NoteMessage>getNoteMessages(User user, String type) {
-		List<NoteMessage> list = new ArrayList<NoteMessage>();
+
+	public Message getMessage(int id) {
 		Connection connection = null;
 		ResultSet result = null;
+		Message msg = null;
 		PreparedStatement st = null;
-		String sql = null;
-		if (type.equals("sent")) sql = "SELECT * FROM  NoteMessage WHERE Sender ='"+user.getUserName()+"'";
-		if (type.equals("received")) sql = "SELECT * FROM  NoteMessage WHERE Receiver ='"+user.getUserName()+"' AND IsRead = '"+0+"'";
+		String sql = "SELECT * FROM  messages WHERE ID ='"+id+"'";
 		try {
 			connection = (Connection)con.getConnection();
 			st = connection.prepareStatement("USE c_cs108_mateog");
@@ -244,30 +205,34 @@ public class MessageManager {
 			st = connection.prepareStatement(sql);
 			result = st.executeQuery();
 			while (result.next()) {
-				list.add(new NoteMessage(result.getString("Sender"), 
+						msg = new Message(
+						result.getInt("ID"),
+						result.getString("MsgType"),
+						result.getString("Sender"), 
 						result.getString("Receiver"),
 						result.getString("Subject"), 
 						result.getTimestamp("TimeSent"), 
-						result.getString("MessageBody")));
+						result.getString("MessageBody"),
+						result.getInt("QuizId"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		return list;
+		return msg;
 	}
+	
 	/**
 	 * Returns a list of all unviewed friendship requests where "user" is the requestee
 	 * @param user requestee
 	 * @return list of unviewed requests
 	 */
 	
-	public List<FriendRequest>getFriendRequests(User user) {
+	public List<FriendRequest>getFriendRequests(String user) {
 		List<FriendRequest> list = new ArrayList<FriendRequest>();
 		Connection connection = null;
 		ResultSet result = null;
 		PreparedStatement st = null;
-		String sql =  "SELECT * FROM  FriendRequest WHERE Receiver ='"+user.getUserName()+"'";
+		String sql =  "SELECT * FROM  FriendRequest WHERE Receiver ='"+user+"'";
 		
 		try {
 			connection = (Connection)con.getConnection();
@@ -276,11 +241,11 @@ public class MessageManager {
 			st = connection.prepareStatement(sql);
 			result = st.executeQuery();
 			while (result.next()) {
-				list.add(new FriendRequest(result.getString("Sender"), 
+				list.add(new FriendRequest(
+						result.getInt("ID"),
+						result.getString("Sender"), 
 						result.getString("Receiver"),
-						result.getString("Subject"), 
-						result.getTimestamp("TimeSent"), 
-						result.getString("MessageBody")));
+						result.getTimestamp("TimeSent"))); 
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -289,83 +254,24 @@ public class MessageManager {
 		return list;
 	}
 	
-	/**
-	 * Returns number of messages of type given
-	 * @param user user
-	 * @param type type of message
-	 * @return number of messages
-	 */
-	public int numMessages(User user, String type) {
-		int num = 0;
-		if (type.equals("note")) {
-			List<NoteMessage> list = getNoteMessages(user, "received");
-			num = list.size();
-		} else if (type.equals("challenge")) {
-			List<ChallengeMessage> list = getChallenges(user);
-			num = list.size();
-		} else if (type.equals("friendrequest")) {
-			List<FriendRequest> list = getFriendRequests(user);
-			num = list.size();
-		}
-		return num;
-	}
-	/**
-	 * Returns a list of all draft messages that the user has saved 
-	 * @param user user 
-	 * @return list of drafts
-	 */
-	public List<NoteMessage>getDrafts(User user) {
-		List<NoteMessage> list = new ArrayList<NoteMessage>();
-		Connection connection = null;
-		ResultSet result = null;
-		PreparedStatement st = null;
-		String sql =  "SELECT * FROM  NoteDraft WHERE Sender ='"+user.getUserName()+"'";	
+	public void deleteRequest(int id) {
+		PreparedStatement st = null;		
+		String sql = "DELETE FROM FriendRequest WHERE ID =?";
 		try {
 			connection = (Connection)con.getConnection();
 			st = connection.prepareStatement("USE c_cs108_mateog");
 			st.executeQuery();
 			st = connection.prepareStatement(sql);
-			result = st.executeQuery();
-			while (result.next()) {
-				list.add(new NoteMessage(result.getString("Sender"), 
-						result.getString("Receiver"),
-						result.getString("Subject"), 
-						result.getTimestamp("TimeSent"), 
-						result.getString("MessageBody")));
-			}
+			st.setInt(1,id);
+			st.executeUpdate();
+					
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return list;
 	}
-	/**
-	 * Returns a list of all challenges for a user
-	 * @param user user
-	 * @return list of challenges
-	 */
-	public List<ChallengeMessage>getChallenges(User user) {
-		List<ChallengeMessage> list = new ArrayList<ChallengeMessage>();
-		Connection connection = null;
-		ResultSet result = null;
-		PreparedStatement st = null;
-		String sql =  "SELECT * FROM  ChallengeMessage WHERE Receiver ='"+user.getUserName()+"'";
-		try {
-			connection = (Connection)con.getConnection();
-			st = connection.prepareStatement("USE c_cs108_mateog");
-			st.executeQuery();
-			st = connection.prepareStatement(sql);
-			result = st.executeQuery();
-			while (result.next()) {
-				list.add(new ChallengeMessage(result.getString("Sender"), 
-						result.getString("Receiver"),
-						result.getString("Subject"), 
-						result.getTimestamp("TimeSent"), 
-						result.getString("MessageBody"),
-						result.getString("QuizName")));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return list;
+	public int numRequests(String user) {
+		List<FriendRequest> list = getFriendRequests(user);
+		return list.size();
 	}
+	
 }
