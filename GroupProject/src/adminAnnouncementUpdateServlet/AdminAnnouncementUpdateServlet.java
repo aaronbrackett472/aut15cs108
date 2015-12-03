@@ -40,7 +40,6 @@ public class AdminAnnouncementUpdateServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		DatabaseConnection connection = new DatabaseConnection();
 		int id = Integer.parseInt(request.getParameter("id"));
 		if (request.getParameter("update") != null) {
 			Announcement.updateAnnouncement(id, request.getParameter("header"), request.getParameter("body"));
