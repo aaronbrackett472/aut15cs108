@@ -2,3 +2,6 @@
 /qanda/
 /administration/
 /adminAnnouncementUpdateServlet/
+/adminUserListServlet/
+/reportedQuizReviewServlet/
+/adminSuspendUserServlet/
