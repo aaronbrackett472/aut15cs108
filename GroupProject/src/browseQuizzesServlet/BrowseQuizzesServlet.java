@@ -1,4 +1,4 @@
-package adminQuizListServlet;
+package browseQuizzesServlet;
 
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -12,21 +12,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import administration.Announcement;
 import administration.Quiz;
 import database.DatabaseConnection;
 
 /**
- * Servlet implementation class AdminQuizListServlet
+ * Servlet implementation class BrowseQuizzesServlet
  */
-@WebServlet("/AdminQuizListServlet")
-public class AdminQuizListServlet extends HttpServlet {
+@WebServlet("/BrowseQuizzesServlet")
+public class BrowseQuizzesServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public AdminQuizListServlet() {
+    public BrowseQuizzesServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -38,7 +37,7 @@ public class AdminQuizListServlet extends HttpServlet {
 		ArrayList<Quiz> quizzes = Quiz.getQuizzes();
 		
 		request.setAttribute("quizzes", quizzes);
-		RequestDispatcher dispatch = request.getRequestDispatcher("admin-quiz-list.jsp");
+		RequestDispatcher dispatch = request.getRequestDispatcher("browse-quizzes.jsp");
 		dispatch.forward(request, response);
 	}
 
@@ -46,8 +45,7 @@ public class AdminQuizListServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Quiz.deleteQuiz(Integer.parseInt(request.getParameter("id")));
-		
+		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 

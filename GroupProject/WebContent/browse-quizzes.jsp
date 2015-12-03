@@ -4,18 +4,17 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Quiz Manager</title>
+<title>Browse Quizzes</title>
 </head>
 <body>
-<h1>Quiz Manager</h1>
+<h1>Quizzes</h1>
 <table style="width:100%">
 	<tr>
-		<th>Quiz ID</th>
-		<th>Name</th>		
+		<th>Name</th>
+		<th>Description</th>		
 		<th>Author</th>
-		<th>Description</th>
 		<th>Date Created</th>
-		<th>Delete</th>
+		<th>Link</th>
 	</tr>
 	<%! @SuppressWarnings("unchecked") %>
 	<%
@@ -27,14 +26,11 @@
 			formattedDescription = formattedDescription.substring(0, kDescriptionPreviewLength) + "...";
 		}
 		out.println("<tr>"
-				+ "<td>" + quiz.id + "</td>"
 				+ "<td>" + quiz.name + "</td>"
-				+ "<td>" + quiz.author + "</td>"
 				+ "<td>" + formattedDescription + "</td>"
+				+ "<td>" + quiz.author + "</td>"
 				+ "<td>" + quiz.createdAt + "</td>"
-				+ "<td><form action=\"AdminQuizListServlet\" method=\"post\">"
-				+ "<input name=\"id\" type=\"hidden\" value=\"" + quiz.id + "\">"
-				+ "<input type=\"submit\" value=\"Delete\"></form></td></tr>");
+				+ "<td><a href=\"quizsummary.jsp?id=" + quiz.id + "\">Take Quiz!</a></td></tr>");
 	}
 	%>
 </table>

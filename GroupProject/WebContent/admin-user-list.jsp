@@ -4,10 +4,10 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Users</title>
+<title>User Manager</title>
 </head>
 <body>
-<h1>Users</h1>
+<h1>User Manager</h1>
 <table style="width:100%">
 	<tr>
 		<th>Username</th>

@@ -1,5 +1,9 @@
 package administration;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 import database.DatabaseConnection;
 
 public class Quiz {
@@ -21,5 +25,27 @@ public class Quiz {
 		DatabaseConnection connection = new DatabaseConnection();
 		connection.executeUpdate("DELETE FROM Quizzes WHERE id = " + id + ";");
 		connection.close();
+	}
+	
+	public static ArrayList<Quiz> getQuizzes() {
+		ArrayList<Quiz> quizzes = new ArrayList<Quiz>();
+		
+		DatabaseConnection connection = new DatabaseConnection();
+		ResultSet resultSet = connection.executeQuery("SELECT * FROM Quizzes;");
+		try {
+			resultSet.beforeFirst();
+			while (resultSet.next()) {
+				quizzes.add(new Quiz(resultSet.getInt("id"),
+						resultSet.getString("name"),
+						resultSet.getString("createdBy"),
+						resultSet.getString("description"),
+						resultSet.getString("createdDate")));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		connection.close();
+		
+		return quizzes;
 	}
 }
