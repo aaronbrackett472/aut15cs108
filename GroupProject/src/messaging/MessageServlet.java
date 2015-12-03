@@ -43,7 +43,7 @@ public class MessageServlet extends HttpServlet {
 		String subject = request.getParameter("subject");
 		String action = request.getParameter("action");
 		String body = request.getParameter("body");
-		String type = request.getParameter("type");
+		String forward = request.getParameter("forward");
 		MessageManager mm = (MessageManager)getServletContext().getAttribute("messageManager");		
 		Message m = null;
 		
@@ -52,11 +52,40 @@ public class MessageServlet extends HttpServlet {
 				m = new Message(0, "note",sender, receiver, subject, new Timestamp(System.currentTimeMillis()), body, 0);
 				mm.addMessage(m);
 				request.setAttribute("send", "Your message has been sent");
+				RequestDispatcher rd = request.getRequestDispatcher("MessageStatus.jsp");
+				if(rd != null)
+					rd.forward(request, response);
 	
 			} else if (action.equals("Discard")) {
 				String id = request.getParameter("msg_id");
 				mm.deleteMessage(Integer.parseInt(id));
 				request.setAttribute("delete", "Message has been deleted");
+				RequestDispatcher rd = request.getRequestDispatcher("MessageStatus.jsp");
+				if(rd != null)
+					rd.forward(request, response);
+			} else if (action.equals("challenge")) {
+				String id = request.getParameter("id");
+				int quiz_id = Integer.parseInt(id);
+				m = new Message(0, "challenge", sender, receiver, subject, new Timestamp(System.currentTimeMillis()), body, quiz_id);
+				mm.addMessage(m);
+				request.setAttribute("challenge", "Your challenge has been sent");
+				RequestDispatcher rd = request.getRequestDispatcher("MessageStatus.jsp");
+				if(rd != null)
+					rd.forward(request, response);
+			} else if (action.equals("compose")) {
+				String type = request.getParameter("type");
+				String recepient = request.getParameter("receiver");
+				if (type.equals("note")) {
+					response.sendRedirect("SendNote.jsp?receiver="+recepient);
+				} else if (type.equals("friendrequest")) {
+					response.sendRedirect("allusers.jsp");	
+				} else if (type.equals("challenge")) {
+					response.sendRedirect("sendchallenge.jsp? to=" +recepient);
+				} 
+//				request.setAttribute("to", recepient);
+//				RequestDispatcher rd = request.getRequestDispatcher("SendNote.jsp");
+//				if(rd != null)
+//					rd.forward(request, response);
 			}
 		} else if (request.getParameter("inbox_update") != null) {
 			String update = request.getParameter("update_type");
@@ -82,11 +111,8 @@ public class MessageServlet extends HttpServlet {
 					}
 				}
 			}
-		
+	
 		}
-		RequestDispatcher rd = request.getRequestDispatcher("MessageStatus.jsp");
-		if(rd != null)
-			rd.forward(request, response);
 	}
 
 }

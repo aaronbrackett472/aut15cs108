@@ -85,16 +85,16 @@ public class User{
 	 *
 	 */
 	public boolean checkFriend(String username) {
-		String checkQuerry = "SELECT * FROM " + friendshipTable + " WHERE username1='"+ this.username + "'" +
-							 "AND username2='" + username + "'";
-		try{
-			ResultSet rs = statement.executeQuery(checkQuerry);	
-			if(rs.next()) {
-				return true;
-			}
-		} catch(SQLException e) {
-			e.printStackTrace();
-		}
+//		String checkQuerry = "SELECT * FROM " + friendshipTable + " WHERE username1='"+ this.username + "'" +
+//							 "AND username2='" + username + "'";
+//		try{
+//			ResultSet rs = statement.executeQuery(checkQuerry);	
+//			if(rs.next()) {
+//				return true;
+//			}
+//		} catch(SQLException e) {
+//			e.printStackTrace();
+//		}
 		return false;
 	}
 

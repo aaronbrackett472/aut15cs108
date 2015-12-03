@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<jsp:include page="cssfile.jsp" />
 
 <%
 	//display all users (can select from here to send friend request/message etc))
@@ -20,58 +20,50 @@
 	ServletContext context = request.getServletContext();
 	DatabaseConnection connection = (DatabaseConnection) context.getAttribute("databaseconnection");
 	String userName = (String)session.getAttribute("loggedin_user");
-
+	MessageManager manager = (MessageManager) context.getAttribute("messageManager");		
 	User us = new User(userName, connection);
 	List<User> users = new ArrayList<User>();
-	//need a way to get the all user accounts
-	/* 	AccountManager manager = (AccountManager)request.getAttribute("user");
-	 */ String title = "welcome " + userName;
+	String title = "welcome " + userName;
 	User us2 = new User("nyeti");
 	User us3 = new User("nzioka");
 	User us4 = new User("kevo");
 	users.add(us2);
 	users.add(us3);
 	users.add(us4);
+	String user = "nzioka";
 	
 	for (int i = 0; i < 50; i++) {
 		users.add(us2);
 	}
 	int numUsers = users.size();
+	int numReqs = manager.numRequests(user);
+	int numMsgs = manager.getNumMessages(user);
 %>
 <link rel="stylesheet" type="text/css" href="messaging.css">
 <title><%=title%></title>
 </head>
 <body>
 	<jsp:include page="header.jsp"/>
-
-	<div id="apDiv1">
-		<label class="heading"><strong><%=title%></strong></label>
+ 
 		<form id="searchform" method="post" action="searchresults.jsp?page=1">
 			<label class="search">Search: <input type="text"
-				name="search" size=40 maxlength=255></input>
+				name="search" size=30 maxlength=255></input>
 			</label>
+		</form> 	
+	<div>
+	<h4 style="text-align:left;float:left;"><a href="AllNoteMessages.jsp">Messages <%if (numMsgs >0) { %>(<%=numMsgs%>)<%}%></a> &bull; 
+	    <span style="font-weight:normal;"><a href="AllFriendRequests.jsp">Friend Requests <%if (numReqs >0) { %>(<%=numReqs%>)<%}%></a></span>	    
+	</h4>
+	</div>
+	
+	<div style="float:right;padding-left:15px;padding-top:5px">
+		<form method="post" action="compose.jsp">
+			<input type="submit" style="margin:15px;font-size:17px;font-weight:bold" value="Compose" />
 		</form>
 	</div>
-	<p>&nbsp;</p>
-	<p>&nbsp;</p>
-	<p>&nbsp;</p>
-	<p>&nbsp;</p>
-	<div id="show">
-		<%
-			if (userName != null) {
-				String accountLink = "userhome.jsp";
-		%>
-		<label class="userlinks"><a href=<%=accountLink%>>My
-				account</a><br /> <br /> <a href="sitehome.jsp?action=logout">Sign
-				out</a></label><br /> <br />
-		<%
-			}
-		%>
-		<label class="userlinks"><b><a href="showquizzes.jsp">View
-					Quizzes</a></b></label>
-	</div>
-  
-	<div id="show2">
+	
+	
+	<div id="users">
 		<%
 			String nextLink = "allusers.jsp?page=" + (pagenum + 1);
 			String prevLink = "allusers.jsp?page=" + (pagenum - 1);
@@ -103,7 +95,6 @@
 						String friendLink = "userpage.jsp?who=" + friend;
 						if (userName == null)
 							friendLink = "sitehome.html";
-
 						String imageLink = usr.getImageFile();
 						if (imageLink == null)
 							imageLink = "user.png";
@@ -112,7 +103,7 @@
 			align="middle"></img><br /> <br />
 		<%
 			if (!us.checkFriend(friend) && us != null) {
-							String addFriend = "SendFriendRequest.jsp?to=" + friend;
+							String addFriend = "FriendRequestServlet?to=" + friend + "&from=" + userName;
 		%>
 		<label class="user"><a class="link" href=<%=addFriend%>>Add
 				<%=friend%> as a friend
@@ -158,7 +149,7 @@
 			align="middle"></img><br></br> <br />
 		<%
 			if (!us.checkFriend(friendUsername) && us != null) {
-							String addFriend = "SendFriendRequest.jsp?to=" + friendUsername;
+							String addFriend = "FriendRequestServlet?to=" + friendUsername + "&from=" + userName;
 		%>
 		<label class="user"><a class="link" href=<%=addFriend%>>Add
 				<%=friendUsername%> as a friend
