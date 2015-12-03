@@ -175,4 +175,26 @@ public class Quiz {
 		connection2.close();
 		return quizzes;
 	}
+	
+	/*
+	 * Search through questions by keyword
+	 * @param keyword - what we're searching by
+	 * @return ArrayList<Integer> - all of the quiz id's that fit that criteria
+	 */
+	public static ArrayList<Integer> searchByKeyword(String keyword){
+		ArrayList<Integer> returnIDs = new ArrayList<Integer>();
+		String query = "SELECT * FROM Quizzes WHERE name LIKE \"%" + keyword + "%\";";
+		DatabaseConnection connection = new DatabaseConnection();
+		ResultSet rs = connection.executeQuery(query);
+		try {
+			while (rs.next()){
+				int newID = rs.getInt("quizID");
+				returnIDs.add(newID);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return returnIDs;
+	}
 }
