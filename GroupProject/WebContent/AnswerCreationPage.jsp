@@ -7,22 +7,14 @@
 <title>Add A Question!</title>
 </head>
 <body>
-<h1>Add an Answer for your <%= request.getAttribute("type") %> Question!</h1>
+<h1>Add an Answer for your Question!</h1>
 <form name="answerData" id="answerData" action="AnswerCreateServlet" method="post">
 	<input type="hidden" name="quizID" id="quizID" value="<%= request.getAttribute("quizID") %>">
 	<input type="hidden" name="questionID" id="questionID" value="<%= request.getAttribute("questionID") %>">
 	<input type="hidden" name="type" id="type" value="<%= request.getAttribute("type") %>">
-	<input type="hidden" name="number" id="number" value="<%
-	if (request.getParameter("numChoices") != null){
-		out.print(request.getParameter("numChoices"));
-	}
-	if (request.getParameter("numPairs") != null){
-		out.print(request.getParameter("numChoices"));
-	}
-	else{
-		out.print("1");
-	}
-	%>">
+	<input type="hidden" name="number" id="number" value="<%= request.getAttribute("number") %>">
+	<input type="hidden" id="correctChoices" name="correctChoices" value="">
 </form>
+<script src="AnswerCreation.js"></script>
 </body>
 </html>
