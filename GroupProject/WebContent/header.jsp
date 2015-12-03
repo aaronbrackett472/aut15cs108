@@ -28,6 +28,7 @@
       
       <nav>
       	<a class="nav-item" href="/GroupProject/index.jsp">Home</a>
+      	<a class="nav-item" href="/GroupProject/quiz-create.jsp">Create a Quiz</a>
         <a class="nav-item" href="/GroupProject/browse.jsp">Browse Quizzes</a>
         <a class="nav-item" href="/GroupProject/notifications.jsp">Notifications</a>
         <a class="nav-item" href="/GroupProject/friends.jsp">Friends</a>

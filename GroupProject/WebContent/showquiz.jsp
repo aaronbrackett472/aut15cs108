@@ -36,27 +36,27 @@ if(request.getParameter("id") == null){
 	Question currentQuestion = currentQuiz.getQuestionAtIndex(i);
 	
 	out.println("<div style=\"padding-top: 40px;\">");
-	if(currentQuestion.getType().equals("Response")){
+	if(currentQuestion.getType().equals("Question-Response")){
 		QuestionResponse q = new QuestionResponse(connection, currentQuestion.getQuestionId());
 		
 		out.println(q.getQuestionHTML(i));
 		out.println(q.getResponseInputHTML());
 	}
 	
-	if(currentQuestion.getType().equals("Blank")){
+	if(currentQuestion.getType().equals("Fill in the Blank")){
 		FillInTheBlank q = new FillInTheBlank(connection, currentQuestion.getQuestionId());
 		out.println(q.getQuestionHTML(i));
 		out.println(q.getResponseInputHTML());
 	}
 	
-	if(currentQuestion.getType().equals("Picture")){
+	if(currentQuestion.getType().equals("Picture Response")){
 		PictureResponse q = new PictureResponse(connection, currentQuestion.getQuestionId());
 		out.println(q.getQuestionHTML(i));
 		out.println(q.getResponseInputHTML());
 	}
 	
 	
-	if(currentQuestion.getType().equals("MultipleChoice")){
+	if(currentQuestion.getType().equals("Multiple Choice")){
 		MultipleChoice q = new MultipleChoice(connection, currentQuestion.getQuestionId());
 		out.println(q.getQuestionHTML(i));
 		out.println(q.getResponseInputHTML());

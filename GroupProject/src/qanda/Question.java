@@ -8,6 +8,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 
 public class Question {
@@ -16,7 +17,7 @@ public class Question {
 	public static String questionTable = "Questions";
 	
 	int id, score, quizId;
-	String question, correctAnswer, imageUrl, type;
+	String question, imageUrl, type;
 	
 	private Statement statement;
 	protected DatabaseConnection connection;
@@ -73,7 +74,6 @@ public class Question {
 			this.type = resultSet.getString("type");
 			this.score = resultSet.getInt("score");
 			this.question = resultSet.getString("question");
-			this.correctAnswer = resultSet.getString("correctAnswer");
 			this.imageUrl = resultSet.getString("imageUrl");
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -86,9 +86,16 @@ public class Question {
 	}
 	
 	public int evaluateAnswer(String answer) {
-		if (answer.trim().toLowerCase().equals(correctAnswer.trim().toLowerCase())){
-			return this.score;
+		
+		Answer correctAnswers = new Answer();
+		correctAnswers.getAnswersByQuestionId(this.connection, this.id);
+		
+		for(String correctAnswer: correctAnswers.answerLists) {
+			if (answer.trim().toLowerCase().equals(correctAnswer.trim().toLowerCase())){
+				return this.score;
+			}
 		}
+		
 		return 0;
 	}
 	
