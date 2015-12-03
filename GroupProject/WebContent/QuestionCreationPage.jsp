@@ -7,22 +7,14 @@
 <title>Create Your Own Quiz!</title>
 </head>
 <body>
+	<form name="DoneEditing" id="Done/AddButtons" action="index.jsp">
+		<input type="submit" value="Done Editing">
+		<button type="button" id="addQuestion">Add a Question</button>
+	</form>
 	<form name="Question" id="QuestionForm" action="QuestionCreateServlet" method = "post">
-		What type of Question do you want to make?
-    	<br>
-    	<input type="radio" name="type" value="0">Question-Response
-    	<br>
-   	 	<input type="radio" name="type" value="1">Fill in the Blank
-    	<br>
-   		<input type="radio" name="type" value="2">Multiple Choice
-    	<br>
-    	<input type="radio" name="type" value="3">Picture Response
-    	<br>
-   		<input type="radio" name="type" value="4">Matching
-    	<br>
-   		<input type="hidden" id="type">
-   		<br>
+   		<div id="RadioButtons"></div>
    		<div id="QuestionData"></div>
+   		<input type="hidden" id="type">
    		<input type="hidden" name="quizID" value="<%= request.getAttribute("quizID") %>">
     </form>
     <script src="QuestionCreation.js"></script>
