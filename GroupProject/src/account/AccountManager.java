@@ -3,6 +3,7 @@ package account;
 
 import database.*;
 import java.sql.*;
+import java.security.*;
 
 /**
  * Keeps track of all user accounts for the quiz project.
@@ -13,7 +14,11 @@ import java.sql.*;
 public class AccountManager{
 	//Instance variables
 	private DatabaseConnection connection;
+	private MessageDigest md;
 	private static String accountsTable = "Accounts";
+	
+	
+
 	
 
 	/**
@@ -22,6 +27,11 @@ public class AccountManager{
 	 */
 	public AccountManager(DatabaseConnection connection){
 		this.connection =  connection;
+		try{
+			md = MessageDigest.getInstance("SHA");
+		} catch(NoSuchAlgorithmException excep) {
+			excep.printStackTrace();
+		}
 		
 	}
 
@@ -29,11 +39,13 @@ public class AccountManager{
 	 * Adds a new user to the database.
 	 * The  database does not allow resistration of a username more than once. 
 	 * The use this method should use checkAccountExists method defined in 
-	 * AccountManager class before adding a user
+	 * AccountManager class before adding a user.
+	 * Empty usernames will not be registered
 	 * @param username the user name
 	 * @param password the password
 	 */
 	public void registerUser(String username, String password) {
+		if(username.isEmpty()) return;
 		Statement statement =  connection.getStatement() ;
 		String checkQuerry = "SELECT * FROM " + accountsTable + " WHERE username='"+ username + "'";
 		try{
@@ -43,6 +55,7 @@ public class AccountManager{
 				return ;
 			} else {
 				//The username is not used
+				password = generateHashedPassword(password);
 				String addQuerry = "INSERT INTO "+ accountsTable + " (username, password) " +
 									"VALUES('" + username + "', '" + password + "')" ;
 				statement.executeUpdate(addQuerry);			
@@ -73,6 +86,7 @@ public class AccountManager{
 	 * @return status true/false
 	 */
 	public boolean verifyUser(String username, String password) {
+		password = generateHashedPassword(password);
 		String checkQuerry = "SELECT * FROM " + accountsTable + " WHERE username='"+ username + "'";
 		Statement statement =  connection.getStatement();
 		try{
@@ -107,6 +121,35 @@ public class AccountManager{
 			e.printStackTrace();
 		}
 		return false;
+	}
+	
+	/**
+	 * Takes in a password and returns out the corresponding
+	 * hashed password value
+	 *
+	 */
+	private String generateHashedPassword(String password) {
+		String hashedPassword ="";
+		md.reset();
+		md.update(password.getBytes());
+		hashedPassword = hexToString(md.digest());
+		return hashedPassword;
+	}
+	
+	/**
+	 *Given a byte[] array, produces a hex String,
+	 *such as "234a6f". with 2 chars for each byte in the array.
+	 * (provided code)
+	 */
+	public static String hexToString(byte[] bytes) {
+		StringBuffer buff = new StringBuffer();
+		for (int i=0; i<bytes.length; i++) {
+			int val = bytes[i];
+			val = val & 0xff;  // remove higher bits, sign
+			if (val<16) buff.append('0'); // leading 0
+			buff.append(Integer.toString(val, 16));
+		}
+		return buff.toString();
 	}
 
 }
