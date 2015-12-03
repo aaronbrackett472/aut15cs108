@@ -5,11 +5,11 @@ import utilities.Utilities;
 
 public class Announcement {
 	
-	private int id;
-	private String author;
-	private String header;
-	private String body;
-	private String createdAt;
+	public final int id;
+	public final String author;
+	public final String header;
+	public final String body;
+	public final String createdAt;
 	
 	public static void createAnnouncement(String author, String header, String body) {
 		DatabaseConnection connection = new DatabaseConnection();
@@ -17,6 +17,21 @@ public class Announcement {
 				+ author + ", "
 				+ header + ", "
 				+ body + ");");
+		connection.close();
+	}
+	
+	public static void updateAnnouncement(int id, String header, String body) {
+		DatabaseConnection connection = new DatabaseConnection();
+		connection.executeUpdate("UPDATE Announcements SET header = \"" + header
+				+ "\" WHERE id = " + id + ";");
+		connection.executeUpdate("UPDATE Announcements SET body = \"" + body
+				+ "\" WHERE id = " + id + ";");
+		connection.close();
+	}
+	
+	public static void deleteAnnouncement(int id) {
+		DatabaseConnection connection = new DatabaseConnection();
+		connection.executeUpdate("DELETE FROM Announcements WHERE id = " + id + ";");
 		connection.close();
 	}
 	
