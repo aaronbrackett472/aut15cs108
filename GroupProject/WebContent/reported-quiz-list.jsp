@@ -34,6 +34,7 @@
 	<%
 	int kCommentPreviewLength = 80;
 	ArrayList<QuizReport> reports = (ArrayList<QuizReport>) request.getAttribute("reports");
+	int reportCount = 0;
 	for (QuizReport report : reports) {
 		String formattedComment = report.comment;
 		if (formattedComment.length() > kCommentPreviewLength) {
@@ -46,7 +47,7 @@
 				+ "<td>" + report.author + "</td>"
 				+ "<td>" + report.reporter + "</td>"
 				+ "<td>" + formattedComment + "</td>"
-				+ "<td><form action=\"reported-quiz-review.jsp\" method=\"post\">"
+				+ "<td><form name=action=\"reported-quiz-review.jsp\" method=\"post\">"
 				+ "<input name=\"id\" type=\"hidden\" value=\"" + report.id + "\">"
 				+ "<input name=\"quizID\" type=\"hidden\" value=\"" + report.quizID + "\">"
 				+ "<input name=\"quizName\" type=\"hidden\" value=\"" + report.quizName + "\">"

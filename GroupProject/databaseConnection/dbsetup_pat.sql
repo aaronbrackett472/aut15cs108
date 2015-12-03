@@ -18,7 +18,7 @@ CREATE TABLE Accounts (
 
 CREATE TABLE Friendship (
 	username1 VARCHAR(64),
-	username2 VARCHAR(64),
+	username2 VARCHAR(64)
 );
 
 CREATE TABLE Achievement (
@@ -92,11 +92,19 @@ INSERT INTO Quizzes (name, randomOrder, singlePage, immediateCorrection, practic
 INSERT INTO Quizzes (name, randomOrder, singlePage, immediateCorrection, practiceModeAllowed, takenCounter, createdBy, description, createdDate) VALUES ("Another Awesome Quiz", 0, 1, 0, 0, 0, "pat", "Just another fun quiz", "2015-11-25 16:15:00");
 
 -- Sample question
-INSERT INTO Questions(quizId, type, score, question, correctAnswer, imageUrl) VALUES (1, "Response", 1, "Who is your daddy?", "Pat", "");
-INSERT INTO Questions(quizId, type, score, question, correctAnswer, imageUrl) VALUES (1, "Response", 1, "What is 5 + 1?", "6", "");
-INSERT INTO Questions(quizId, type, score, question, correctAnswer, imageUrl) VALUES (1, "Blank", 1, "@@@@ killed Lord Tywin Lannister? (First name)", "Tyrion", "");
-INSERT INTO Questions(quizId, type, score, question, correctAnswer, imageUrl) VALUES (1, "Picture", 1, "Who is this actress? (First name)", "Lisa", "https://upload.wikimedia.org/wikipedia/en/f/f6/Friendsphoebe.jpg");
+INSERT INTO Questions(quizId, type, score, question, correctAnswer, imageUrl) VALUES (1, "Response", 1, "Who is your daddy?", "", "");
+INSERT INTO Questions(quizId, type, score, question, correctAnswer, imageUrl) VALUES (1, "Response", 1, "What is 5 + 1?", "", "");
+INSERT INTO Questions(quizId, type, score, question, correctAnswer, imageUrl) VALUES (1, "Blank", 1, "@@@@ killed Lord Tywin Lannister?", "", "");
+INSERT INTO Questions(quizId, type, score, question, correctAnswer, imageUrl) VALUES (1, "Picture", 1, "Who is this actress?", "", "https://upload.wikimedia.org/wikipedia/en/f/f6/Friendsphoebe.jpg");
 INSERT INTO Questions(quizId, type, score, question, correctAnswer, imageUrl) VALUES (1, "MultipleChoice", 1, "Who plays Rachel Green in Friends?", "", "");
+
+
+INSERT INTO Answers(questionID, answer, answerIndex, correct, prompt) VALUES (1, "Pat", 0, 1, '');
+INSERT INTO Answers(questionID, answer, answerIndex, correct, prompt) VALUES (3, "6", 0, 1, '');
+INSERT INTO Answers(questionID, answer, answerIndex, correct, prompt) VALUES (5, "Tyrion", 0, 1, '');
+INSERT INTO Answers(questionID, answer, answerIndex, correct, prompt) VALUES (5, "Tyrion Lannister", 0, 1, '');
+INSERT INTO Answers(questionID, answer, answerIndex, correct, prompt) VALUES (5, "The Imp", 0, 1, '');
+INSERT INTO Answers(questionID, answer, answerIndex, correct, prompt) VALUES (7, "Lisa Kudrow", 0, 1, '');
 
 INSERT INTO Answers(questionID, answer, answerIndex, correct, prompt) VALUES (9, "Lisa Kudrow", 0, 0, '');
 INSERT INTO Answers(questionID, answer, answerIndex, correct, prompt) VALUES (9, "Jennifer Aniston", 1, 1, '');
