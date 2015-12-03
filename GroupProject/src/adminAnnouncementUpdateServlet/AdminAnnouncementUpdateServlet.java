@@ -1,4 +1,4 @@
-package reportedQuizReviewServlet;
+package adminAnnouncementUpdateServlet;
 
 import java.io.IOException;
 
@@ -9,20 +9,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import administration.Announcement;
 import database.DatabaseConnection;
 import utilities.Utilities;
 
 /**
- * Servlet implementation class ReportedQuizReviewServlet
+ * Servlet implementation class AdminAnnouncementUpdateServlet
  */
-@WebServlet("/ReportedQuizReviewServlet")
-public class ReportedQuizReviewServlet extends HttpServlet {
+@WebServlet("/AdminAnnouncementUpdateServlet")
+public class AdminAnnouncementUpdateServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ReportedQuizReviewServlet() {
+    public AdminAnnouncementUpdateServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -40,19 +41,14 @@ public class ReportedQuizReviewServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		DatabaseConnection connection = new DatabaseConnection();
-		connection.executeUpdate("UPDATE QuizReports SET resolved = 1 WHERE id = "
-				+ request.getParameter("id") + ";");
-		if (request.getParameter("suspendAuthor") != null) {
-			int days = Integer.parseInt(request.getParameter("suspension"));
-			connection.executeUpdate("UPDATE Accounts SET suspended = 1 WHERE username = \""
-					+ request.getParameter("author") + "\";");
-			connection.executeUpdate("UPDATE Accounts SET suspensionEnd = \"" + Utilities.getFutureDateInDays(days)
-					+ "\" WHERE username = \"" + request.getParameter("author") + "\";");
-
+		int id = Integer.parseInt(request.getParameter("id"));
+		if (request.getParameter("update") != null) {
+			Announcement.updateAnnouncement(id, request.getParameter("header"), request.getParameter("body"));
+		} else {
+			Announcement.deleteAnnouncement(id);
 		}
-		connection.close();
 		
-		RequestDispatcher dispatch = request.getRequestDispatcher("ReportedQuizListServlet");
+		RequestDispatcher dispatch = request.getRequestDispatcher("AdminAnnouncementListServlet");
 		dispatch.forward(request, response);
 	}
 
