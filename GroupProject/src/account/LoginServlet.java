@@ -57,10 +57,11 @@ public class LoginServlet extends HttpServlet {
 		
 		if(accounts.verifyUser(username, password)) {
 			
-			User userToLogin = new User(username, connection);
-			if(!userToLogin.isSuspended())
+			User userObject = new User(username, connection);
+			if(!userObject.isSuspended())
 			{
 				session.setAttribute("loggedin_user", username);
+				session.setAttribute("userobject", userObject);
 				response.sendRedirect("/GroupProject/");
 			} else {
 				response.sendRedirect("/GroupProject/?message=suspended");

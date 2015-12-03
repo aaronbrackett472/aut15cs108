@@ -35,7 +35,7 @@
   
     <div id="browse-results-container">
     <div class="result-selected-class">Latest Quizzes!</div>	
-      <input id="search-box" placeholder="Search by keywords or class code" class="">
+      <input id="search-box" placeholder="Search by keyword" class="">
       <ul id="browse-results-list">
         <%
         	List<Quiz> recentQuizzes = Quiz.getRecentQuizzes(connection, 10);
