@@ -1,2 +1,11 @@
-/database/
-/account/
+/reportedQuizReviewServlet/
+/administration/
+/repoertedQuizReviewListener/
+/reportedQuizReviewListener/
+/quizReportListServlet/
+/quizReportReviewServlet/
+/reportedQuizListServlet/
+/utilities/
+/adminAnnouncementListServlet/
+/qanda/
+/adminAnnouncementUpdateServlet/
