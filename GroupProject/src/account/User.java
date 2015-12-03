@@ -72,10 +72,13 @@ public class User{
 		//Ignore if the frindName is  already a friend to this user
 		if(checkFriend(friendName)) return;
 		try{
-			String addQuerry = "INSERT INTO "+ FRIENDSHIP_TABLE + " (username1, username2) " +
-					"VALUES('" + this.username + "', '" + friendName + "')" ;
+			String addQuerry1 = "INSERT INTO "+ FRIENDSHIP_TABLE + " (username1, username2) " +
+					           "VALUES('" + this.username + "', '" + friendName + "')" ;
+			String addQuerry2 = "INSERT INTO "+ FRIENDSHIP_TABLE + " (username1, username2) " +
+					            "VALUES('" + friendName + "', '" + this.username + "')" ;
 			
-			statement.executeUpdate(addQuerry);		
+			statement.executeUpdate(addQuerry1);
+			statement.executeUpdate(addQuerry2);	
 		} catch(SQLException e){
 			e.printStackTrace();
 		}
@@ -130,13 +133,18 @@ public class User{
 	}
 
 	/**
-	 * Removes the given friends from the friends of this user
+	 * Removes the given friends from the friends of this user.
+	 * The username is removed from friendNames list, and friendName
+	 * is removed from usernamesList
 	 */
 	public void removeFriend(String friendName) {
-		String querry = "DELETE FROM " + FRIENDSHIP_TABLE + " WHERE username1='"+ this.username + "'" +
+		String querry1 = "DELETE FROM " + FRIENDSHIP_TABLE + " WHERE username1='"+ this.username + "'" +
 					    "AND username2='" + friendName + "'";
+		String querry2 = "DELETE FROM " + FRIENDSHIP_TABLE + " WHERE username1='"+ friendName + "'" +
+			    		"AND username2='" + this.username + "'";
 		try{
-			statement.executeUpdate(querry);
+			statement.executeUpdate(querry1);
+			statement.executeUpdate(querry2);
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}
