@@ -63,12 +63,13 @@ public class History {
 	
 	/**
 	 * Gets history items given a fieldname as a criteria
-	 * @param field any one of the HISTORY_TABLE fields
+	 * @param fieldName any one of the HISTORY_TABLE fields
+	 * @param fieldValue value of the field
 	 * @return history history items for the given field
 	 */
-	public ArrayList<HistoryItem> getHistoryByField(String field) {
+	public ArrayList<HistoryItem> getHistoryByField(String fieldName, String fieldValue) {
 		ArrayList<HistoryItem> history =  new ArrayList<HistoryItem>();
-		String querry = "SELECT * FROM " + HISTORY_TABLE + " WHERE username='"+ field + "'";
+		String querry = "SELECT * FROM " + HISTORY_TABLE + " WHERE '" + fieldName + "' = '"+ fieldValue + "'";
 		try{
 			ResultSet rs = connection.executeQuery(querry);	
 			while(rs.next()) {
@@ -93,7 +94,7 @@ public class History {
 	 * @return history history items for the given username
 	 */
 	public ArrayList<HistoryItem> getHistoryByUsername(String username) {
-		return getHistoryByField(username);
+		return getHistoryByField("username", username);
 	}
 	
 	/** 
@@ -102,6 +103,6 @@ public class History {
 	 * @return history history items for the given quizId
 	 */
 	public ArrayList<HistoryItem> getHistoryByQuizId(String quizId) {
-		return getHistoryByField(quizId);
+		return getHistoryByField("quizId", quizId);
 	}
 }

@@ -8,7 +8,7 @@ import java.sql.*;
 
 /**
  * Represent a single user of the quiz
- *
+ * @author Musyoka
  */
 public class User{
 	//Instance variables
@@ -18,9 +18,7 @@ public class User{
 	private AccountManager accounts;
 	
 	//Constants
-	private static String friendshipTable = "Friendship";
-	private static String achievementsTable = "Achievement";
-	private static String historyTable = "History";
+	public static String FRIENDSHIP_TABLE = "Friendship";
 
 	
 	/**
@@ -36,6 +34,7 @@ public class User{
 	/**
 	 * Adds a friend to this user
 	 * If the given friend is not a registered user, then the friend is not added
+	 * Frienship is bidirectional relationship
 	 * @param friendName name of the friend
 	 */
 	public void addFriend(String friendName) {
@@ -43,8 +42,9 @@ public class User{
 		//Ignore if the frindName is  already a friend to this user
 		if(checkFriend(friendName)) return;
 		try{
-			String addQuerry = "INSERT INTO "+ friendshipTable + " (username1, username2) " +
+			String addQuerry = "INSERT INTO "+ FRIENDSHIP_TABLE + " (username1, username2) " +
 					"VALUES('" + this.username + "', '" + friendName + "')" ;
+			
 			statement.executeUpdate(addQuerry);		
 		} catch(SQLException e){
 			e.printStackTrace();
@@ -58,7 +58,7 @@ public class User{
 	 *
 	 */
 	public boolean checkFriend(String username) {
-		String checkQuerry = "SELECT * FROM " + friendshipTable + " WHERE username1='"+ this.username + "'" +
+		String checkQuerry = "SELECT * FROM " + FRIENDSHIP_TABLE + " WHERE username1='"+ this.username + "'" +
 							 "AND username2='" + username + "'";
 		try{
 			ResultSet rs = statement.executeQuery(checkQuerry);	
@@ -86,7 +86,7 @@ public class User{
 	 */
 	public Set<String> getAllFriends() {
 		Set<String> friends =  new HashSet<String>();
-		String querry = "SELECT * FROM " + friendshipTable + " WHERE username1='"+ username + "'";
+		String querry = "SELECT * FROM " + FRIENDSHIP_TABLE + " WHERE username1='"+ username + "'";
 		try{
 			ResultSet rs = statement.executeQuery(querry);
 			while(rs.next()) {
@@ -103,8 +103,8 @@ public class User{
 	 * Removes the given friends from the friends of this user
 	 */
 	public void removeFriend(String friendName) {
-		String querry = "DELETE FROM " + friendshipTable + " WHERE username1='"+ this.username + "'" +
-							 "AND username2='" + friendName + "'";
+		String querry = "DELETE FROM " + FRIENDSHIP_TABLE + " WHERE username1='"+ this.username + "'" +
+					    "AND username2='" + friendName + "'";
 		try{
 			statement.executeUpdate(querry);
 		} catch(SQLException e) {
@@ -116,21 +116,9 @@ public class User{
 	 * Returns the a list of achievement titles held by this user
 	 * @return achievements
 	 */	
-	public ArrayList<Achievement> getAchievements() {
-		ArrayList<Achievement> achievements = new ArrayList<Achievement>();
-		String querry = "SELECT * FROM " + achievementsTable + " WHERE username='"+ username + "'";
-		try{
-			ResultSet rs = statement.executeQuery(querry);	
-			while(rs.next()) {
-				String name = rs.getString(2);
-				String time = rs.getString(3);
-				Achievement item = new Achievement(name, time);
-				achievements.add(item);		
-			}
-		} catch(SQLException e) {
-			e.printStackTrace();
-		}				
-		return achievements;
+	public ArrayList<AchievementItem> getAchievements() {
+		Achievement achievements = new Achievement(connection);
+		return achievements.getAchievementByUser(username);
 	}
 
 }
