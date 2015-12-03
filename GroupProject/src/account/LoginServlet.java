@@ -57,11 +57,14 @@ public class LoginServlet extends HttpServlet {
 		
 		if(accounts.verifyUser(username, password)) {
 			
-			//User userToLogin = new User(username, connection);
-			
-			
-			session.setAttribute("loggedin_user", username);
-			response.sendRedirect("/GroupProject/");
+			User userToLogin = new User(username, connection);
+			if(!userToLogin.isSuspended())
+			{
+				session.setAttribute("loggedin_user", username);
+				response.sendRedirect("/GroupProject/");
+			} else {
+				response.sendRedirect("/GroupProject/?message=suspended");
+			}
 		} else {
 			System.out.println("invalid user or password");
 			response.sendRedirect("/GroupProject/?message=badlogin");

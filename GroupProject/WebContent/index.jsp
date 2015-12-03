@@ -20,6 +20,10 @@
 		}
 		if (messageToDisplay.equals("badlogin")) {
 			out.print(Util.showErrorMessage("Invalid Username/Password"));
+		}
+		
+		if (messageToDisplay.equals("suspended")) {
+			out.print(Util.showErrorMessage("Your Account is Suspended. Please Contact the Administrator."));
 		} 
 	} 
 	%>
