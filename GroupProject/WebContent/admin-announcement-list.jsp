@@ -8,6 +8,7 @@
 </head>
 <body>
 <h1>Announcements</h1>
+<p><a href="admin-announcement-create.jsp">Create Announcement</a></p>
 <table style="width:100%">
 	<tr>
 		<th>Announcement ID</th>

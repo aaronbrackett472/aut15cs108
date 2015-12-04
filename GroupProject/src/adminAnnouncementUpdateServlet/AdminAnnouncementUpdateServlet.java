@@ -40,11 +40,19 @@ public class AdminAnnouncementUpdateServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int id = Integer.parseInt(request.getParameter("id"));
-		if (request.getParameter("update") != null) {
-			Announcement.updateAnnouncement(id, request.getParameter("header"), request.getParameter("body"));
+		if (request.getParameter("create") != null) {
+			Announcement.createAnnouncement(request.getParameter("author"),
+					request.getParameter("header"),
+					request.getParameter("body"));
 		} else {
-			Announcement.deleteAnnouncement(id);
+			int id = Integer.parseInt(request.getParameter("id"));
+			if (request.getParameter("update") != null) {
+				Announcement.updateAnnouncement(id,
+						request.getParameter("header"),
+						request.getParameter("body"));
+			} else {
+				Announcement.deleteAnnouncement(id);
+			}
 		}
 		
 		RequestDispatcher dispatch = request.getRequestDispatcher("AdminAnnouncementListServlet");
