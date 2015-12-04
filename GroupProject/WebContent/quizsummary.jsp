@@ -58,7 +58,19 @@ if(request.getParameter("id") == null){
       		</div>
       		
       		<div style="padding-top: 40px;"></div>
-      		<div class="result-selected-class">Top Performers</div>
+      		<div class="result-selected-class">Top 5 Performers</div>
+      		<div class="placeholder-container">
+      		<%
+      			
+      	  		prevQuiz = hc.getHistoryByQuizId(quizId, "score", 5);
+      			for(HistoryItem hItem: prevQuiz) {
+      		%>
+      		<div><b><%= hItem.getUserName() %></b> scored <%= hItem.getScore() %>/<%= hItem.getMaxScore() %> on <%= hItem.getTime().toString() %></div>
+      		<%
+      			}
+      		%>
+      		</div>
+      		
     		<form action="TakeQuiz" name="quiz-response" method="GET">
     			<input type="hidden" name="id" value="<% out.print(currentQuiz.getId()); %>">
 				<div class="add-class-container">
