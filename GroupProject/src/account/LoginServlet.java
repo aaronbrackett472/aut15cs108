@@ -55,6 +55,13 @@ public class LoginServlet extends HttpServlet {
 			{
 				session.setAttribute("loggedin_user", username);
 				session.setAttribute("userobject", userObject);
+				
+				if(userObject.isAdmin()) {
+					session.setAttribute("isAdmin", true);
+				} else {
+					session.setAttribute("isAdmin", false);
+				}
+				
 				response.sendRedirect("/GroupProject/");
 			} else {
 				response.sendRedirect("/GroupProject/?message=suspended");
