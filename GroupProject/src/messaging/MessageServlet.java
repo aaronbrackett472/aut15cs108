@@ -43,7 +43,6 @@ public class MessageServlet extends HttpServlet {
 		String subject = request.getParameter("subject");
 		String action = request.getParameter("action");
 		String body = request.getParameter("body");
-		String forward = request.getParameter("forward");
 		MessageManager mm = (MessageManager)getServletContext().getAttribute("messageManager");		
 		Message m = null;
 		
@@ -75,12 +74,13 @@ public class MessageServlet extends HttpServlet {
 			} else if (action.equals("compose")) {
 				String type = request.getParameter("type");
 				String recepient = request.getParameter("receiver");
+				System.out.println(recepient);
 				if (type.equals("note")) {
 					response.sendRedirect("SendNote.jsp?receiver="+recepient);
 				} else if (type.equals("friendrequest")) {
 					response.sendRedirect("allusers.jsp");	
 				} else if (type.equals("challenge")) {
-					response.sendRedirect("sendchallenge.jsp? to=" +recepient);
+					response.sendRedirect("selectchallenges.jsp?to=" +recepient);
 				} 
 //				request.setAttribute("to", recepient);
 //				RequestDispatcher rd = request.getRequestDispatcher("SendNote.jsp");
@@ -112,6 +112,22 @@ public class MessageServlet extends HttpServlet {
 				}
 			}
 	
+		} else if (request.getParameter("select_quiz") != null) {
+			String[] checkedIds = request.getParameterValues("check");
+			if (checkedIds != null) {
+				for (String id: checkedIds) {
+					int quiz_id = Integer.parseInt(id);
+					System.out.println(quiz_id);
+					System.out.println(sender);
+					System.out.println(receiver);
+					m = new Message(0, "challenge", sender, receiver, subject, new Timestamp(System.currentTimeMillis()), body, quiz_id);
+					mm.addMessage(m);
+				}
+			}
+//			request.setAttribute("challenge", "Your challenge has been sent");
+//			RequestDispatcher rd = request.getRequestDispatcher("MessageStatus.jsp");
+//			if(rd != null)
+//				rd.forward(request, response);
 		}
 	}
 
