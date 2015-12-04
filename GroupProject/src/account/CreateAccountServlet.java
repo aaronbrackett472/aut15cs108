@@ -2,13 +2,17 @@
 package account;
 
 import java.io.IOException;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import database.DatabaseConnection;
+
+import database.DBContextListener;
+
 
 /**
  * Servlet implementation class CreateAccountServlet
@@ -36,17 +40,17 @@ public class CreateAccountServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		AccountManager accounts =  (AccountManager)request.getSession().getAttribute(UserSessionListener.ACCOUNTS_CONTEXT_ATTRIBUTE);
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException  {
+		DatabaseConnection connection = (DatabaseConnection)request.getServletContext().getAttribute(DBContextListener.DATABASE_CONTEXT_ATTRIBUTE);
+		AccountManager accounts =  new AccountManager(connection);
 		String username =  request.getParameter("username");
 		String password = request.getParameter("password");
-		if(accounts.checkAccountExists("username")) {
-			RequestDispatcher dispatch = request.getRequestDispatcher("create-account-fail.jsp");
+		if(accounts.checkAccountExists(username)) {
+			RequestDispatcher dispatch = request.getRequestDispatcher("newaccount.jsp?error=duplicateusername");
 			dispatch.forward(request, response);
 		} else {
 			accounts.registerUser(username, password);
-			RequestDispatcher dispatch = request.getRequestDispatcher("create-account-welcome.jsp");
-			dispatch.forward(request, response);
+			response.sendRedirect("/GroupProject/index.jsp?message=accountcreated");
 		}
 		
 		

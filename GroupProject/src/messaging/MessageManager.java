@@ -1,7 +1,7 @@
 package messaging;
+
 import account.*;
 import java.sql.Date;
-
 
 
 import java.sql.PreparedStatement;
@@ -10,7 +10,6 @@ import java.sql.SQLException;
 import java.util.*;
 
 import com.mysql.jdbc.Connection;
-
 
 import database.DatabaseConnection;
 
@@ -39,6 +38,7 @@ public class MessageManager {
 	 */
 	@SuppressWarnings("resource")
 	public void addMessage(Message msg) {
+
 		String sql = "INSERT INTO messages (MsgType, Sender, Receiver, Subject, TimeSent, MessageBody, IsRead, QuizId) VALUES (?,?,?,?,?,?,?,?)" ;
 		PreparedStatement st = null;
         int isRead = 0;
@@ -55,6 +55,7 @@ public class MessageManager {
 			st.setString(6, msg.getMessageBody());
 			st.setInt(7, isRead);
 			st.setInt(8, msg.getQuizId());
+
 			st.executeUpdate();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
@@ -68,7 +69,6 @@ public class MessageManager {
 			}
 		}
 	}
-	
 	
 	@SuppressWarnings("resource")
 	public void sendRequest(FriendRequest msg) {
@@ -81,6 +81,7 @@ public class MessageManager {
 			st.setString(1, msg.sender);
 			st.setString(2, msg.receiver);
 			st.setTimestamp(3, msg.stamp);
+
 			st.executeUpdate();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
@@ -93,6 +94,7 @@ public class MessageManager {
 				}
 			}
 		}
+
 	}
 	public List<Message>getUserMessages(String user) {
 		List<Message>list = new ArrayList<Message>();
@@ -100,11 +102,13 @@ public class MessageManager {
 		Message msg = null;
 		PreparedStatement st = null;
 		String sql = "SELECT * FROM  messages WHERE Receiver ='"+user+"'";
+
 		try {
 			connection = (Connection)con.getConnection();
 			st = connection.prepareStatement("USE c_cs108_mateog");
 			st.executeQuery();
 			st = connection.prepareStatement(sql);
+
 			result = st.executeQuery();
 			while (result.next()) {
 						msg = new Message(
@@ -139,6 +143,7 @@ public class MessageManager {
 	public void deleteMessage(int id) {
 		PreparedStatement st = null;		
 		String sql = "DELETE FROM messages WHERE ID =?";
+
 		try {
 			connection = (Connection)con.getConnection();
 			st = connection.prepareStatement("USE c_cs108_mateog");
@@ -152,19 +157,24 @@ public class MessageManager {
 		}
 		
 	}
+
 	/**
 	 * Marks a message as unread. Updates the IsRead field on the relevant table
 	 * @param msg message to be marked unread
 	 */
+
 	public void markUnread(int id) {
 		PreparedStatement st = null;
 		String sql = "UPDATE messages SET IsRead = 0 WHERE ID =?";
+
 		try {
 			connection = (Connection)con.getConnection();
 			st = connection.prepareStatement("USE c_cs108_mateog");
 			st.executeQuery();
 			st = connection.prepareStatement(sql);
+
 			st.setInt(1,id);
+
 			st.executeUpdate();
 					
 		} catch (SQLException e) {
@@ -175,16 +185,20 @@ public class MessageManager {
 	 * Marks a message as read
 	 * @param msg message to be marked read
 	 */
+
 	public void markRead(int id) {
 		Connection connection = null;
 		PreparedStatement st = null;
 		String sql = "UPDATE messages SET IsRead = 1 WHERE ID =?";
+
 		try {
 			connection = (Connection)con.getConnection();
 			st = connection.prepareStatement("USE c_cs108_mateog");
 			st.executeQuery();
 			st = connection.prepareStatement(sql);
+
 			st.setInt(1,id);
+
 			st.executeUpdate();
 					
 		} catch (SQLException e) {
@@ -192,12 +206,14 @@ public class MessageManager {
 		}
 	}
 
+
 	public Message getMessage(int id) {
 		Connection connection = null;
 		ResultSet result = null;
 		Message msg = null;
 		PreparedStatement st = null;
 		String sql = "SELECT * FROM  messages WHERE ID ='"+id+"'";
+
 		try {
 			connection = (Connection)con.getConnection();
 			st = connection.prepareStatement("USE c_cs108_mateog");
@@ -205,6 +221,7 @@ public class MessageManager {
 			st = connection.prepareStatement(sql);
 			result = st.executeQuery();
 			while (result.next()) {
+
 						msg = new Message(
 						result.getInt("ID"),
 						result.getString("MsgType"),
@@ -214,25 +231,32 @@ public class MessageManager {
 						result.getTimestamp("TimeSent"), 
 						result.getString("MessageBody"),
 						result.getInt("QuizId"));
+
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+
 		return msg;
 	}
 	
+
 	/**
 	 * Returns a list of all unviewed friendship requests where "user" is the requestee
 	 * @param user requestee
 	 * @return list of unviewed requests
 	 */
 	
+
 	public List<FriendRequest>getFriendRequests(String user) {
+
 		List<FriendRequest> list = new ArrayList<FriendRequest>();
 		Connection connection = null;
 		ResultSet result = null;
 		PreparedStatement st = null;
+
 		String sql =  "SELECT * FROM  FriendRequest WHERE Receiver ='"+user+"'";
+
 		
 		try {
 			connection = (Connection)con.getConnection();
@@ -241,11 +265,13 @@ public class MessageManager {
 			st = connection.prepareStatement(sql);
 			result = st.executeQuery();
 			while (result.next()) {
+
 				list.add(new FriendRequest(
 						result.getInt("ID"),
 						result.getString("Sender"), 
 						result.getString("Receiver"),
 						result.getTimestamp("TimeSent"))); 
+
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -257,6 +283,7 @@ public class MessageManager {
 	public void deleteRequest(int id) {
 		PreparedStatement st = null;		
 		String sql = "DELETE FROM FriendRequest WHERE ID =?";
+
 		try {
 			connection = (Connection)con.getConnection();
 			st = connection.prepareStatement("USE c_cs108_mateog");
@@ -273,5 +300,5 @@ public class MessageManager {
 		List<FriendRequest> list = getFriendRequests(user);
 		return list.size();
 	}
-	
+
 }

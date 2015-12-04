@@ -1,8 +1,12 @@
- <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" import="qanda.*, database.*, java.util.List" %>
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8" import="qanda.*, database.*, account.*, administration.*, java.util.List" %>
+
 <%
 	ServletContext context = request.getServletContext();
 	DatabaseConnection connection = (DatabaseConnection) context.getAttribute("databaseconnection");
+	
+	String username = (String)session.getAttribute("loggedin_user");
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -12,14 +16,30 @@
 </head>
 <body>
 	<jsp:include page="header.jsp"/>
+	<%
+	if (request.getParameter("message") != null){
+		String messageToDisplay = request.getParameter("message");
+		if (messageToDisplay.equals("accountcreated")) {
+			out.print(Util.showSuccessMessage("Account Created Successfully. Please Log In to Begin Using CardinalQuiz!"));
+		}
+		if (messageToDisplay.equals("badlogin")) {
+			out.print(Util.showErrorMessage("Invalid Username/Password"));
+		}
+		
+		if (messageToDisplay.equals("suspended")) {
+			out.print(Util.showErrorMessage("Your Account is Suspended. Please Contact the Administrator."));
+		} 
+	} 
+	%>
+	
     <main>
     <div>
     	<div id="main-browse-container">
   <div id="browse-container">
   
     <div id="browse-results-container">
-    <div class="result-selected-class">Latest Quizzes</div>	
-      <input id="search-box" placeholder="Search by keywords or class code" class="">
+    <div class="result-selected-class">Latest Quizzes!</div>	
+      <input id="search-box" placeholder="Search by keyword" class="">
       <ul id="browse-results-list">
         <%
         	List<Quiz> recentQuizzes = Quiz.getRecentQuizzes(connection, 10);
@@ -27,7 +47,7 @@
         %>
         
         <li class="browse-result">
-          <div class="title"><a href="showquiz.jsp?id=<% out.print(q.getId()); %>"><% out.print(q.getName()); %></a></div>
+          <div class="title"><a href="quizsummary.jsp?id=<% out.print(q.getId()); %>"><% out.print(q.getName()); %></a></div>
           <div class="description">Created by <% out.print(q.getCreator()); %> on <% out.print(q.getCreationDate()); %>. Taken <% out.print(q.getTakenCount()); %> times</div>
         </li>
         <%
@@ -39,39 +59,80 @@
   <div id="result-info-container">
     <div class="result-selected-class">Announcements</div>
     <div>
-      <div class="result-relation-title">ClassQuiz is Now Live! (12/4)</div>
+    
+        <%
+        	List<Announcement> recentAnnouncements = Announcement.getRecentAnnouncements(connection, 10);
+        	for (Announcement a: recentAnnouncements) {
+        %>   
+    
+      <div class="result-relation-title"><%= a.header %> (<%= a.createdAt.toString() %>) by <%= a.author %></div>
       <div class="prereqs">
         <ul>
           <div class="placeholder-text">
-            After weeks of hard work, CardinalQuiz is now live. We hope everyone enjoys it!  
+            <%= a.body %>  
           </div>
         </ul>
       </div>
-
-      <div class="result-relation-title">Updated Site Rules (11/23)</div>
-      <div class="leads-to-classes">
-        <ul>
-          <div class="placeholder-text">
-            Please don't post any NSFW quiz on CardinalQuiz!
-          </div>
-        </ul>
-      </div>
+      <%
+        	}
+      %>
     </div>
     
     <div style="padding-top: 40px;">
     <div class="result-selected-class">Previous Quizzes</div>	
       <div class="placeholder-container">
-      	You haven't done any quiz. Perhaps you want to change that?
+      <%
+      if (username == null) {
+      	out.println("You are not logged in. Please log in to see previous quizzes taken")	;
+      } else {
+    	  History historyForHomepage = new History(connection);
+    	  List<HistoryItem> prevQuiz = historyForHomepage.getHistoryByUsername(username);
+    	  if ( prevQuiz.size() == 0 ) {
+    		  out.println("You haven't done any quiz. Perhaps you want to change that?");
+    	  } else {
+    		  for(HistoryItem hItem: prevQuiz) {
+    			  Quiz qItem = new Quiz(connection, hItem.getQuizId());
+      %>
+      	<div><a href="quizsummary.jsp?id=<%= hItem.getQuizId() %>"><%= qItem.getName() %></a> taken on <%= hItem.getTime() %>, Score: <%= hItem.getScore() %>/<%= hItem.getMaxScore() %></div>
+      	<%
+      		}
+      	}
+      }
+      	%>
       </div>
     </div>
-    <div class="add-class-container">
-      <button>Take a Random Quiz</button>
-    </div>
+    <%
+    if (username != null) {
+    %>
+    <form action="TakeRandomQuiz" name="quiz-response" method="GET">
+    	<div class="add-class-container">
+      		<button>Take a Random Quiz</button>
+    	</div>
+    </form>
+    <% 
+    }
+    %>
     
     <div style="padding-top: 40px;">
     <div class="result-selected-class">Achievements</div>	
       <div class="placeholder-container">
-      	You don't have any achievements
+      <%
+      if (username == null) {
+      	out.println("You are not logged in. Please log in to see your achievements");
+      } else {
+    	  Achievement ac = new Achievement(connection);
+    	  List<AchievementItem> acItems = ac.getAchievementByUser(username);
+    	  if ( acItems.size() == 0 ) {
+    		  out.print("You don't have any achievements :(");
+    	  } else {
+    		  for(AchievementItem aItem: acItems) {
+      %>
+      	<div><%= aItem.getAchievementName() %>, <%= aItem.getDescription() %></div>
+      	<%
+      		}
+      	}
+      }
+      	%>
       </div>
     </div> 
     

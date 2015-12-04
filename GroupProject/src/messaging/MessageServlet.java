@@ -1,4 +1,5 @@
 package messaging;
+<<<<<<< HEAD
 import account.*;
 
 import java.io.IOException;
@@ -6,6 +7,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class MessageServlet
  */
+
 //@WebServlet("/MessageServlet")
 public class MessageServlet extends HttpServlet {
        
@@ -21,6 +24,7 @@ public class MessageServlet extends HttpServlet {
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
+
      * @see HttpServlet#HttpServlet()
      */
     public MessageServlet() {
@@ -38,11 +42,13 @@ public class MessageServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
 		String sender = request.getParameter("sender");
 		String receiver = request.getParameter("to");
 		String subject = request.getParameter("subject");
 		String action = request.getParameter("action");
 		String body = request.getParameter("body");
+
 		MessageManager mm = (MessageManager)getServletContext().getAttribute("messageManager");		
 		Message m = null;
 		

@@ -7,6 +7,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
+
 import database.DatabaseConnection;
 
 /**
@@ -17,16 +18,20 @@ import database.DatabaseConnection;
 public class WebsiteListener implements ServletContextListener {
 
 	MessageManager messageManager;
+
 	DatabaseConnection connection;
+
 	
     /**
      * Default constructor. 
      */
     public WebsiteListener() {
+
     	connection = new DatabaseConnection();
     	messageManager = new MessageManager();
     }
     
+
 	/**
      * @see ServletContextListener#contextDestroyed(ServletContextEvent)
      */

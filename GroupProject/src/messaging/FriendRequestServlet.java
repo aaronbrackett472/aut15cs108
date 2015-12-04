@@ -1,4 +1,5 @@
 package messaging;
+<<<<<<< HEAD
 import account.*;
 
 import java.io.IOException;
@@ -6,6 +7,14 @@ import java.sql.Timestamp;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+=======
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+>>>>>>> pat
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,10 +22,12 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class FriendRequestServlet
  */
+
 //@WebServlet("/FriendRequestServlet")
 public class FriendRequestServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final String MESSAGE_PAGE = "AllFriendRequests.jsp";
+
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -64,6 +75,7 @@ public class FriendRequestServlet extends HttpServlet {
 			mm.deleteRequest(msg_id);
 		}
 		RequestDispatcher rd = request.getRequestDispatcher("MessageStatus.jsp");
+
 		if(rd != null)
 			rd.forward(request, response);
 	}

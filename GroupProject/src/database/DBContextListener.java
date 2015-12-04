@@ -11,7 +11,9 @@ import javax.servlet.annotation.WebListener;
  */
 @WebListener
 public class DBContextListener implements ServletContextListener {
-
+	//Constants
+	public static String DATABASE_CONTEXT_ATTRIBUTE = "databaseconnection";
+	
     /**
      * Default constructor. 
      */
@@ -35,10 +37,10 @@ public class DBContextListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent arg0)  { 
          // TODO Auto-generated method stub
     	ServletContext context = arg0.getServletContext();
-    	DatabaseConnection connection = (DatabaseConnection) context.getAttribute("databaseconnection");
+    	DatabaseConnection connection = (DatabaseConnection) context.getAttribute(DATABASE_CONTEXT_ATTRIBUTE);
     	if(connection == null) {
     		connection = new DatabaseConnection();
-    		context.setAttribute("databaseconnection", connection);
+    		context.setAttribute(DATABASE_CONTEXT_ATTRIBUTE, connection);
     	}
     }
 	

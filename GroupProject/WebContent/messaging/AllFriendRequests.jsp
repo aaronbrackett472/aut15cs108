@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+
 <%@ page
 	import="java.util.*, messaging.*, java.sql.Timestamp, account.*, database.*"%>
+
 
 <!-- This page lists all the friendrequests for a particular user
 	One way to use this page would be to create a link in the user's home page 
@@ -29,7 +31,7 @@
 <body>
 	<jsp:include page="header.jsp" />
 	<h4 style="text-align:left;float:left;"><span style="font-weight:normal;"><a href="AllNoteMessages.jsp">Messages<%if (numMsgs >0) { %>(<%=numMsgs%>)<%}%></a></span> &bull; 
-	    <a href="AllFriendRequests.jsp "">Friend Requests<%if (numReqs >0) { %>(<%=numReqs%>)<%}%></a> 
+	    <a href="AllFriendRequests.jsp">Friend Requests<%if (numReqs >0) { %>(<%=numReqs%>)<%}%></a> 
 	</h4>
 	
 	<div style="float:right;padding-left:15px;padding-top:5px">

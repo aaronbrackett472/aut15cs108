@@ -10,7 +10,7 @@ import javafx.util.Pair;
 
 public class ChoiceSet {
 	
-	private static String choicesTable = "Choices";
+	public static String choicesTable = Answer.answerTable;
 	
 	int questionId;
 	public List<Pair<String, Boolean>> choicesList;
@@ -37,12 +37,12 @@ public class ChoiceSet {
 	 */
 	void getChoicesByQuestionId(DatabaseConnection connection, int questionId) {
 		//DatabaseConnection connection = new DatabaseConnection();
-		ResultSet resultSet = connection.executeQuery("SELECT * FROM " + choicesTable + " WHERE questionId = '" + questionId + "';");
+		ResultSet resultSet = connection.executeQuery("SELECT * FROM " + choicesTable + " WHERE questionID = '" + questionId + "';");
 		this.choicesList.clear();
 		try {
 			this.questionId = questionId;
 			while(resultSet.next() != false) {
-				this.addChoices(resultSet.getString("choice"), resultSet.getBoolean("isCorrect"));
+				this.addChoices(resultSet.getString("answer"), resultSet.getBoolean("correct"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -71,13 +71,13 @@ public class ChoiceSet {
 		int choiceIndex = 0;
 		//DatabaseConnection connection = new DatabaseConnection();
 		for(Pair<String, Boolean> choice: choicesList) {
-			String query = "INSERT INTO " + choicesTable + " (questionId, choice, choiceIndex, isCorrect) VALUES('" + 
+			String query = "INSERT INTO " + choicesTable + " (questionID, answer, answerIndex, correct) VALUES('" + 
 			this.questionId + "', '" + choice.getKey() + "', '" +  choiceIndex + "', '" + convertBooleanToInt(choice.getValue()) + "');";
 			connection.executeUpdate(query);
 			choiceIndex++;
 		}
 		
-		ResultSet resultSet = connection.executeQuery("SELECT * FROM " + choicesTable + " WHERE questionId ='" + this.questionId + "';");
+		ResultSet resultSet = connection.executeQuery("SELECT * FROM " + choicesTable + " WHERE questionID ='" + this.questionId + "';");
 		try {
 			resultSet.last();
 			id = resultSet.getInt("id");

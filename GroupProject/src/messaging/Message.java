@@ -4,6 +4,7 @@ package messaging;
  * Created by alfonce on 11/11/15.
  * Represents received messages.
  */
+
 import java.sql.Timestamp;
 
 public class Message {
@@ -22,6 +23,7 @@ public class Message {
 		this.seen = false;
 		this.quiz_id = quiz_id;
 		this.id = id;
+
 	}
 
 	public void setMessageType(String type) {
@@ -35,6 +37,7 @@ public class Message {
 	public int getQuizId(){
 		return quiz_id;
 	}
+
 	public String getMessageBody() {
 		return body;
 	}

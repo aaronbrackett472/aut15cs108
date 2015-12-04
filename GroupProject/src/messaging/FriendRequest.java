@@ -1,4 +1,5 @@
 package messaging;
+
 import java.sql.Timestamp;
 
 public class FriendRequest{
@@ -10,5 +11,6 @@ public class FriendRequest{
 		this.receiver = receiver;
 		this.stamp = stamp;		
 		this.id = id;
+
     }
 }

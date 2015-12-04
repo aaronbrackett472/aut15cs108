@@ -1,14 +1,14 @@
 package account;
-//package QuizProject;
 
 import java.util.*;
+import java.util.Date;
 
 import database.DatabaseConnection;
 import java.sql.*;
 
 /**
  * Represent a single user of the quiz
- *
+ * @author Musyoka
  */
 public class User{
 	//Instance variables
@@ -16,11 +16,17 @@ public class User{
 	private DatabaseConnection connection;
 	private Statement statement;
 	private AccountManager accounts;
+	private boolean isAdmin, isSuspended;
+	private Date suspensionEnd;
 	
-	//Constants
-	private static String friendshipTable = "friendship";
-	private static String achievementsTable = "achivements";
-	private static String historyTable = "history";
+	//Constant
+    
+	private static String friendshipTable = "Friendship";
+	private static String achievementsTable = "Achievement";
+	private static String historyTable = "History";
+	private static String accountTable = "Accounts";
+
+	public static String FRIENDSHIP_TABLE = "Friendship";
 
 	
 	//temporarry to get ride of errors on code
@@ -31,38 +37,39 @@ public class User{
 	/**
 	 * Constructor
 	 */
-	public User(String username){
-		this.username = username;
-		connection = new DatabaseConnection();
-		statement = connection.getStatement();
-		accounts =  new AccountManager();
+	public User(String username, DatabaseConnection connection){
+
 		
-		//Add a frindship, achivements, history tables if they dont exist
-		String friendshipQuerry = "CREATE TABLE IF NOT EXISTS " + friendshipTable +
-								  " (username1 CHAR(64), " +
-								  " username2 CHAR(64) )";
-		String achievementQuerry = "CREATE TABLE IF NOT EXISTS " + achievementsTable +
-				  				   " (username CHAR(64), " +
-				  				   " achivementName CHAR(64), " +
-				  				   " timeAcquired CHAR(64) )";
-		String historyQuerry = "CREATE TABLE IF NOT EXISTS " + historyTable +
-							   " (username CHAR(64), " +
-							   " score CHAR(64), " +
-							   " timeAcquired CHAR(64) )";
-		
-		try{
-			statement.executeUpdate(friendshipQuerry);
-			statement.executeUpdate(achievementQuerry);
-			statement.executeUpdate(historyQuerry);
-		} catch(SQLException e) {
+		ResultSet resultSet = connection.executeQuery("SELECT * FROM " + accountTable + " WHERE username = '" + username + "';");
+		try {
+			
+			if(resultSet.next()){
+				this.username = username;
+				this.connection = connection;
+				this.statement = connection.getStatement();
+				this.accounts =  new AccountManager(connection);
+			
+				resultSet.first();
+				this.isAdmin = resultSet.getBoolean("isAdmin");
+				this.isSuspended = resultSet.getBoolean("suspended");
+
+				this.suspensionEnd = resultSet.getDate("suspensionEnd");
+				
+			} else {
+				
+			}
+			
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
 		
 	}
 
 	/**
 	 * Adds a friend to this user
 	 * If the given friend is not a registered user, then the friend is not added
+	 * Frienship is bidirectional relationship
 	 * @param friendName name of the friend
 	 */
 	public void addFriend(String friendName) {
@@ -70,9 +77,13 @@ public class User{
 		//Ignore if the frindName is  already a friend to this user
 		if(checkFriend(friendName)) return;
 		try{
-			String addQuerry = "INSERT INTO "+ friendshipTable + " (username1, username2) " +
-					"VALUES('" + this.username + "', '" + friendName + "')" ;
-			statement.executeUpdate(addQuerry);		
+			String addQuerry1 = "INSERT INTO "+ FRIENDSHIP_TABLE + " (username1, username2) " +
+					           "VALUES('" + this.username + "', '" + friendName + "')" ;
+			String addQuerry2 = "INSERT INTO "+ FRIENDSHIP_TABLE + " (username1, username2) " +
+					            "VALUES('" + friendName + "', '" + this.username + "')" ;
+			
+			statement.executeUpdate(addQuerry1);
+			statement.executeUpdate(addQuerry2);	
 		} catch(SQLException e){
 			e.printStackTrace();
 		}
@@ -85,38 +96,26 @@ public class User{
 	 *
 	 */
 	public boolean checkFriend(String username) {
-//		String checkQuerry = "SELECT * FROM " + friendshipTable + " WHERE username1='"+ this.username + "'" +
-//							 "AND username2='" + username + "'";
-//		try{
-//			ResultSet rs = statement.executeQuery(checkQuerry);	
-//			if(rs.next()) {
-//				return true;
-//			}
-//		} catch(SQLException e) {
-//			e.printStackTrace();
-//		}
+		String checkQuerry = "SELECT * FROM " + FRIENDSHIP_TABLE + " WHERE username1='"+ this.username + "'" +
+							 "AND username2='" + username + "'";
+		try{
+			ResultSet rs = statement.executeQuery(checkQuerry);	
+			if(rs.next()) {
+				return true;
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
 		return false;
 	}
 
 	/**
 	 * Returns performance history items of this user
-	 * @return history perfomance history
+	 * @return history performance history
 	 */
 	public ArrayList<HistoryItem> getPerfomanceHistory() {
-		ArrayList<HistoryItem> history =  new ArrayList<HistoryItem>();
-		String querry = "SELECT * FROM " + historyTable + " WHERE username='"+ username + "'";
-		try{
-			ResultSet rs = statement.executeQuery(querry);	
-			while(rs.next()) {
-				int score  =  Integer.parseInt(rs.getString(2));
-				String time = rs.getString(3);
-				HistoryItem item = new HistoryItem(score, time);
-				history.add(item);		
-			}
-		} catch(SQLException e) {
-			e.printStackTrace();
-		}	
-		return history;
+		History history = new History(connection);
+		return history.getHistoryByUsername(username);
 	}
 
 	/**
@@ -125,7 +124,7 @@ public class User{
 	 */
 	public Set<String> getAllFriends() {
 		Set<String> friends =  new HashSet<String>();
-		String querry = "SELECT * FROM " + friendshipTable + " WHERE username1='"+ username + "'";
+		String querry = "SELECT * FROM " + FRIENDSHIP_TABLE + " WHERE username1='"+ username + "'";
 		try{
 			ResultSet rs = statement.executeQuery(querry);
 			while(rs.next()) {
@@ -139,13 +138,18 @@ public class User{
 	}
 
 	/**
-	 * Removes the given friends from the friends of this user
+	 * Removes the given friends from the friends of this user.
+	 * The username is removed from friendNames list, and friendName
+	 * is removed from usernamesList
 	 */
 	public void removeFriend(String friendName) {
-		String querry = "DELETE FROM " + friendshipTable + " WHERE username1='"+ this.username + "'" +
-							 "AND username2='" + friendName + "'";
+		String querry1 = "DELETE FROM " + FRIENDSHIP_TABLE + " WHERE username1='"+ this.username + "'" +
+					    "AND username2='" + friendName + "'";
+		String querry2 = "DELETE FROM " + FRIENDSHIP_TABLE + " WHERE username1='"+ friendName + "'" +
+			    		"AND username2='" + this.username + "'";
 		try{
-			statement.executeUpdate(querry);
+			statement.executeUpdate(querry1);
+			statement.executeUpdate(querry2);
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}
@@ -155,22 +159,6 @@ public class User{
 	 * Returns the a list of achievement titles held by this user
 	 * @return achievements
 	 */	
-	public ArrayList<Achievement> getAchievements() {
-		ArrayList<Achievement> achievements = new ArrayList<Achievement>();
-		String querry = "SELECT * FROM " + achievementsTable + " WHERE username='"+ username + "'";
-		try{
-			ResultSet rs = statement.executeQuery(querry);	
-			while(rs.next()) {
-				String name = rs.getString(2);
-				String time = rs.getString(3);
-				Achievement item = new Achievement(name, time);
-				achievements.add(item);		
-			}
-		} catch(SQLException e) {
-			e.printStackTrace();
-		}				
-		return achievements;
-	}
 
 	public String getUserName() {
 		// TODO Auto-generated method stub
@@ -182,6 +170,24 @@ public class User{
 		return null;
 	}
 	
+
+	public ArrayList<AchievementItem> getAchievements() {
+		Achievement achievements = new Achievement(connection);
+		return achievements.getAchievementByUser(username);
+
+	}
 	
+	public boolean isAdmin(){
+		return this.isAdmin;
+	}
+	
+	public boolean isSuspended() {
+		if(this.isSuspended) {
+			Date curDate = new Date();
+			if(this.suspensionEnd.after(curDate)) {
+				return true;
+			} else return false;
+		} else return false;
+	}
 
 }

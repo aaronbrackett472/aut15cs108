@@ -3,6 +3,7 @@
 <%@ page
 	import="messaging.*, java.util.*, java.sql.Timestamp, java.text.*, account.*"%>
 
+
 <!-- Shows a single note message. Linked with AllNoteMessages. 
 	Assumes that we can get the current user from the set attribute
 	From this page reply to the message(redirected to the SendNote.jsp file)
@@ -14,6 +15,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <%
 	HttpSession ses = request.getSession();
+
 	ServletContext context = request.getServletContext();
 	String user = (String) session.getAttribute("loggedin_user");
 	int id = Integer.parseInt(request.getParameter("msg_id"));
@@ -55,7 +57,7 @@
 <body>
 	<jsp:include page="header.jsp" />
 	<h4 style="text-align:left;float:left;"><span style="font-weight:normal;"><a href="AllNoteMessages.jsp">Messages<%if (numMsgs >0) { %>(<%=numMsgs%>)<%}%></a></span> &bull; 
-	    <span style="font-weight:normal;"><a href="AllFriendRequests.jsp"">Friend Requests <%if (numReqs >0) { %>(<%=numReqs%>)<%}%></a> </span>
+	    <span style="font-weight:normal;"><a href="AllFriendRequests.jsp">Friend Requests <%if (numReqs >0) { %>(<%=numReqs%>)<%}%></a> </span>
 	</h4>
 		<div style="float:right;padding-left:15px;padding-top:5px">
 		<form method="post" action="compose.jsp">
@@ -66,6 +68,7 @@
 	<%
 	if (type.equals("note")) {
 		%>
+
 	<div id="apDiv2">
 		<p>&nbsp;</p>
 		<label class="message"><%=time%> <%=sender%> wrote:<br /> <br />

@@ -3,12 +3,15 @@ package account;
 
 import java.io.IOException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import database.DatabaseConnection;
+import database.DBContextListener;
+
 
 /**
  * Servlet implementation class LoginServlet
@@ -37,15 +40,35 @@ public class LoginServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		AccountManager accounts = (AccountManager)request.getSession().getAttribute(UserSessionListener.ACCOUNTS_CONTEXT_ATTRIBUTE);
+
+		HttpSession session = request.getSession();
+		DatabaseConnection connection = (DatabaseConnection)request.getServletContext().getAttribute(DBContextListener.DATABASE_CONTEXT_ATTRIBUTE);	
+		AccountManager accounts =  new AccountManager(connection);
+
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
+		
 		if(accounts.verifyUser(username, password)) {
-			RequestDispatcher dispatch =  request.getRequestDispatcher("create-account-welcome.jsp");
-			dispatch.forward(request, response);
+			
+			User userObject = new User(username, connection);
+			if(!userObject.isSuspended())
+			{
+				session.setAttribute("loggedin_user", username);
+				session.setAttribute("userobject", userObject);
+				
+				if(userObject.isAdmin()) {
+					session.setAttribute("isAdmin", true);
+				} else {
+					session.setAttribute("isAdmin", false);
+				}
+				
+				response.sendRedirect("/GroupProject/");
+			} else {
+				response.sendRedirect("/GroupProject/?message=suspended");
+			}
 		} else {
-			RequestDispatcher  dispatch =  request.getRequestDispatcher("try-again-loggin.jsp");
-			dispatch.forward(request, response);
+			System.out.println("invalid user or password");
+			response.sendRedirect("/GroupProject/?message=badlogin");
 		}
 	}
 

@@ -3,6 +3,7 @@
 <%@ page
 	import="java.util.*, java.sql.Timestamp, messaging.*, account.*, database.*"%>
 
+
 <!-- This page lists all the note messages for a particular user
 	One way to use this page would be to create a link in the user's home page 
 	Each note message has a link that directs to ViewNote page
@@ -14,6 +15,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <%
 	HttpSession ses = request.getSession();
+
 	ServletContext context = request.getServletContext();
 	String user = (String) session.getAttribute("loggedin_user");
 	List<Message> messages = null;
@@ -120,5 +122,6 @@
 			});
 		});
 	</script>
+
 </body>
 </html>

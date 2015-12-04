@@ -16,7 +16,7 @@ public class QuestionTest {
 		
 		DatabaseConnection connection = new DatabaseConnection();
 		
-		Question.saveToDatabase(connection, 1, "Response", 1, "Who is your daddy?", "You", "n/a");
+		Question.saveToDatabase(connection, 1, "Response", 1, "Who is your daddy?", "n/a");
 		ResultSet questionResult = Question.getQuestionsByQuizId(connection, 1);
 		try {
 			questionResult.last();

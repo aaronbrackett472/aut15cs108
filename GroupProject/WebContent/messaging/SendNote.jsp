@@ -1,11 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+
 <%@ page
 	import="java.util.*, messaging.*, java.sql.Timestamp, account.*, database.*"%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <%
 	HttpSession ses = request.getSession();
 	ServletContext context = request.getServletContext();
@@ -32,16 +35,19 @@
 %>
 <jsp:include page="cssfile.jsp" />
 <title><%=title%></title>
+
 <script type="text/javascript">
 	function discardMessage() {
 		document.getElementById('subject').value = "";
 		document.getElementById('body').value = "";
 		var div = document.getElementById('apDiv3');
 		div.removeChild(document.getElementById('form1'));
-		document.getElementById('heading').innerHTML = "Request Discarded";
+
+		document.getElementById('heading').innerHTML = "Message Discarded";
 		var label = document.createElement('label');
 		label.className = 'message';
-		label.innerHTML = "<br></br>Your request has been discarded.";
+		label.innerHTML = "<br></br>You message has been discarded.";
+
 		div.appendChild(label);
 	}
 </script>
@@ -51,7 +57,7 @@
 	
 	<div>
 	<h4 style="text-align:left;float:left;"><span style="font-weight:normal;"><a href="AllNoteMessages.jsp">Messages<%if (numMsgs >0) { %>(<%=numMsgs%>)<%}%></a></span> &bull; 
-	    <a href="AllFriendRequests.jsp "">Friend Requests<%if (numReqs >0) { %>(<%=numReqs%>)<%}%></a> 
+	    <a href="AllFriendRequests.jsp">Friend Requests<%if (numReqs >0) { %>(<%=numReqs%>)<%}%></a> 
 	</h4>
 	</div>
 	
@@ -66,6 +72,7 @@
 			<input type="hidden" name="type" value="note"></input> <label style="text-align:left;float:left;"
 				class="message"><b>From:</b></label> <input class="messagefield"
 				type="text" name="fromname" id="from" value="<%=username%>" size=30 />
+
 			<label class="message"><b>To:</b></label> <input class="messagefield"
 				type="text" name="toname" id="toname" value="<%=receiverName%>"
 				size=30 /> <input type="hidden" name="to" value="<%=receiverName%>"></input>
@@ -75,6 +82,7 @@
 			<p>
 				<input class="messagefield" type="text" name="subject" id="subject"
 					value="<%=subject%>" size=75 />
+
 			</p>
 			<p>
 				<label class="message"><b>Message</b></label>
