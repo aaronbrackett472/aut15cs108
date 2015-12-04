@@ -4,6 +4,7 @@
 <head>
 	<jsp:include page="include.jsp"/>
 	<title>Administrator's Panel</title>
+	<link rel="shortcut icon" href="favicon.ico">
 </head>
 <body>
 	<jsp:include page="header.jsp"/>

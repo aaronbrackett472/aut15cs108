@@ -14,6 +14,7 @@ if(request.getParameter("id") == null){
 %>
 <html>
 <head>
+	<link rel="shortcut icon" href="favicon.ico">
 	<jsp:include page="include.jsp"/>
 	<title>Quiz: <% out.print(currentQuiz.getName()); %></title>
 </head>

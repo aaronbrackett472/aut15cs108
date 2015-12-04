@@ -32,7 +32,7 @@ function showQuestionHTML(){
         	'<div style="padding-top: 20px;"></div><div class="placeholder-text">' +
         	'<input type="text" name="question" id="question" class="med-box">' +
         	'</div><div style="padding-top: 20px;"></div>' +
-        	'<div class="prereqs"> <div class="placeholder-text">How much is this question worth?</div></div>' +
+        	'<div class="prereqs"> <div class="placeholder-text">How much is this question worth? (If multiple answers, score per answer)</div></div>' +
         	'<div style="padding-top: 20px;"></div><div class="placeholder-text"><input class="med-box" type="text" name="score" id="score">' +
         	'</div><div style="padding-top: 20px;"></div>';
         var questionBody = document.getElementById('QuestionForm');
