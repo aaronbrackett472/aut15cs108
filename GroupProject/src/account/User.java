@@ -29,6 +29,11 @@ public class User{
 	public static String FRIENDSHIP_TABLE = "Friendship";
 
 	
+	//temporarry to get ride of errors on code
+	public User(String username, DatabaseConnection con) {
+		this.username = username;
+		this.connection = con;
+	}
 	/**
 	 * Constructor
 	 */
@@ -155,21 +160,16 @@ public class User{
 	 * @return achievements
 	 */	
 
-//	public ArrayList<Achievement> getAchievements() {
-//		ArrayList<Achievement> achievements = new ArrayList<Achievement>();
-//		String query = "SELECT * FROM " + achievementsTable + " WHERE username='"+ username + "'";
-//		try{
-//			ResultSet rs = statement.executeQuery(query);	
-//			while(rs.next()) {
-//				String name = rs.getString(2);
-//				String time = rs.getString(3);
-//				Achievement item = new Achievement(name, time);
-//				achievements.add(item);		
-//			}
-//		} catch(SQLException e) {
-//			e.printStackTrace();
-//		}				
-//		return achievements;
+	public String getUserName() {
+		// TODO Auto-generated method stub
+		return username;
+	}
+
+	//perhaps we should have an image for every user, 
+	public String getImageFile() {
+		return null;
+	}
+	
 
 	public ArrayList<AchievementItem> getAchievements() {
 		Achievement achievements = new Achievement(connection);

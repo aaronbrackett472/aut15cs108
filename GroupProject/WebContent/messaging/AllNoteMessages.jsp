@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="java.util.*, messaging.*"%>
+<%@ page
+	import="java.util.*, java.sql.Timestamp, messaging.*, account.*, database.*"%>
+
 
 <!-- This page lists all the note messages for a particular user
 	One way to use this page would be to create a link in the user's home page 
@@ -13,181 +15,113 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <%
 	HttpSession ses = request.getSession();
-	User us = (User) ses.getAttribute("user");
-	String user = us.getUserName();
-	MessageManager mm = null;
-	String pagen = request.getParameter("page");
-	int pagenum = 1;
-	if (pagen != null) {
-		pagenum = Integer.parseInt(pagen);
-	}
-	List<NoteMessage> messages = null;
-	ServletContext ctx = getServletContext();
-	mm = (MessageManager) ctx.getAttribute("messageManager");
-	messages = mm.getNoteMessages(us);
-	String title = "Note Messages";
+
+	ServletContext context = request.getServletContext();
+	String user = (String) session.getAttribute("loggedin_user");
+	List<Message> messages = null;
+	MessageManager manager = (MessageManager) context.getAttribute("messageManager");		
+	messages = manager.getUserMessages(user);
 	int numMsgs = messages.size();
+	int numReqs = manager.numRequests(user);
+	java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
 %>
-<style type="text/css">
-#apDiv1 {
-	position: absolute;
-	width: 1250px;
-	height: 100px;
-	z-index: 1;
-	left: 0px;
-	top: 0px;
-	background-color: #048;
-}
+<jsp:include page="cssfile.jsp" />
 
-#apDiv2 {
-	position: absolute;
-	width: 1028px;
-	height: 596px;
-	z-index: 3;
-	left: 0px;
-	top: 100px;
-	background-color: #DBD6E0;
-	color: #99F;
-}
-
-#request {
-	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-	width: 100%;
-	border-collapse: collapse;
-}
-
-#request td, #request th {
-	font-size: 1em;
-	border: 1px solid #98bf21;
-	padding: 3px 7px 2px 7px;
-}
-
-#request th {
-	font-size: 1.1em;
-	text-align: left;
-	padding-top: 5px;
-	padding-bottom: 4px;
-	background-color: #A7C942;
-	color: #ffffff;
-}
-
-.heading {
-	font-family: "Comic Sans MS", cursive;
-	font-size: 28px;
-	font-weight: 100;
-	position: relative;
-	left: 30px;
-	top: 20px;
-	color: white;
-}
-
-.userlinks {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 14px;
-	position: relative;
-	left: 20px;
-	top: 10px;
-}
-
-.unread {
-	font-size: 14px;
-	font-weight: bold;
-	position: relative;
-	left: 20px;
-	color: black;
-}
-
-.read {
-	font-size: 14px;
-	position: relative;
-	left: 20px;
-	color: black;
-}
-
-.headers {
-	font-size: 14px;
-	font-weight: bold;
-	color: blue;
-	position: relative;
-	left: 20px;
-}
-
-.page {
-	text-align: right;
-	font-size: 14px;
-	font-weight: bold;
-}
-</style>
-
-<title><%=title%></title>
-
+<script type="text/javascript">
+	function discardMessage() {
+		document.getElementById('subject').value = "";
+		document.getElementById('body').value = "";
+		var div = document.getElementById('apDiv3');
+		div.removeChild(document.getElementById('form1'));
+		document.getElementById('heading').innerHTML = "Request Discarded";
+		var label = document.createElement('label');
+		label.className = 'message';
+		label.innerHTML = "<br></br>Your request has been discarded.";
+		div.appendChild(label);
+	}
+</script>
 </head>
 <body>
-	<div id="apDiv1">
-		<label class="heading"><strong><%=title%></strong></label>
+	<jsp:include page="header.jsp" />
+	<h4 style="text-align:left;float:left;"><a href="AllNoteMessages.jsp">Messages <%if (numMsgs >0) { %>(<%=numMsgs%>)<%}%></a> &bull; 
+	    <span style="font-weight:normal;"><a href="AllFriendRequests.jsp">Friend Requests <%if (numReqs >0) { %>(<%=numReqs%>)<%}%></a></span>	    
+	</h4>
+	<div style="float:right;padding-left:15px;padding-top:5px">
+		<form method="post" action="compose.jsp">
+			<input type="submit" style="margin:15px;font-size:17px;font-weight:bold" value="Compose" />
+		</form>
 	</div>
-	<div id="apDiv2">
-		<%
-			String olderLink = "AllNoteMessages.jsp?page=" + (pagenum + 1);
-			String newerLink = "AllNoteMessages.jsp?page=" + (pagenum - 1);
-
-			int messagesPerPage = 15;
-			int numDisplayed = pagenum * messagesPerPage;
-			if (pagenum > 1) {
-		%>
-		<label class="page"><a href=<%=newerLink%>>Newer</a></label>
-		<%
+	<hr style="clear:both;"/>
+	<%
+	
+ 	if (messages.isEmpty()) {
+		%><center><h4> No new mail! </h4></center><% 
+	} else {
+	%>
+	<form method="post" action="MessageServlet">
+	<fieldset style="border:0 none;">
+	
+	<table cellpadding="5" cellspacing="5" border="0" width="100%">
+		<tbody>
+			<%	
+				for(int i = 0; i < messages.size(); i++) {
+					Message m = messages.get(i);
+					String subject = m.getSubject();
+					String sender = m.getSenderName();
+					int id = m.getId();
+					Timestamp time = m.getDateSent();
+					int length = Math.min(50, m.getMessageBody().length());
+					String snippet = m.getMessageBody().substring(0, length);
+					String display = subject + ":" + snippet;
+				%>
+				<tr>
+					<td align="left" width="7%" >
+					<input type="checkbox" id="checkbox<%=i%>" name="check" value="<%=id%>"></td>
+					<%if (m.isRead()) { %>
+					<td align="left" width="22%"><a href="user/profile.jsp?user=<%=sender %>"><font color="#000000"><b><%=sender%></b></font></a></td>
+					<td align="left" width="49%"><a href="ViewNote.jsp?msg_id=<%=id%>"><font color="#000000"><b><%=snippet%></b></font></a></td>
+					<td align="right" width="20%"><b><%=sdf.format(time)%></b></td>
+					<%} else {%>
+						<td align="left" width="22%"><a href="user/profile.jsp?user=<%=sender %>"><font color="#000000"><%=sender%></font></a></td>		
+						<td align="left" width="49%"><a href="ViewNote.jsp?msg_id=<%=id%>"><font color="#000000"><%=snippet%></font></a></td>
+						<td align="right" width="20%"><%=sdf.format(time)%></td>
+					<%}%>
+				</tr>
+			<% } %>
+		</tbody>
+	</table>
+	</fieldset>
+			<hr>
+					<div> Select:&nbsp;&nbsp;<a href="javascript:;" onclick="checkAll(this)" >All</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:;" id="checknone">None</a>
+					<span style="float:right"><b>Selected Messages :&nbsp;&nbsp;&nbsp;</b>
+					<select name="update_type">
+						<option value="delete">Delete Messages</option>
+						<option value="read">Mark as Read</option>
+						<option value="unread">Mark as Unread</option>
+					</select>
+						<input type="hidden" name="quiz_id" value="s">
+						<input type="submit" name="inbox_update" value="Update"></span>
+					</div>
+		<%		
 			}
-			if (numDisplayed < numMsgs) {
-		%><label class="page"><a href=<%=olderLink%>>Older</a></label>
-		<%
-			}
 		%>
-		<table id="request">
-			<tr>
-				<th>From</th>
-				<th>Subject</th>
-			</tr>
-			<%
-				if (messages != null) {
-					int messageStart = (pagenum - 1) * messagesPerPage;
-					int messagesEnd = (pagenum) * messagesPerPage;
-					int limit = Math.min(numMsgs, messagesEnd);
-
-					for (int i = messageStart; i < limit; i++) {
-						NoteMessage m = messages.get(i);
-						String senderName = m.getSenderName();
-						String time = m.getDateSent().toString();
-						String receiver = m.getReceiverName();
-						String subject = m.getSubject();
-						String body = "body";
-						boolean isRead = m.isRead();
-						String labelClass = isRead ? "read" : "unread";
-						String viewLink = "ViewNote.jsp?ID=" + i;
-			%><tr>
-				<td><label class=<%=labelClass%>> <%=senderName%> </label></td>
-				<td><label class=<%=labelClass%>><a href=<%=viewLink%>><%=subject%></a> </label></td>
-			</tr>
-			<%
+	</form>
+	<script type="text/javascript">
+		function checkAll(link) {
+			var inputs = document.getElementsByTagName('input');
+			for (var i=0; i < inputs.length; i++) {
+				if (inputs[i].type == 'checkbox') {
+					inputs[i].checked = true;
 				}
-				}
-			%>
-		</table>
-		<%
-			if (pagenum > 1) {
-		%>
-		<label class="page"><a href=<%=newerLink%>>Newer</a></label>
-		<%
 			}
-			if (numDisplayed < numMsgs) {
-		%><label class="page"><a href=<%=olderLink%>>Older</a></label>
-		<%
-			}
-		%>
-
-
-	</div>
-
+		}
+		$(function () {
+			$('#checknone').click(function () {
+    			$('fieldset').find(':checkbox').attr('checked', false);
+    			return true;
+			});
+		});
+	</script>
 
 </body>
 </html>

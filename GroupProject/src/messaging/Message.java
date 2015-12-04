@@ -4,31 +4,40 @@ package messaging;
  * Created by alfonce on 11/11/15.
  * Represents received messages.
  */
-import java.util.Date;
 
-public abstract class Message {
-	private String sender, receiver, type, subject, body, quizname;
-	private Date date;
+import java.sql.Timestamp;
+
+public class Message {
+	private String sender, receiver, type, subject, body;
+	private Timestamp date;
+	private int id = 0;
+	private int quiz_id = 0;
 	boolean seen;
-	
-	public Message(String sender, String receiver, String subject,Date date,String body) {
+	public Message(int id, String type, String sender, String receiver, String subject,Timestamp date,String body, int quiz_id) {
 		this.sender = sender;
 		this.receiver = receiver;
 		this.subject = subject;
+		this.type = type;
 		this.date = date;
 		this.body = body;
 		this.seen = false;
-		this.quizname = "";
+		this.quiz_id = quiz_id;
+		this.id = id;
+
 	}
 
 	public void setMessageType(String type) {
 		this.type = type;
 	}
 	
-	public void setQuizName(String name) {
-		this.quizname = name;
+	public int getId() {
+		return id;
 	}
 	
+	public int getQuizId(){
+		return quiz_id;
+	}
+
 	public String getMessageBody() {
 		return body;
 	}
@@ -43,7 +52,7 @@ public abstract class Message {
 		return type;
 	}
 	
-	public Date getDateSent() {
+	public Timestamp getDateSent() {
 		return date;
 	}
 	public boolean isRead() {
