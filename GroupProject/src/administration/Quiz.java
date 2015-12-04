@@ -77,37 +77,6 @@ public class Quiz {
 		connection.close();
 	}
 	
-	public static void updateQuiz(int id, String name, String description,
-			boolean randomOrder, boolean singlePage, boolean immediateCorrection, boolean practiceModeAllowed,
-			String tags) {
-		
-		Quiz oldQuiz = getQuiz(id);
-		
-		ArrayList<Boolean> changes = new ArrayList<Boolean>();
-		changes.add(!oldQuiz.name.equals(name));
-		changes.add(!oldQuiz.description.equals(description));
-		changes.add(oldQuiz.randomOrder != randomOrder);
-		changes.add(oldQuiz.singlePage != singlePage);
-		changes.add(oldQuiz.immediateCorrection != immediateCorrection);
-		changes.add(oldQuiz.practiceModeAllowed != practiceModeAllowed);
-		
-		String columns[] = {"name", "description", "randomOrder", "singlePage", "immediateCorrection", "practiceModeAllowed"};
-		
-		String values[] = {"\"" + name + "\"", "\"" + description + "\"",
-				String.valueOf(randomOrder ? 1 : 0),
-				String.valueOf(singlePage ? 1 : 0),
-				String.valueOf(immediateCorrection ? 1 : 0),
-				String.valueOf(practiceModeAllowed ? 1 : 0)};
-		
-		DatabaseConnection connection = new DatabaseConnection();
-		for (int i = 0; i < changes.size(); i++) {
-			if (changes.get(i)) {
-				connection.executeUpdate("UPDATE Quizzes SET " + columns[i] + " = " + values[i] + " WHERE id = " + id + ";");
-			}
-		}
-		connection.close();
-	}
-	
 	public static Quiz getQuiz(int id) {
 		DatabaseConnection connection = new DatabaseConnection();
 		ArrayList<Quiz> quizzes = getQuizzes(connection, "SELECT * FROM Quizzes WHERE id = " + id + ";");
@@ -206,6 +175,48 @@ public class Quiz {
 		return quizzes;
 	}
 	
+	public static void updateQuiz(int id, String name, String description,
+			boolean randomOrder, boolean singlePage, boolean immediateCorrection, boolean practiceModeAllowed,
+			String tags) {
+		
+		Quiz oldQuiz = getQuiz(id);
+		
+		ArrayList<Boolean> changes = new ArrayList<Boolean>();
+		changes.add(!oldQuiz.name.equals(name));
+		changes.add(!oldQuiz.description.equals(description));
+		changes.add(oldQuiz.randomOrder != randomOrder);
+		changes.add(oldQuiz.singlePage != singlePage);
+		changes.add(oldQuiz.immediateCorrection != immediateCorrection);
+		changes.add(oldQuiz.practiceModeAllowed != practiceModeAllowed);
+		
+		String columns[] = {"name", "description", "randomOrder", "singlePage", "immediateCorrection", "practiceModeAllowed"};
+		
+		String values[] = {"\"" + name + "\"", "\"" + description + "\"",
+				String.valueOf(randomOrder ? 1 : 0),
+				String.valueOf(singlePage ? 1 : 0),
+				String.valueOf(immediateCorrection ? 1 : 0),
+				String.valueOf(practiceModeAllowed ? 1 : 0)};
+		
+		// Update quiz in database.
+		DatabaseConnection connection = new DatabaseConnection();
+		for (int i = 0; i < changes.size(); i++) {
+			if (changes.get(i)) {
+				connection.executeUpdate("UPDATE Quizzes SET " + columns[i] + " = " + values[i] + " WHERE id = " + id + ";");
+			}
+		}
+		
+		// Update tags.
+		updateTags(connection, tags, id);
+		connection.close();
+	}
+	
+	private static void updateTags(DatabaseConnection connection, String tags, int quizID) {
+		ArrayList<String> tagList = new ArrayList<String>(Arrays.asList(tags.split("\\s*,\\s*")));
+		ArrayList<String> oldTagList = getTags(connection, quizID);
+		tagList.removeAll(oldTagList);
+		createTags(connection, tagList, quizID);
+	}
+	
 	private static ArrayList<String> getTags(DatabaseConnection connection, int quizID) {
 		ArrayList<String> tags = new ArrayList<String>();
 		ResultSet resultSet = connection.executeQuery("SELECT * FROM Tags WHERE quizID = " + quizID + ";");
@@ -218,15 +229,6 @@ public class Quiz {
 			e.printStackTrace();
 		}
 		return tags;
-	}
-	
-	public static void updateTags(String tags, int quizID) {
-		List<String> tagList = Arrays.asList(tags.split("\\s*,\\s*"));
-		DatabaseConnection connection = new DatabaseConnection();
-		List<String> oldTagList = getTags(connection, quizID);
-		tagList.removeAll(oldTagList);
-		createTags(connection, tagList, quizID);
-		connection.close();
 	}
 	
 	public static void createTags(DatabaseConnection connection, List<String> tagList, int quizID) {
