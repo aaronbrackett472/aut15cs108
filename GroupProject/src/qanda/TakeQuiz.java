@@ -1,6 +1,9 @@
 package qanda;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -39,14 +42,21 @@ public class TakeQuiz extends HttpServlet {
 		ServletContext context = request.getServletContext();
 		DatabaseConnection connection = (DatabaseConnection) context.getAttribute("databaseconnection");
 		
+		// check if logged in
+		String username = (String)session.getAttribute("loggedin_user");
+		if (username == null) {
+			// Do something
+			response.getWriter().append("Not logged in!");
+		}		
+		
 		Quiz q = new Quiz(connection, quizId);
 		session.setAttribute("currentQuiz", q);
 		RequestDispatcher dispatch;
 		
 		if(q.useSinglePage()) {
-			dispatch = request.getRequestDispatcher("onebyone.jsp?id=" + quizId);
+			dispatch = request.getRequestDispatcher("oneperpage.jsp?question=0");
 		} else {
-			dispatch = request.getRequestDispatcher("showquiz.jsp?id=" + quizId);
+			dispatch = request.getRequestDispatcher("showquiz.jsp?quizid=" + quizId);
 		}
 		
 		dispatch.forward(request, response);

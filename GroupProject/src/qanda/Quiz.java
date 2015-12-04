@@ -207,7 +207,7 @@ public class Quiz {
 	 * Counts the number of quizzes made by the given user
 	 * @param username the user name
 	 * @param connection database connection
-	 * @return count the number of quizes by user
+	 * @return count the number of quizzes by user
 	 */
 	public static int countQuizzesByUser(String username, DatabaseConnection connection) {
 		int count = 0;
