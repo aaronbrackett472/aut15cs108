@@ -1,8 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="administration.QuizReport, java.util.ArrayList, database.*"%>
-
-
+<%@ page import="administration.QuizReport, java.util.ArrayList, database.*, account.*"%>
 <%
+	String username = (String)session.getAttribute("loggedin_user");
+	if (username == null) {
+		out.print("You are not logged in!");
+		out.close();
+	} else {
+		User currentUserObject = (User)session.getAttribute("userobject");
+    	if (currentUserObject != null) {
+    		if( !currentUserObject.isAdmin() ) {
+    			out.print("You don't have a permission to view this page!");
+    			out.close();
+    		}
+    	}
+	}
+	
 	ServletContext context = request.getServletContext();
 	DatabaseConnection connection = (DatabaseConnection) context.getAttribute("databaseconnection");
 %>

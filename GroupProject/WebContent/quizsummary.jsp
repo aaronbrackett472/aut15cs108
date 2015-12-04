@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" import="qanda.*, database.*, account.*" %>
+    pageEncoding="UTF-8" import="qanda.*, database.*, account.*, java.util.List" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%
@@ -22,10 +22,10 @@ if(request.getParameter("id") == null){
 <body>
 	<jsp:include page="header.jsp"/>
 	<%
-       			String username = (String)session.getAttribute("loggedin_user");
-       			if (username == null) {
-       				out.print(Util.showWarningMessage("You are not logged in. Please log in/create an account before using CardinalQuiz."));
-       			} else {
+		String username = (String)session.getAttribute("loggedin_user");
+		if (username == null) {
+			out.print(Util.showWarningMessage("You are not logged in. Please log in/create an account before using CardinalQuiz."));
+			} else {
       %>
        			
     <main>
@@ -43,6 +43,20 @@ if(request.getParameter("id") == null){
       		</div>
       		<div style="padding-top: 40px;"></div>
       		<div class="result-selected-class">Your Performance</div>
+      		
+      		<div class="placeholder-container">
+      		
+      		<%
+      			History hc = new History(connection);
+      	  		List<HistoryItem> prevQuiz = hc.getHistoryByQuizIdAndUsername(quizId, username);
+      			for(HistoryItem hItem: prevQuiz) {
+      		%>
+      		<div>Score: <%= hItem.getScore() %>/<%= hItem.getMaxScore() %>. Taken on <%= hItem.getTime().toString() %></div>
+      		<%
+      			}
+      		%>
+      		</div>
+      		
       		<div style="padding-top: 40px;"></div>
       		<div class="result-selected-class">Top Performers</div>
     		<form action="TakeQuiz" name="quiz-response" method="GET">

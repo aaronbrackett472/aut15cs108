@@ -1,14 +1,36 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="administration.Announcement, java.util.ArrayList"%>
+<%@ page import="administration.Announcement, java.util.List, account.*"%>
+<%
+	String username = (String)session.getAttribute("loggedin_user");
+	if (username == null) {
+		out.print("You are not logged in!");
+		out.close();
+	} else {
+		User currentUserObject = (User)session.getAttribute("userobject");
+    	if (currentUserObject != null) {
+    		if( !currentUserObject.isAdmin() ) {
+    			out.print("You don't have a permission to view this page!");
+    			out.close();
+    		}
+    	}
+	}
+%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Reported Quizzes</title>
+	<jsp:include page="include.jsp"/>
+	<title>Administrator's Panel</title>
 </head>
 <body>
-<h1>Announcements</h1>
-<table style="width:100%">
+	<jsp:include page="header.jsp"/>
+    <main>
+<div>
+<div id="main-browse-container-center" style="width:80%;">
+  <div id="result-info-container" style="width:100%;">
+      <div class="result-selected-class">Manage Site Announcements</div>	
+      <div id="browse-results-list">
+<table class="table table-hover table-striped" style="width:100%">
 	<tr>
 		<th>Announcement ID</th>
 		<th>Header</th>		
@@ -19,8 +41,8 @@
 	</tr>
 	<%! @SuppressWarnings("unchecked") %>
 	<%
-	int kBodyPreviewLength = 80;
-	ArrayList<Announcement> announcements = (ArrayList<Announcement>) request.getAttribute("announcements");
+	int kBodyPreviewLength = 100;
+	List<Announcement> announcements = (List<Announcement>) request.getAttribute("announcements");
 	for (Announcement announcement : announcements) {
 		String formattedBody = announcement.body;
 		if (formattedBody.length() > kBodyPreviewLength) {
@@ -42,5 +64,10 @@
 	}
 	%>
 </table>
+</div>
+</div>
+</div>
+</div>
+</main>
 </body>
 </html>
