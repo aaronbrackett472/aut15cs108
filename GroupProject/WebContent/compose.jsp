@@ -6,7 +6,6 @@
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
 
 <%
 	ServletContext context = request.getServletContext();
@@ -33,47 +32,58 @@
 			if (numMsgs > 0) {
 		%>(<%=numMsgs%>)<%
 			}
-		%></a></span>
-		&bull; <a href="AllFriendRequests.jsp "">Friend Requests<%
+		%></a></span> &bull; <a href="AllFriendRequests.jsp "">Friend Requests<%
  	if (numReqs > 0) {
  %>(<%=numReqs%>)<%
  	}
  %></a>
 	</h4>
+
+
+	<%
+		if (friends.size()==0) {
+			%>
+	<h4 style="text-aling: left;">You can only send messages to
+		friends</h4>
+
+	<%
+		} else {
+			
+			%>
+
 	<form id="form1" name="form1" method="post" action="MessageServlet">
-	
-	<h4 style="text-align: left;">
-	Please choose the type of message you would like to send:
-	<select name="type">
-		<option value="note">Note Message</option>
-		<option value="challenge">Challenge Message</option>
- 	</select> 
-	</h4>
-	
-	<h4 style="text-align: left;">
-	Please choose recipient: 
-	<select name="receiver" id="friend_dropdown">
-		<%  for(int i = 0; i < friends.size(); i++) {
+
+		<h4 style="text-align: left;">
+			Please choose the type of message you would like to send: <select
+				name="type">
+				<option value="note">Note Message</option>
+				<option value="challenge">Challenge Message</option>
+			</select>
+		</h4>
+
+		<h4 style="text-align: left;">
+			Please choose recipient: <select name="receiver" id="friend_dropdown">
+				<%  for(int i = 0; i < friends.size(); i++) {
            	String option = (String)friends.get(i);
    		%>
-   		<option value="<%= option %>"><%= option %></option>
-  		 <% } %>
-	</select>
-	<script>
+				<option value="<%= option %>"><%= option %></option>
+				<% } %>
+			</select>
+			<script>
 		var dropDown = document.getElementById('friend_dropdown');
 		dropDown.onchange = function() {
 			var info = dropDown.value;
 			dropDown
 		};
 	</script>
-	
-	</h4>
-	<p>
-	Click next to continue
-	</p>
-	<input class="send" type="submit" name="action" id="action"
-				value="compose"/> 
-	</form>
 
+		</h4>
+		<p>Click next to continue</p>
+		<input class="send" type="submit" name="action" id="action"
+			value="compose" />
+	</form>
+	<% 	
+		}
+	%>
 </body>
 </html>
