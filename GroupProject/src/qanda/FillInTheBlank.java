@@ -10,9 +10,22 @@ public class FillInTheBlank extends Question {
 	private static final String blankCharacter = "@@@@";
 	private static final String blankReplacementHTML = "_______";
 	
+	private int count; 
+	
 	public FillInTheBlank(DatabaseConnection connection, int id) {
 		super(connection, id);
+		int lastIndex = 0;
+
+		while(lastIndex != -1){
+		    lastIndex = question.indexOf(blankCharacter,lastIndex);
+		    if(lastIndex != -1){
+		        count ++;
+		        lastIndex += blankCharacter.length();
+		    }
+		}
 	}
+	
+	
 	
 	@Override
 	boolean checkValidQuestion() {
@@ -30,17 +43,7 @@ public class FillInTheBlank extends Question {
 	@Override
 	public String getResponseInputHTML(){
 		String response = "";
-		int lastIndex = 0;
-		int count = 0;
-
-		while(lastIndex != -1){
-		    lastIndex = question.indexOf(blankCharacter,lastIndex);
-		    if(lastIndex != -1){
-		        count ++;
-		        lastIndex += blankCharacter.length();
-		    }
-		}
-		System.out.println(count);
+		
 		for (int i = 0; i < count; i++){
 			response+=super.getResponseInputHTML();
 			response+="<br>";

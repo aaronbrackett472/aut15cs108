@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
 import qanda.*;
 /**
  * Servlet implementation class AnswerCreateServlet
@@ -63,12 +64,12 @@ public class AnswerCreateServlet extends HttpServlet {
 				}
 			}
 			if (type.equals("Multiple Choice")){
-
-				String correctChoicesString = request.getParameter("correctChoices");
-				String[] correctChoicesArr = correctChoicesString.split(";");
+				String checkboxes = request.getParameter("correct");
+				String[] splitCheckboxes = checkboxes.split(",");
 				for (int i = 0; i < numAnswers; i++){
 					String answer = answers[i];
-					if (Arrays.asList(correctChoicesArr).contains(Integer.toString(i))){
+					String iString = Integer.toString(i);
+					for (String check = splitCheckboxes){
 						Answer.saveToDatabase(questionID, answer, i, true, "");
 					}
 					else{

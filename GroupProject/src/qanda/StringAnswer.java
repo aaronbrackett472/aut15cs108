@@ -1,6 +1,6 @@
 package qanda;
 
-public class StringAnswer extends Answer {
+/*public class StringAnswer extends Answer {
 	private String response;
 	
 	public StringAnswer(String answer){
@@ -12,3 +12,4 @@ public class StringAnswer extends Answer {
 		return response;
 	}
 }
+*/
