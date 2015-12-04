@@ -4,6 +4,7 @@ package account;
 import database.*;
 import java.sql.*;
 import java.security.*;
+import java.util.*;
 
 /**
  * Keeps track of all user accounts for the quiz project.
@@ -16,9 +17,6 @@ public class AccountManager{
 	private DatabaseConnection connection;
 	private MessageDigest md;
 	private static String accountsTable = "Accounts";
-	
-	
-
 	
 
 	/**
@@ -76,6 +74,25 @@ public class AccountManager{
 	 */
 	public User getUser(String username){	
 		return new User(username, connection);
+	}
+	
+	/**
+	 * Return all the username of the users in the database
+	 * @return allUsers  ArrayList of all the users
+	 */
+	public ArrayList<String> getAllUsers() {
+		ArrayList<String> allUsers =  new ArrayList<String>();
+		String querry = "SELECT username FROM " + accountsTable ;
+		ResultSet result = connection.executeQuery(querry);
+		try{
+			while(result.next()) {
+				allUsers.add(result.getString("username"));
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return allUsers;
+		
 	}
 
 	/**
