@@ -69,10 +69,16 @@ public class AnswerCreateServlet extends HttpServlet {
 				for (int i = 0; i < numAnswers; i++){
 					String answer = answers[i];
 					String iString = Integer.toString(i);
-					for (String check = splitCheckboxes){
-						Answer.saveToDatabase(questionID, answer, i, true, "");
+					boolean saved = false;
+					for (String check : splitCheckboxes){
+						if (iString == check){	
+							Answer.saveToDatabase(questionID, answer, i, true, "");
+							saved = true;
+							break;
+						}
+							
 					}
-					else{
+					if (!saved){
 						Answer.saveToDatabase(questionID, answer, i, false, "");
 					}
 				}
