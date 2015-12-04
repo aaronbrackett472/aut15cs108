@@ -3,12 +3,19 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Quiz Manager</title>
+	<jsp:include page="include.jsp"/>
+	<title>Manage Quizzes</title>
 </head>
 <body>
-<h1>Quiz Manager</h1>
-<table style="width:100%">
+
+	<jsp:include page="header.jsp"/>
+    <main>
+<div>
+<div id="main-browse-container-center" style="width:80%;">
+  <div id="result-info-container" style="width:100%;">
+      <div class="result-selected-class">Manage Quizzes</div>	
+      <div id="browse-results-list">
+<table class="table table-hover table-striped" style="width:100%">
 	<tr>
 		<th>Quiz ID</th>
 		<th>Name</th>		
@@ -38,5 +45,10 @@
 	}
 	%>
 </table>
+</div>
+</div>
+</div>
+</div>
+</main>
 </body>
 </html>

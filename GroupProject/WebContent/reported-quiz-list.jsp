@@ -59,7 +59,7 @@
 				+ "<td>" + report.author + "</td>"
 				+ "<td>" + report.reporter + "</td>"
 				+ "<td>" + formattedComment + "</td>"
-				+ "<td><form name=action=\"reported-quiz-review.jsp\" method=\"post\">"
+				+ "<td><form action=\"reported-quiz-review.jsp\" method=\"post\">"
 				+ "<input name=\"id\" type=\"hidden\" value=\"" + report.id + "\">"
 				+ "<input name=\"quizID\" type=\"hidden\" value=\"" + report.quizID + "\">"
 				+ "<input name=\"quizName\" type=\"hidden\" value=\"" + report.quizName + "\">"
