@@ -1,35 +1,37 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page import="messaging.*, java.util.*, java.text.*"%>
+<%@ page import="java.text.SimpleDateFormat, java.util.*, messaging.*"%>
 
-<!-- Shows a single note message. Linked with AllNoteMessages. 
-	Assumes that we can get the current user from the set attribute
-	From this page reply to the message(redirected to the SendNote.jsp file)
-     You can also delete the message (redirect to SendMessage servlet which handles deletion of the 
+<!-- Shows a single friend request. Link this page to the page that contains all 
+     friendship request message. From this page you can confirm or decline a request(
+     redirected to FriendRequestServlet. 
+     You can also delete the request (redirect to SendMessage servlet which handles deletion of the 
      entry from the friendship table -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <%
 	HttpSession ses = request.getSession();
 	User us = (User) ses.getAttribute("user");
 	String user = us.getUserName();
 	int id = Integer.parseInt(request.getParameter("ID"));
-	List<NoteMessage> messages = null;
+	List<FriendRequest> messages = null;
 	ServletContext ctx = getServletContext();
 	MessageManager mm = null;
 	mm = (MessageManager) ctx.getAttribute("messageManager");
-	messages = mm.getNoteMessages(us);
-	NoteMessage note = messages.get(id);
-	String title = "View Note";
-	String sender = note.getSenderName();
-	String subject = note.getSubject();
-	String body = note.getMessageBody();
+	messages = mm.getFriendRequests(us);
+	FriendRequest friend = messages.get(id);
+
+	String title = "View Request";
+	String sender = friend.getSenderName();
+	String subject = friend.getSubject();
+	String body = friend.getMessageBody();
 	SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
-	String time = sdf.format(note.getDateSent());
-	ses.setAttribute("message", note);
-	mm.markRead(note);
+	String time = sdf.format(friend.getDateSent());
+	mm.markRead(friend);
+	ses.setAttribute("message", friend);
 %>
 <title><%=title%></title>
 
@@ -80,7 +82,9 @@
 	left: 20px;
 	top: 20px;
 }
+
 </style>
+
 </head>
 <body>
 	<div id="apDiv1">
@@ -91,14 +95,18 @@
 	%>
 	<div id="apDiv2">
 		<p>&nbsp;</p>
-		<label class="message"><%=time%> <%=sender%> wrote:<br /> <br />
-			Subject: <%=subject%><br /> <br /> </label> <label class="body"><%=body%></label><br></br>
+		<label class="message"><%=time%> <%=sender%> wrote:<br />
+		<br /> Subject: <%=subject%><br />
+		<br /> </label> <label class="body"><%=body%></label><br></br>
 		<br></br>
 		<%
-			String replyLink = "SendNote.jsp?to=" + sender;
-		%><label class="message"><a href=<%=replyLink%>>Reply</a></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			String acceptLink = "FriendRequestServlet?whose=" + sender + "&accept=yes";
+			String declineLink = "FriendRequestServlet?whose=" + sender + "&accept=no";
+		%><label class="message"><a href=<%=acceptLink%>>Accept</a></label>&nbsp;&nbsp;&nbsp;&nbsp;
+		<label class="message"><a href=<%=declineLink%>>Decline</a></label>&nbsp;&nbsp;&nbsp;&nbsp;
 		<label class="message"><a href=<%=deleteLink%>>Delete this
 				message</a></label>
 	</div>
+
 </body>
 </html>
