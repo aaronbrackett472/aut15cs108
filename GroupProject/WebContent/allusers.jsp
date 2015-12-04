@@ -27,8 +27,6 @@
 	int numReqs = manager.numRequests(user);
 	int numMsgs = manager.getNumMessages(user);
 %>
-<jsp:include page="cssfile.jsp"/>
-
 </head>
 <body>
 	<jsp:include page="header.jsp"/> 	
@@ -37,14 +35,15 @@
 	    <span style="font-weight:normal;"><a href="AllFriendRequests.jsp">Friend Requests <%if (numReqs >0) { %>(<%=numReqs%>)<%}%></a></span>	    
 	</h4>
 	</div>
-	
+	<form id="searchform" method="post" action="finduser.jsp">
+		  	<label class="search">Search:
+		  	<input type="text" name="search" size=40 maxlength=255></input> </label>
+	</form>
 	<div style="float:right;padding-left:15px;padding-top:5px">
 		<form method="post" action="compose.jsp">
 			<input type="submit" style="margin:15px;font-size:17px;font-weight:bold" value="Compose" />
 		</form>
 	</div>
-	
-	
 	<div id="users">
 		<%
 			String nextLink = "allusers.jsp?page=" + (pagenum + 1);
@@ -133,6 +132,8 @@
 				}
 			}
 		%>
+		
+		String sendNote = "Send"
 
 	</div>  
 

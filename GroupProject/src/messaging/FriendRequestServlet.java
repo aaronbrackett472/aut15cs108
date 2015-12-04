@@ -39,33 +39,25 @@ public class FriendRequestServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String friend = request.getParameter("sender");
 		String confirm = request.getParameter("confirmMsg");
 		String reject = request.getParameter("ignoreMsg");
 		String toUser = request.getParameter("to");
 		String from = request.getParameter("from");
 		String id = request.getParameter("id");
-		
-
-//		User us = (User)request.getSession().getAttribute("user"); //request send to them?
-//		String userName = us.getUserName();
+		String receiver = request.getParameter("receiver");
 		MessageManager mm = (MessageManager)getServletContext().getAttribute("messageManager");	
 		DatabaseConnection connection = (DatabaseConnection) getServletContext().getAttribute("databaseconnection");
-
-		
 		if (toUser != null) {
 			FriendRequest msg = new FriendRequest(0, from, toUser, new Timestamp(System.currentTimeMillis()));
 			mm.sendRequest(msg);
-			request.setAttribute("sendrequest", "Request has been sent to" + toUser+ "for approval");
+			request.setAttribute("sendrequest", "Request has been sent to " + toUser+ " for approval");
 		}
 		if (confirm != null) {
 			request.setAttribute("successMessage", "You are now "
-					+ "friends with " + friend);
+					+ "friends with " + from);
 			User user = new User(from, connection);
-			user.addFriend(toUser);
-			System.out.println(from);
-			System.out.println(toUser);
-			int msg_id = Integer.parseInt(id);	
+			user.addFriend(receiver);
+			int msg_id = Integer.parseInt(id);
 			mm.deleteRequest(msg_id);
 		} else if (reject != null) {
 			request.setAttribute("failureMessage", "Friend request removed");

@@ -20,7 +20,6 @@
  	User currentUser = new User(user, connection);
  	Set<String>list = currentUser.getAllFriends();
  	List<String>friends = new ArrayList<String>(list);
-	
 %>
 </head>
 
@@ -48,7 +47,6 @@
 	<select name="type">
 		<option value="note">Note Message</option>
 		<option value="challenge">Challenge Message</option>
-		<option value="friendrequest">Friend Request</option>
  	</select> 
 	</h4>
 	
