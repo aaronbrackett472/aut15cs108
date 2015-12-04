@@ -1,8 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ page
-	import="java.util.*, java.sql.Timestamp, messaging.*, account.*, database.*"%>
-
+	import="java.util.*, java.sql.Timestamp, messaging.*, account.*, database.*, qanda.*"%>
 
 <!-- This page lists all the note messages for a particular user
 	One way to use this page would be to create a link in the user's home page 
@@ -15,15 +14,16 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <%
 	HttpSession ses = request.getSession();
-
 	ServletContext context = request.getServletContext();
 	String user = (String) session.getAttribute("loggedin_user");
-	List<Message> messages = null;
 	MessageManager manager = (MessageManager) context.getAttribute("messageManager");		
-	messages = manager.getUserMessages(user);
-	int numMsgs = messages.size();
+	String receiver = (String)request.getParameter("to");
+	int numMsgs = manager.getNumMessages(user);
 	int numReqs = manager.numRequests(user);
 	java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat();
+	DatabaseConnection connection = (DatabaseConnection) context.getAttribute("databaseconnection");
+	History h = new History(connection);
+	List<Quiz>quizzes = h.getAllQuizzesTakenByUsername(user);	
 %>
 <jsp:include page="cssfile.jsp" />
 
@@ -52,10 +52,16 @@
 		</form>
 	</div>
 	<hr style="clear:both;"/>
+	
+	<h4>
+		Please select challenge(s) to send.
+		Click "Submit" when done choosing.
+	</h4>
+
 	<%
 	
- 	if (messages.isEmpty()) {
-		%><center><h4> No new mail! </h4></center><% 
+ 	if (quizzes.isEmpty()) {
+		%><center><h4> No quizzes available! </h4></center><% 
 	} else {
 	%>
 	<form method="post" action="MessageServlet">
@@ -64,43 +70,30 @@
 	<table cellpadding="5" cellspacing="5" border="0" width="100%">
 		<tbody>
 			<%	
-				for(int i = 0; i < messages.size(); i++) {
-					Message m = messages.get(i);
-					String subject = m.getSubject();
-					String sender = m.getSenderName();
+				for(int i = 0; i < quizzes.size(); i++) {
+					Quiz m = quizzes.get(i);
+					String name=m.getName();
 					int id = m.getId();
-					Timestamp time = m.getDateSent();
-					int length = Math.min(50, m.getMessageBody().length());
-					String snippet = m.getMessageBody().substring(0, length);
-					String display = subject + ":" + snippet;
+					int length = Math.min(50, name.length());
+					String snippet = name.substring(0, length);
+					String display = name + ":" + snippet;
 				%>
 				<tr>
 					<td align="left" width="7%" >
 					<input type="checkbox" id="checkbox<%=i%>" name="check" value="<%=id%>"></td>
-					<%if (m.isRead()) { %>
-					<td align="left" width="22%"><a href="user/profile.jsp?user=<%=sender %>"><font color="#000000"><b><%=sender%></b></font></a></td>
-					<td align="left" width="49%"><a href="ViewNote.jsp?msg_id=<%=id%>"><font color="#000000"><b><%=snippet%></b></font></a></td>
-					<td align="right" width="20%"><b><%=sdf.format(time)%></b></td>
-					<%} else {%>
-						<td align="left" width="22%"><a href="user/profile.jsp?user=<%=sender %>"><font color="#000000"><%=sender%></font></a></td>		
-						<td align="left" width="49%"><a href="ViewNote.jsp?msg_id=<%=id%>"><font color="#000000"><%=snippet%></font></a></td>
-						<td align="right" width="20%"><%=sdf.format(time)%></td>
-					<%}%>
-				</tr>
+					<td align="left" width="22%"> <font color="#8E8E8E"><b><%=name%></b></font></a></td> 					
+ 				</tr>
 			<% } %>
 		</tbody>
 	</table>
 	</fieldset>
 			<hr>
 					<div> Select:&nbsp;&nbsp;<a href="javascript:;" onclick="checkAll(this)" >All</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="javascript:;" id="checknone">None</a>
-					<span style="float:right"><b>Selected Messages :&nbsp;&nbsp;&nbsp;</b>
-					<select name="update_type">
-						<option value="delete">Delete Messages</option>
-						<option value="read">Mark as Read</option>
-						<option value="unread">Mark as Unread</option>
-					</select>
+					<span style="float:right"><b>Selected Quizzes :&nbsp;&nbsp;&nbsp;</b>
 						<input type="hidden" name="quiz_id" value="s">
-						<input type="submit" name="inbox_update" value="Update"></span>
+						<input type="submit" name="select_quiz" value="Submit"></span>
+						<input type="hidden" name="sender" value=<%=user%>>
+						<input type="hidden" name="to" value=<%=receiver%>>
 					</div>
 		<%		
 			}
@@ -122,6 +115,5 @@
 			});
 		});
 	</script>
-
 </body>
 </html>

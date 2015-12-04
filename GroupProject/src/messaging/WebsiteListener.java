@@ -7,6 +7,9 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
+
+import database.DatabaseConnection;
+
 /**
  * Application Lifecycle Listener implementation class WebsiteListener
  *
@@ -15,22 +18,19 @@ import javax.servlet.annotation.WebListener;
 public class WebsiteListener implements ServletContextListener {
 
 	MessageManager messageManager;
+
+	DatabaseConnection connection;
+
 	
     /**
      * Default constructor. 
      */
     public WebsiteListener() {
-        // TODO Auto-generated constructor stub
+
+    	connection = new DatabaseConnection();
     	messageManager = new MessageManager();
     }
     
- 
-	/**
-     * @see ServletContextAttributeListener#attributeRemoved(ServletContextAttributeEvent)
-     */
-    public void attributeRemoved(ServletContextAttributeEvent arg0)  { 
-         // TODO Auto-generated method stub
-    }
 
 	/**
      * @see ServletContextListener#contextDestroyed(ServletContextEvent)
