@@ -1,16 +1,9 @@
 package messaging;
-
-import account.*;
-import java.sql.Date;
-
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
-
-import com.mysql.jdbc.Connection;
-
+import java.sql.*;
 import database.DatabaseConnection;
 
 /**
@@ -23,7 +16,7 @@ public class MessageManager {
 	private Connection connection;
 	public MessageManager( ) {
 		con = new DatabaseConnection();	
-		connection = (Connection) con.getConnection();
+		connection = (Connection)con.getConnection();
 
 	}
 
@@ -256,8 +249,6 @@ public class MessageManager {
 		PreparedStatement st = null;
 
 		String sql =  "SELECT * FROM  FriendRequest WHERE Receiver ='"+user+"'";
-
-		
 		try {
 			connection = (Connection)con.getConnection();
 			st = connection.prepareStatement("USE c_cs108_mateog");
@@ -283,7 +274,6 @@ public class MessageManager {
 	public void deleteRequest(int id) {
 		PreparedStatement st = null;		
 		String sql = "DELETE FROM FriendRequest WHERE ID =?";
-
 		try {
 			connection = (Connection)con.getConnection();
 			st = connection.prepareStatement("USE c_cs108_mateog");
@@ -296,7 +286,6 @@ public class MessageManager {
 			e.printStackTrace();
 		}
 	}
-	
 	public int numRequests(String user) {
 		List<FriendRequest> list = getFriendRequests(user);
 		return list.size();

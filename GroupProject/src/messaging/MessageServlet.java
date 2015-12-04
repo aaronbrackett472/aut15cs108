@@ -86,10 +86,6 @@ public class MessageServlet extends HttpServlet {
 				} else if (type.equals("challenge")) {
 					response.sendRedirect("selectchallenges.jsp?to=" +recepient);
 				} 
-//				request.setAttribute("to", recepient);
-//				RequestDispatcher rd = request.getRequestDispatcher("SendNote.jsp");
-//				if(rd != null)
-//					rd.forward(request, response);
 			}
 		} else if (request.getParameter("inbox_update") != null) {
 			String update = request.getParameter("update_type");
@@ -120,17 +116,14 @@ public class MessageServlet extends HttpServlet {
 			if (checkedIds != null) {
 				for (String id: checkedIds) {
 					int quiz_id = Integer.parseInt(id);
-					System.out.println(quiz_id);
-					System.out.println(sender);
-					System.out.println(receiver);
 					m = new Message(0, "challenge", sender, receiver, subject, new Timestamp(System.currentTimeMillis()), body, quiz_id);
 					mm.addMessage(m);
 				}
 			}
-//			request.setAttribute("challenge", "Your challenge has been sent");
-//			RequestDispatcher rd = request.getRequestDispatcher("MessageStatus.jsp");
-//			if(rd != null)
-//				rd.forward(request, response);
+			request.setAttribute("challenge", "Your challenge has been sent");
+			RequestDispatcher rd = request.getRequestDispatcher("MessageStatus.jsp");
+			if(rd != null)
+				rd.forward(request, response);
 		}
 	}
 

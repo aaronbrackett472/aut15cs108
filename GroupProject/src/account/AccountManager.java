@@ -11,7 +11,6 @@ import java.util.*;
  * Supports registration, access and verification of account user information
  *
  */
-
 public class AccountManager{
 	//Instance variables
 	private DatabaseConnection connection;
@@ -75,7 +74,6 @@ public class AccountManager{
 	public User getUser(String username){	
 		return new User(username, connection);
 	}
-	
 	/**
 	 * Return all the username of the users in the database
 	 * @return allUsers  ArrayList of all the users
@@ -94,7 +92,23 @@ public class AccountManager{
 		return allUsers;
 		
 	}
-
+	
+	/*
+	 * Return all the users whose names match given search string
+	 */
+	public List<String>findSearchedUsers(String query) {
+		List<String> usernames = new ArrayList<String>();
+		String sql = "SELECT username FROM " + accountsTable + " WHERE username LIKE '" + query + "'";
+		ResultSet result = connection.executeQuery(sql);
+		try{
+			while(result.next()) {
+				usernames.add(result.getString("username"));
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return usernames;
+	}
 	/**
 	 * Given username and password, verifies whether the username and password matches
 	 * the username and password registered.
