@@ -1,14 +1,20 @@
 package qanda;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import database.DatabaseConnection;
 
 /**
  * Servlet implementation class TakeQuiz
@@ -30,11 +36,31 @@ public class TakeQuiz extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		int questionId = Integer.parseInt(request.getParameter("id"));
+		int quizId = Integer.parseInt(request.getParameter("id"));
 		
 		HttpSession session = request.getSession();
+		ServletContext context = request.getServletContext();
+		DatabaseConnection connection = (DatabaseConnection) context.getAttribute("databaseconnection");
 		
-		RequestDispatcher dispatch = request.getRequestDispatcher("showquiz.jsp?id=" + questionId);
+		// check if logged in
+		String username = (String)session.getAttribute("loggedin_user");
+		if (username == null) {
+			// Do something
+			response.getWriter().append("Not logged in!");
+		}		
+		
+		Quiz q = new Quiz(connection, quizId);
+		session.setAttribute("currentQuiz", q);
+		RequestDispatcher dispatch;
+		
+		if(q.useSinglePage()) {
+			dispatch = request.getRequestDispatcher("showquiz.jsp?quizid=" + quizId);
+		} else {
+			session.setAttribute("totalScore", 0);
+			session.setAttribute("perfectScore", 0);
+			dispatch = request.getRequestDispatcher("oneperpage.jsp?question=0");
+		}
+		
 		dispatch.forward(request, response);
 	}
 

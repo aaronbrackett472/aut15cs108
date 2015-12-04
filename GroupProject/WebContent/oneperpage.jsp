@@ -6,13 +6,16 @@
 ServletContext context = request.getServletContext();
 DatabaseConnection connection = (DatabaseConnection) context.getAttribute("databaseconnection");
 
-if(request.getParameter("id") == null){
-	out.println("Invalid Quiz ID supplied");
+Quiz currentQuiz;
+int currentIndex;
+
+if (session.getAttribute("currentQuiz") == null) {
+	out.println("Quiz not found. Please enable cookie.");
 } else {
-	int quizId = Integer.parseInt( request.getParameter("id") );
+	currentQuiz = (Quiz)session.getAttribute("currentQuiz");
+	currentIndex = Integer.parseInt(request.getParameter("question"));
+	int quizId = currentQuiz.getId();
 	
-	//ServletContext context = request.getServletContext();
-	Quiz currentQuiz = new Quiz(connection, quizId);
 %>
 <html>
 <head>
@@ -21,49 +24,54 @@ if(request.getParameter("id") == null){
 </head>
 <body>
 	<jsp:include page="header.jsp"/>
+	<%
+       String username = (String)session.getAttribute("loggedin_user");
+       if (username == null) {
+    	   out.print(Util.showWarningMessage("You are not logged in. Please log in/create an account before using CardinalQuiz."));
+    } else {
+      %>
     <main>
     <div>
     	<div id="main-browse-container-center">
   			<div id="result-info-container" style="width:100%;">
-    			<form action="QuizGrader" name="quiz-response" method="POST">
+    			<form action="OnePerPageGrader" name="quiz-response" method="POST">
 <%
-
- for (int i = 0; i < currentQuiz.getNumQuestions(); i++) {
-	Question currentQuestion = currentQuiz.getQuestionAtIndex(i);
+	Question currentQuestion = currentQuiz.getQuestionAtIndex(currentIndex);
 	
 	out.println("<div style=\"padding-top: 40px;\">");
-	if(currentQuestion.getType().equals("Response")){
+	if(currentQuestion.getType().equals("Question-Response")){
 		QuestionResponse q = new QuestionResponse(connection, currentQuestion.getQuestionId());
 		
-		out.println(q.getQuestionHTML(i));
+		out.println(q.getQuestionHTML(currentIndex));
 		out.println(q.getResponseInputHTML());
 	}
 	
-	if(currentQuestion.getType().equals("Blank")){
+	if(currentQuestion.getType().equals("Fill in the Blank")){
 		FillInTheBlank q = new FillInTheBlank(connection, currentQuestion.getQuestionId());
-		out.println(q.getQuestionHTML(i));
+		out.println(q.getQuestionHTML(currentIndex));
 		out.println(q.getResponseInputHTML());
 	}
 	
-	if(currentQuestion.getType().equals("Picture")){
+	if(currentQuestion.getType().equals("Picture Response")){
 		PictureResponse q = new PictureResponse(connection, currentQuestion.getQuestionId());
-		out.println(q.getQuestionHTML(i));
+		out.println(q.getQuestionHTML(currentIndex));
 		out.println(q.getResponseInputHTML());
 	}
 	
 	
-	if(currentQuestion.getType().equals("MultipleChoice")){
+	if(currentQuestion.getType().equals("Multiple Choice")){
 		MultipleChoice q = new MultipleChoice(connection, currentQuestion.getQuestionId());
-		out.println(q.getQuestionHTML(i));
+		out.println(q.getQuestionHTML(currentIndex));
 		out.println(q.getResponseInputHTML());
 	}
 	
 	out.println("</div>");
 	
-}  
+
 %>
 	<div class="add-class-container" style="text-align:center;">
-      <button type="submit" value="Submit">Grade My Quiz!</button>
+      <button type="submit" value="Submit">Next</button>
+      <input type="hidden" name="question" value="<%=currentIndex %>" />
     </div>
     </form>
 			</div>
@@ -74,5 +82,6 @@ if(request.getParameter("id") == null){
 </html>
 
 <%
+       			}
 }
 %>

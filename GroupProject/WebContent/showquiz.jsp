@@ -6,10 +6,10 @@
 ServletContext context = request.getServletContext();
 DatabaseConnection connection = (DatabaseConnection) context.getAttribute("databaseconnection");
 
-if(request.getParameter("id") == null){
+if (request.getParameter("quizid") == null) {
 	out.println("Invalid Quiz ID supplied");
 } else {
-	int quizId = Integer.parseInt( request.getParameter("id") );
+	int quizId = Integer.parseInt( request.getParameter("quizid") );
 	Quiz currentQuiz = new Quiz(connection, quizId);
 %>
 <html>
