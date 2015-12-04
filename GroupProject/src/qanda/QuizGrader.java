@@ -105,7 +105,12 @@ public class QuizGrader extends HttpServlet {
 		// Store result in history
 		System.out.println("adding to history");
 		History historyClass = new History(connection);
-		historyClass.storeItem(new HistoryItem(username, totalScore, perfectScore, quizId, new Date()));
+		
+		Date quizFinishTime = new Date();
+		Date quizStartTime = (Date)session.getAttribute("quizStartTime");
+		int minuteTaken = (int) ((quizFinishTime.getTime() - quizStartTime.getTime())/1000);
+		
+		historyClass.storeItem(new HistoryItem(username, totalScore, perfectScore, quizId, minuteTaken, quizFinishTime));
 		
 		// Increment the taken counter
 		Quiz.incrementQuizId(connection, quizId);

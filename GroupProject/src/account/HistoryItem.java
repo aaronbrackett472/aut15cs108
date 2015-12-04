@@ -12,17 +12,19 @@ public class HistoryItem {
 	private int score;
 	private int maxScore;
 	private int quizId;
-	private Date time;
+	private int minuteTaken;
+	private Date dateTaken;
 	
 	/**
 	 * Constructor
 	 */
-	public HistoryItem(String username, int score, int maxScore, int quizId, Date time) {
+	public HistoryItem(String username, int score, int maxScore, int quizId, int minuteTaken, Date dateTaken) {
 		this.username = username;
 		this.score = score;
 		this.maxScore = maxScore;
 		this.quizId  = quizId;
-		this.time = time;
+		this.minuteTaken = minuteTaken;
+		this.dateTaken = dateTaken;
 	}
 	
 	/**
@@ -56,8 +58,12 @@ public class HistoryItem {
 	/**
 	 * Returns the time the score of the history item was achieved
 	 */
-	public Date getTime() {
-		return time;
+	public Date getDateTaken() {
+		return dateTaken;
+	}
+	
+	public int getMinuteTaken() {
+		return minuteTaken;
 	}
 	
 }

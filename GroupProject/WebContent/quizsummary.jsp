@@ -51,7 +51,7 @@ if(request.getParameter("id") == null){
       	  		List<HistoryItem> prevQuiz = hc.getHistoryByQuizIdAndUsername(quizId, username);
       			for(HistoryItem hItem: prevQuiz) {
       		%>
-      		<div>Score: <%= hItem.getScore() %>/<%= hItem.getMaxScore() %>. Taken on <%= hItem.getTime().toString() %></div>
+      		<div>Score: <%= hItem.getScore() %>/<%= hItem.getMaxScore() %>. Taken on <%= hItem.getDateTaken().toString() %>. Finished in <%= hItem.getMinuteTaken() %> seconds</div>
       		<%
       			}
       		%>
@@ -65,16 +65,30 @@ if(request.getParameter("id") == null){
       	  		prevQuiz = hc.getHistoryByQuizId(quizId, "score", 5);
       			for(HistoryItem hItem: prevQuiz) {
       		%>
-      		<div><b><%= hItem.getUserName() %></b> scored <%= hItem.getScore() %>/<%= hItem.getMaxScore() %> on <%= hItem.getTime().toString() %></div>
+      		<div><b><%= hItem.getUserName() %></b> scored <%= hItem.getScore() %>/<%= hItem.getMaxScore() %> on <%= hItem.getDateTaken().toString() %>. Finished in <%= hItem.getMinuteTaken() %> seconds</div>
       		<%
       			}
       		%>
       		</div>
       		
-    		<form action="TakeQuiz" name="quiz-response" method="GET">
+    		<form action="TakeQuiz" method="GET">
     			<input type="hidden" name="id" value="<% out.print(currentQuiz.getId()); %>">
+    			<input type="hidden" name="mode" value="normal">
 				<div class="add-class-container">
       				<button type="submit" value="Submit">Take This Quiz!</button>
+    			</div>
+    		</form>
+    		<form action="TakeQuiz" method="GET">
+    			<input type="hidden" name="id" value="<% out.print(currentQuiz.getId()); %>">
+    			<input type="hidden" name="mode" value="practice">
+				<div class="add-class-container">
+      				<button type="submit" value="Submit">Take This Quiz in Practice Mode</button>
+    			</div>
+    		</form>
+    		<form action="ReportQuizServlet" method="GET">
+    			<input type="hidden" name="id" value="<% out.print(currentQuiz.getId()); %>">
+				<div class="red-class-container">
+      				<button type="submit" value="Submit">Report Quiz to Admin</button>
     			</div>
     		</form>
 			</div>

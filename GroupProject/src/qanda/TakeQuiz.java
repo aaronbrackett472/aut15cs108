@@ -3,6 +3,7 @@ package qanda;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -42,6 +43,8 @@ public class TakeQuiz extends HttpServlet {
 		ServletContext context = request.getServletContext();
 		DatabaseConnection connection = (DatabaseConnection) context.getAttribute("databaseconnection");
 		
+		
+		
 		// check if logged in
 		String username = (String)session.getAttribute("loggedin_user");
 		if (username == null) {
@@ -51,6 +54,10 @@ public class TakeQuiz extends HttpServlet {
 		
 		Quiz q = new Quiz(connection, quizId);
 		session.setAttribute("currentQuiz", q);
+		
+		Date quizStartTime = new Date();
+		session.setAttribute("quizStartTime", quizStartTime);
+		
 		RequestDispatcher dispatch;
 		
 		if(q.useSinglePage()) {

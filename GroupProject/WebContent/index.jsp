@@ -91,7 +91,7 @@
     		  for(HistoryItem hItem: prevQuiz) {
     			  Quiz qItem = new Quiz(connection, hItem.getQuizId());
       %>
-      	<div><a href="quizsummary.jsp?id=<%= hItem.getQuizId() %>"><%= qItem.getName() %></a> taken on <%= hItem.getTime() %>, Score: <%= hItem.getScore() %>/<%= hItem.getMaxScore() %></div>
+      	<div><a href="quizsummary.jsp?id=<%= hItem.getQuizId() %>"><%= qItem.getName() %></a> taken on <%= hItem.getDateTaken() %>, Score: <%= hItem.getScore() %>/<%= hItem.getMaxScore() %>, Finished in <%= hItem.getMinuteTaken() %> seconds</div>
       	<%
       		}
       	}

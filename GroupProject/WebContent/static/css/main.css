@@ -594,11 +594,35 @@ td, th {
   line-height: 1.5;
   padding: 6px 14px;
   text-transform: uppercase;
-  background: none repeat scroll 0% 0% #4ab471;
+  background: none repeat scroll 0% 0% #00B214;
 }
 .add-class-container button.go {
   background: none repeat scroll 0% 0% #8c190e;
 }
+
+.red-class-container {
+  text-align: left;
+}
+.red-class-container button {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  color: white;
+  border-radius: 2px;
+  border: 1px solid #D1D3D4;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 1px;
+  line-height: 1.5;
+  padding: 6px 14px;
+  text-transform: uppercase;
+  background: none repeat scroll 0% 0% #FF3573;
+}
+.red-class-container button.go {
+  background: none repeat scroll 0% 0% #ec1c1c;
+}
+
+
 #classTreeContainer {
   font-family: Avenir Next;
   position: absolute;

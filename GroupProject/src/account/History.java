@@ -37,10 +37,10 @@ public class History {
 		
 		GregorianCalendar calendar = new GregorianCalendar();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String dateString = format.format(item.getTime());
+		String dateString = format.format(item.getDateTaken());
 		
-		String query = "INSERT INTO "+ HISTORY_TABLE + " (username, score, maxScore, quizId, dateTaken) " + 
-						"VALUES('" + item.getUserName() + "', '" + item.getScore()+ "', '" + item.getMaxScore()+ "', '" + item.getQuizId()+ "', '" + dateString + "')" ;
+		String query = "INSERT INTO "+ HISTORY_TABLE + " (username, score, maxScore, quizId, minuteTaken) " + 
+						"VALUES('" + item.getUserName() + "', '" + item.getScore()+ "', '" + item.getMaxScore()+ "', '" + item.getQuizId()+ "', '" + item.getMinuteTaken() + "')" ;
 		System.out.println(query);
 		connection.executeUpdate(query);
 	}
@@ -59,8 +59,9 @@ public class History {
 				int score  =  rs.getInt("score");
 				int maxScore =  rs.getInt("maxScore");
 				int quizId = rs.getInt("quizId");
-				Date time = rs.getDate("dateTaken");
-				HistoryItem item = new HistoryItem(username, score, maxScore, quizId, time);
+				int minuteTaken = rs.getInt("minuteTaken");
+				Date dateTaken = rs.getDate("dateTaken");
+				HistoryItem item = new HistoryItem(username, score, maxScore, quizId, minuteTaken, dateTaken);
 				history.add(item);		
 			}
 		} catch(SQLException e) {
@@ -85,8 +86,9 @@ public class History {
 				int score  =  rs.getInt("score");
 				int maxScore =  rs.getInt("maxScore");
 				int quizId = rs.getInt("quizId");
-				Date time = rs.getDate("dateTaken");
-				HistoryItem item = new HistoryItem(username, score, maxScore, quizId, time);
+				int minuteTaken = rs.getInt("minuteTaken");
+				Date dateTaken = rs.getDate("dateTaken");
+				HistoryItem item = new HistoryItem(username, score, maxScore, quizId, minuteTaken, dateTaken);
 				history.add(item);		
 			}
 		} catch(SQLException e) {
@@ -116,7 +118,7 @@ public class History {
 		try{
 			ResultSet rs = connection.executeQuery(query);	
 			while(rs.next()) {
-				HistoryItem item = new HistoryItem(rs.getString("username"), rs.getInt("score"), rs.getInt("maxScore"), rs.getInt("quizId"), rs.getDate("dateTaken"));
+				HistoryItem item = new HistoryItem(rs.getString("username"), rs.getInt("score"), rs.getInt("maxScore"), rs.getInt("quizId"), rs.getInt("minuteTaken"), rs.getDate("dateTaken"));
 				history.add(item);		
 			}
 		} catch(SQLException e) {
@@ -146,7 +148,7 @@ public class History {
 		try{
 			ResultSet rs = connection.executeQuery(query);	
 			while(rs.next()) {
-				HistoryItem item = new HistoryItem(rs.getString("username"), rs.getInt("score"), rs.getInt("maxScore"), rs.getInt("quizId"), rs.getDate("dateTaken"));
+				HistoryItem item = new HistoryItem(rs.getString("username"), rs.getInt("score"), rs.getInt("maxScore"), rs.getInt("quizId"), rs.getInt("minuteTaken"), rs.getDate("dateTaken"));
 				history.add(item);		
 			}
 		} catch(SQLException e) {

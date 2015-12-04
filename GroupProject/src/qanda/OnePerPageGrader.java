@@ -57,12 +57,13 @@ public class OnePerPageGrader extends HttpServlet {
 		}
 		
 		Quiz currentQuiz = (Quiz)session.getAttribute("currentQuiz");
-		int quizId = currentQuiz.getId();
 		
 		// Check the quiz Id parameter
 		if (currentQuiz == null) {
 			response.getWriter().append("Quiz Not Found in Session!");
 		}
+		
+		int quizId = currentQuiz.getId();
 		
 		// Check the questionId parameter
 		if (request.getParameter("question") == null) {
@@ -109,7 +110,12 @@ public class OnePerPageGrader extends HttpServlet {
 			// Store result in history
 			System.out.println("adding to history");
 			History historyClass = new History(connection);
-			historyClass.storeItem(new HistoryItem(username, totalScore, perfectScore, quizId, new Date()));
+			
+			Date quizFinishTime = new Date();
+			Date quizStartTime = (Date)session.getAttribute("quizStartTime");
+			int minuteTaken = (int) ((quizFinishTime.getTime() - quizStartTime.getTime())/1000);
+			
+			historyClass.storeItem(new HistoryItem(username, totalScore, perfectScore, quizId, minuteTaken, quizFinishTime));
 			
 			// Increment the taken counter
 			Quiz.incrementQuizId(connection, quizId);
