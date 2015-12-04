@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -34,22 +35,9 @@ public class AdminAnnouncementListServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		ArrayList<Announcement> announcements = new ArrayList<Announcement>();
 		
 		DatabaseConnection connection = new DatabaseConnection();
-		ResultSet resultSet = connection.executeQuery("SELECT * FROM Announcements;");
-		try {
-			resultSet.beforeFirst();
-			while (resultSet.next()) {
-				announcements.add(new Announcement(resultSet.getInt("id"),
-						resultSet.getString("author"),
-						resultSet.getString("header"),
-						resultSet.getString("body"),
-						resultSet.getString("createdAt")));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		List<Announcement> announcements = Announcement.getRecentAnnouncements(connection, 100);
 		connection.close();
 		
 		request.setAttribute("announcements", announcements);

@@ -1,6 +1,7 @@
 package account;
 
 import database.*;
+import qanda.Quiz;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -76,9 +77,9 @@ public class History {
 	 */
 	public ArrayList<HistoryItem> getHistoryByField(String fieldName, String fieldValue) {
 		ArrayList<HistoryItem> history =  new ArrayList<HistoryItem>();
-		String querry = "SELECT * FROM " + HISTORY_TABLE + " WHERE " + fieldName + "='"+ fieldValue + "';";
+		String query = "SELECT * FROM " + HISTORY_TABLE + " WHERE " + fieldName + "='"+ fieldValue + "';";
 		try{
-			ResultSet rs = connection.executeQuery(querry);	
+			ResultSet rs = connection.executeQuery(query);	
 			while(rs.next()) {
 				String username = rs.getString("username");
 				int score  =  rs.getInt("score");
@@ -109,7 +110,48 @@ public class History {
 	 * @param quizId any one of the HISTORY_TABLE fields
 	 * @return history history items for the given quizId
 	 */
-	public ArrayList<HistoryItem> getHistoryByQuizId(String quizId) {
-		return getHistoryByField("quizId", quizId);
+	public ArrayList<HistoryItem> getHistoryByQuizId(int quizId, String orderBy, int limit) {
+		ArrayList<HistoryItem> history =  new ArrayList<HistoryItem>();
+		String query = "SELECT * FROM " + HISTORY_TABLE + " WHERE quizId='" + quizId + "' ORDER BY " + orderBy + " DESC LIMIT " + limit + ";";
+		try{
+			ResultSet rs = connection.executeQuery(query);	
+			while(rs.next()) {
+				HistoryItem item = new HistoryItem(rs.getString("username"), rs.getInt("score"), rs.getInt("maxScore"), rs.getInt("quizId"), rs.getDate("dateTaken"));
+				history.add(item);		
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}	
+		return history;
+	}
+	
+	public List<Quiz> getAllQuizzesTakenByUsername(String username) {
+		List<HistoryItem> h = this.getHistoryByUsername(username);
+		Set<Integer> quizIdSet = new HashSet<Integer>(h.size()); 
+		for(HistoryItem hItem: h) {
+			quizIdSet.add(hItem.getQuizId());
+		}
+		
+		List<Quiz> quizList = new ArrayList<Quiz>(quizIdSet.size());
+		for(int quizId: quizIdSet) {
+			quizList.add(new Quiz(this.connection, quizId));
+		}
+		
+		return quizList;
+	}
+	
+	public ArrayList<HistoryItem> getHistoryByQuizIdAndUsername(int quizId, String username) {
+		ArrayList<HistoryItem> history =  new ArrayList<HistoryItem>();
+		String query = "SELECT * FROM " + HISTORY_TABLE + " WHERE quizId='" + quizId + "' AND username='" + username +"';";
+		try{
+			ResultSet rs = connection.executeQuery(query);	
+			while(rs.next()) {
+				HistoryItem item = new HistoryItem(rs.getString("username"), rs.getInt("score"), rs.getInt("maxScore"), rs.getInt("quizId"), rs.getDate("dateTaken"));
+				history.add(item);		
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}	
+		return history;
 	}
 }
