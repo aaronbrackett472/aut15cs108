@@ -14,6 +14,7 @@ if (request.getParameter("quizid") == null) {
 %>
 <html>
 <head>
+	<link rel="shortcut icon" href="favicon.ico">
 	<jsp:include page="include.jsp"/>
 	<title>Quiz: <% out.print(currentQuiz.getName()); %></title>
 </head>
@@ -36,27 +37,27 @@ if (request.getParameter("quizid") == null) {
 	Question currentQuestion = currentQuiz.getQuestionAtIndex(i);
 	
 	out.println("<div style=\"padding-top: 40px;\">");
-	if(currentQuestion.getType().equals("Question-Response")){
+	if(currentQuestion.getType().equals("Question-Response")||currentQuestion.getType().equals("Response")){
 		QuestionResponse q = new QuestionResponse(connection, currentQuestion.getQuestionId());
 		
 		out.println(q.getQuestionHTML(i));
 		out.println(q.getResponseInputHTML());
 	}
 	
-	if(currentQuestion.getType().equals("Fill in the Blank")){
+	if(currentQuestion.getType().equals("Fill in the Blank")||currentQuestion.getType().equals("Blank")){
 		FillInTheBlank q = new FillInTheBlank(connection, currentQuestion.getQuestionId());
 		out.println(q.getQuestionHTML(i));
 		out.println(q.getResponseInputHTML());
 	}
 	
-	if(currentQuestion.getType().equals("Picture Response")){
+	if(currentQuestion.getType().equals("Picture Response")||currentQuestion.getType().equals("Picture")){
 		PictureResponse q = new PictureResponse(connection, currentQuestion.getQuestionId());
 		out.println(q.getQuestionHTML(i));
 		out.println(q.getResponseInputHTML());
 	}
 	
 	
-	if(currentQuestion.getType().equals("Multiple Choice")){
+	if(currentQuestion.getType().equals("Multiple Choice")||currentQuestion.getType().equals("MultipleChoice")){
 		MultipleChoice q = new MultipleChoice(connection, currentQuestion.getQuestionId());
 		out.println(q.getQuestionHTML(i));
 		out.println(q.getResponseInputHTML());

@@ -5,6 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Announcement "<%= request.getParameter("id") %>"</title>
+<link rel="shortcut icon" href="favicon.ico">
 </head>
 <body>
 <form action="AdminAnnouncementUpdateServlet" method="post">

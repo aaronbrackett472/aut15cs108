@@ -34,7 +34,7 @@ if (type == 'Matching'){
 	'<div style="padding-top: 20px;"></div>';
 	var numPairs = +document.getElementById('number').value;
 	for (var i = 0; i < numPairs; i++){
-		answerHTML+='<input type="text" name="prompt" class="small-box"><input type="text" name="answer" class="small-box">'
+		answerHTML+='<input type="text" name="prompt" class="small-box"><input type="text" name="answer" class="small-box"><br>'+
 		'<div style="padding-top: 10px;"></div>';
 	}
 }

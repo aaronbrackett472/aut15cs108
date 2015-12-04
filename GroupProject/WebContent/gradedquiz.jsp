@@ -17,6 +17,7 @@ if (session.getAttribute("currentQuiz") == null) {
 %>
 <html>
 <head>
+	<link rel="shortcut icon" href="favicon.ico">
 	<jsp:include page="include.jsp"/>
 	<title>Quiz Result: <% out.print(currentQuiz.getName()); %></title>
 </head>
