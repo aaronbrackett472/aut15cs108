@@ -56,6 +56,8 @@ public class TakeQuiz extends HttpServlet {
 		if(q.useSinglePage()) {
 			dispatch = request.getRequestDispatcher("showquiz.jsp?quizid=" + quizId);
 		} else {
+			session.setAttribute("totalScore", 0);
+			session.setAttribute("perfectScore", 0);
 			dispatch = request.getRequestDispatcher("oneperpage.jsp?question=0");
 		}
 		
