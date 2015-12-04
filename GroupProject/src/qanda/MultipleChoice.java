@@ -17,8 +17,8 @@ public class MultipleChoice extends Question {
 		super(connection, id);
 	}
 	
-	@Override
-	public int evaluateAnswer(String answer){
+	/*@Override
+	public int evaluateAnswer(String[] answers){
 
 		int correctCount = 0;
 		ChoiceSet choices = new ChoiceSet();
@@ -33,24 +33,52 @@ public class MultipleChoice extends Question {
 			}
 		}
 		
-		if (correctCount > 0) {
-			return this.score;
-		} else {
+		return correctCount*score;
+	}*/
+	
+	@Override
+	public int evaluateAnswer(String[] answers) {
+		
+		List<Answer> correctAnswers = Answer.getCorrectAnswersByQuestionId(this.connection, this.id);
+		int numCorrect = 0;
+		System.out.println("got here 1");
+		for (int i = 0; i < answers.length; i++){
+			System.out.println("got here 2");
+			String answer = answers[i];
+			System.out.println(answer);
+			for(Answer correctAnswer: correctAnswers) {
+				System.out.println("got here 3");
+				if (correctAnswer.isCorrect(answer, i)){
+					System.out.println("ca: " + correctAnswer);
+					System.out.println("correctindex: " + correctAnswer.answerIndex);
+					System.out.println("index: " + i);
+					numCorrect++;
+					System.out.println("Correct!");
+					break;
+				}
+			}
+			numCorrect--;
+		}
+		System.out.println("numCorrect: " + numCorrect);
+		System.out.println("score for this question: " + score);
+		if (numCorrect <= 0){
 			return 0;
 		}
+		return numCorrect*score;
 	}
 	
 	@Override
 	public String getResponseInputHTML() {
 		ChoiceSet cs = new ChoiceSet();
 		cs.getChoicesByQuestionId(this.connection, this.id);
-		StringBuilder returnString = new StringBuilder();
-		returnString.append("<ul>");
+		String returnString = "";
+		returnString+="<ul>";
+		System.out.println(cs.choicesList.size());
 		for(Pair<String, Boolean> choice : cs.choicesList) {
 			
-			returnString.append("<li id=\"choice-list\"><input type=\"radio\" name=\"response-" + this.id + "\" value=\"" + choice.getKey() + "\"> " + choice.getKey() + "</li>");
+			returnString+="<li id=\"choice-list\"><input type=\"radio\" name=\"response-" + this.id + "\" value=\"" + choice.getKey() + "\"> " + choice.getKey() + "</li>";
 		}
-		returnString.append("</ul>");
-		return returnString.toString();
+		returnString+="</ul>";
+		return returnString;
 	}
 }

@@ -9,6 +9,7 @@
 <head>
 	<jsp:include page="include.jsp"/>
 	<title>Welcome to Cardinal Quiz</title>
+	<link rel="shortcut icon" href="favicon.ico">
 </head>
 <body>
 	<jsp:include page="header.jsp"/>

@@ -37,7 +37,8 @@ public class ChoiceSet {
 	 */
 	void getChoicesByQuestionId(DatabaseConnection connection, int questionId) {
 		//DatabaseConnection connection = new DatabaseConnection();
-		ResultSet resultSet = connection.executeQuery("SELECT * FROM " + choicesTable + " WHERE questionID = '" + questionId + "';");
+		System.out.println(questionId);
+		ResultSet resultSet = connection.executeQuery("SELECT * FROM " + choicesTable + " WHERE questionID = " + questionId + ";");
 		this.choicesList.clear();
 		try {
 			this.questionId = questionId;

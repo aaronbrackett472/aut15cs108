@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
 import qanda.*;
 /**
  * Servlet implementation class AnswerCreateServlet
@@ -45,6 +46,13 @@ public class AnswerCreateServlet extends HttpServlet {
 		}
 		else{
 			String[] answers = request.getParameterValues("answer");
+			
+			if (type.equals("Blank")){
+				for (int i = 0; i < numAnswers; i++){
+					String answer = answers[i];
+					Answer.saveToDatabase(questionID, answer, i, true, "");
+				}
+			}
 
 			if (type.equals("Matching")){
 
@@ -56,15 +64,21 @@ public class AnswerCreateServlet extends HttpServlet {
 				}
 			}
 			if (type.equals("Multiple Choice")){
-
-				String correctChoicesString = request.getParameter("correctChoices");
-				String[] correctChoicesArr = correctChoicesString.split(";");
+				String checkboxes = request.getParameter("correct");
+				String[] splitCheckboxes = checkboxes.split(",");
 				for (int i = 0; i < numAnswers; i++){
 					String answer = answers[i];
-					if (Arrays.asList(correctChoicesArr).contains(Integer.toString(i))){
-						Answer.saveToDatabase(questionID, answer, i, true, "");
+					String iString = Integer.toString(i);
+					boolean saved = false;
+					for (String check : splitCheckboxes){
+						if (iString == check){	
+							Answer.saveToDatabase(questionID, answer, i, true, "");
+							saved = true;
+							break;
+						}
+							
 					}
-					else{
+					if (!saved){
 						Answer.saveToDatabase(questionID, answer, i, false, "");
 					}
 				}

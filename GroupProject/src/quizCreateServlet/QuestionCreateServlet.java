@@ -45,7 +45,6 @@ public class QuestionCreateServlet extends HttpServlet {
 		String question = request.getParameter("question");
 		int score = Integer.parseInt(request.getParameter("score"));
 		
-		//int timeLimit = Integer.parseInt(request.getParameter("timeLimit"));
 		String[] types = {
 				"Question-Response", 
 				"Fill in the Blank", 
@@ -59,11 +58,8 @@ public class QuestionCreateServlet extends HttpServlet {
 		String imageUrl = request.getParameter("url");
 		int quizID = Integer.parseInt(request.getParameter("quizID"));
 		int questionID = Question.saveToDatabase(connection, quizID, type, score, question, imageUrl);
-		if (request.getParameter("numChoices") != null){
-			request.setAttribute("number", request.getParameter("numChoices"));
-		}
-		else if (request.getParameter("numPairs") != null){
-			request.setAttribute("number", request.getParameter("numPairs"));
+		if (request.getParameter("number") != null){
+			request.setAttribute("number", request.getParameter("number"));
 		}
 		else{
 			request.setAttribute("number", "1");

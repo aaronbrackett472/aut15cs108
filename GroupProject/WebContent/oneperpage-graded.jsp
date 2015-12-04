@@ -14,8 +14,8 @@ if (session.getAttribute("currentQuiz") == null) {
 	int quizId = currentQuiz.getId();
 	int currentIndex = Integer.parseInt(request.getParameter("question"));
 
-	int totalScore = (Integer)request.getAttribute("totalScore");
-	int perfectScore = (Integer)request.getAttribute("perfectScore");
+	int totalScore = (Integer)session.getAttribute("totalScore");
+	int perfectScore = (Integer)session.getAttribute("perfectScore");
 %>
 <html>
 <head>
@@ -25,16 +25,16 @@ if (session.getAttribute("currentQuiz") == null) {
 <body>
 	<jsp:include page="header.jsp"/>
 	<%
-       			String username = (String)session.getAttribute("loggedin_user");
-       			if (username == null) {
-       				out.print(Util.showWarningMessage("You are not logged in. Please log in/create an account before using CardinalQuiz."));
-       			} else {
+       	String username = (String)session.getAttribute("loggedin_user");
+       	if (username == null) {
+       		out.print(Util.showWarningMessage("You are not logged in. Please log in/create an account before using CardinalQuiz."));
+       	} else {
       %>
     <main>
     <div>
     	<div id="main-browse-container-center">
   			<div id="result-info-container" style="width:100%;">
-  			<div class="result-selected-class">Your Score: <% out.print(totalScore); %> / <% out.print(perfectScore); %></div>
+  			<div class="result-selected-class">Your score so far: <% out.print(totalScore); %> / <% out.print(perfectScore); %></div>
     			
 <%
 
@@ -49,8 +49,8 @@ if (session.getAttribute("currentQuiz") == null) {
 		out.println(q.getQuestionHTML(currentIndex));
 		//out.println(q.getResponseInputHTML());
 		
-		int currentScore = (Integer)request.getAttribute("score-" + questionId);
-		String currentResponse = (String)request.getAttribute("response-" + questionId);
+		int currentScore = (Integer)session.getAttribute("score-" + questionId);
+		String currentResponse = (String)session.getAttribute("response-" + questionId);
 		/* if (currentScore == 0)out.print("<div class=\"row\"><div class=\"bg-danger\">");
 		else if (currentScore < currentQuestion.getScore())out.print("<div class=\"row\"><div class=\"bg-warning\">");
 		else out.print("<div class=\"row\"><div class=\"bg-success\">"); */
@@ -65,8 +65,8 @@ if (session.getAttribute("currentQuiz") == null) {
 		FillInTheBlank q = new FillInTheBlank(connection, currentQuestion.getQuestionId());
 		out.println(q.getQuestionHTML(currentIndex));
 		//out.println(q.getResponseInputHTML());
-		int currentScore = (Integer)request.getAttribute("score-" + questionId);
-		String currentResponse = (String)request.getAttribute("response-" + questionId);
+		int currentScore = (Integer)session.getAttribute("score-" + questionId);
+		String currentResponse = (String)session.getAttribute("response-" + questionId);
 		if (currentScore == 0)out.print(Util.showErrorMessage("Your answer " + currentResponse + " is incorrect!", 9));
 		else out.print(Util.showSuccessMessage("Your answer " + currentResponse + " is correct!", 9));
 	}
@@ -75,8 +75,8 @@ if (session.getAttribute("currentQuiz") == null) {
 		PictureResponse q = new PictureResponse(connection, currentQuestion.getQuestionId());
 		out.println(q.getQuestionHTML(currentIndex));
 		//out.println(q.getResponseInputHTML());
-		int currentScore = (Integer)request.getAttribute("score-" + questionId);
-		String currentResponse = (String)request.getAttribute("response-" + questionId);
+		int currentScore = (Integer)session.getAttribute("score-" + questionId);
+		String currentResponse = (String)session.getAttribute("response-" + questionId);
 		if (currentScore == 0)out.print(Util.showErrorMessage("Your answer " + currentResponse + " is incorrect!", 9));
 		else out.print(Util.showSuccessMessage("Your answer " + currentResponse + " is correct!", 9));
 	}
@@ -86,8 +86,8 @@ if (session.getAttribute("currentQuiz") == null) {
 		MultipleChoice q = new MultipleChoice(connection, currentQuestion.getQuestionId());
 		out.println(q.getQuestionHTML(currentIndex));
 		//out.println(q.getResponseInputHTML());
-		int currentScore = (Integer)request.getAttribute("score-" + questionId);
-		String currentResponse = (String)request.getAttribute("response-" + questionId);
+		int currentScore = (Integer)session.getAttribute("score-" + questionId);
+		String currentResponse = (String)session.getAttribute("response-" + questionId);
 		if (currentScore == 0)out.print(Util.showErrorMessage("Your answer " + currentResponse + " is incorrect!", 9));
 		else out.print(Util.showSuccessMessage("Your answer " + currentResponse + " is correct!", 9));
 	}

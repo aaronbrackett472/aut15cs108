@@ -4,6 +4,7 @@
 <head>
 	<jsp:include page="include.jsp"/>
 	<title>Administrator's Panel</title>
+	<link rel="shortcut icon" href="favicon.ico">
 </head>
 <body>
 	<jsp:include page="header.jsp"/>
@@ -12,14 +13,29 @@
 <div id="main-browse-container-center" style="width:50%;">
   <div id="result-info-container" style="width:100%;">
     <div class="result-selected-class">Administrator Dashboard</div>	
+    
       <div id="browse-results-list">
+      	<div style="padding-top: 40px;"></div>
         <div class="prereqs"><div class="placeholder-text">
-    	<a href="AdminAnnouncementListServlet">Make/Edit/Delete Announcements</a>
+    	<a href="AdminAnnouncementListServlet">Manage Announcements</a>
     	</div></div>
     	<div style="padding-top: 40px;"></div>
     	<div class="prereqs"><div class="placeholder-text">
 		<a href="ReportedQuizListServlet">Review Reported Quizzes</a>
 		</div></div>
+    	<div style="padding-top: 40px;"></div>
+    	<div class="prereqs"><div class="placeholder-text">
+		<a href="AdminUserListServlet">Manage User</a>
+		</div></div>		
+    	<div style="padding-top: 40px;"></div>
+    	<div class="prereqs"><div class="placeholder-text">
+		<a href="AdminQuizListServlet">Quiz Manager</a>
+		</div></div>		
+    	<div style="padding-top: 40px;"></div>
+    	<div class="prereqs"><div class="placeholder-text">
+		<a href="AdminStatisticsServlet">Site Statistics</a>
+		</div></div>
+	
 </ul>
 </div>
 </div>

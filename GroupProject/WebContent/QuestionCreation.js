@@ -32,7 +32,7 @@ function showQuestionHTML(){
         	'<div style="padding-top: 20px;"></div><div class="placeholder-text">' +
         	'<input type="text" name="question" id="question" class="med-box">' +
         	'</div><div style="padding-top: 20px;"></div>' +
-        	'<div class="prereqs"> <div class="placeholder-text">How much is this question worth?</div></div>' +
+        	'<div class="prereqs"> <div class="placeholder-text">How much is this question worth? (If multiple answers, score per answer)</div></div>' +
         	'<div style="padding-top: 20px;"></div><div class="placeholder-text"><input class="med-box" type="text" name="score" id="score">' +
         	'</div><div style="padding-top: 20px;"></div>';
         var questionBody = document.getElementById('QuestionForm');
@@ -43,13 +43,15 @@ function showQuestionHTML(){
             break;
           case 1:
             document.getElementById('type').setAttribute('value','Blank');
-            questionHTML+='<div class="prereqs"> <div class="placeholder-text">Replace the blanks in your question with "@@@@"</div></div>';
-            questionHTML+='<br>';
+            questionHTML+='<div class="prereqs"> <div class="placeholder-text">Replace the blanks in your question with "@@@@"</div></div>'+
+            '<div class="prereqs"> <div class="placeholder-text">How many blanks are there?</div></div>' +
+            '<div style="padding-top: 20px;"></div><input type="text" name="number" class="med-box">' +
+            '<br>';
             break;
           case 2:
             document.getElementById('type').setAttribute('value','MultipleChoice');
             questionHTML+='<div class="prereqs"> <div class="placeholder-text">How many choices are there?</div></div>' +
-            '<div style="padding-top: 20px;"></div><input type="text" name="numChoices" class="med-box">' +
+            '<div style="padding-top: 20px;"></div><input type="text" name="number" class="med-box">' +
             '';
             break;
           case 3:
@@ -61,13 +63,13 @@ function showQuestionHTML(){
           case 4:
             document.getElementById('type').setAttribute('value','Matching');
             questionHTML+='<div class="prereqs"> <div class="placeholder-text">How many pairs are there?</div></div>' +
-            '<div style="padding-top: 20px;"></div><input type="text" name="numPairs" class="med-box">' +
+            '<div style="padding-top: 20px;"></div><input type="text" name="number" class="med-box">' +
             '<div style="padding-top: 20px;"></div>';
             break;
           default:
             console.log("Things have gone wrong");
         }
-        questionHTML+='<div class="add-class-container" style="text-align:center;"><button type="submit" id="saveQuestion">Save Question</button></div>';
+        questionHTML+='<div class="add-class-container" style="text-align:center;"><button type="submit" id="saveQuestion">Save Question< /button></div>';
         var div = document.getElementById('QuestionData');
         div.innerHTML = questionHTML;
     }

@@ -53,6 +53,7 @@ public class QuizCreateServlet extends HttpServlet {
 		String quizCreatorUsername = (String)session.getAttribute("loggedin_user");
 		if (quizCreatorUsername == null) {
 			// Do something
+			//CharSequence cs = "Not logged in!";
 			response.getWriter().append("Not logged in!");
 		} 
 		

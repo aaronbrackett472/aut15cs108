@@ -19,8 +19,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+	<link rel="shortcut icon" href="favicon.ico">
 	<jsp:include page="include.jsp"/>
-	<title>Administrator's Panel</title>
+	<title>Manage Site Announcements</title>
 </head>
 <body>
 
@@ -30,11 +31,9 @@
 <div id="main-browse-container-center" style="width:80%;">
   <div id="result-info-container" style="width:100%;">
       <div class="result-selected-class">Manage Site Announcements</div>	
-      <div class="result-selected-class"><a href="admin-announcement-create.jsp">Create Announcement</a></div>
+      <div class="result-selected-class"><a href="admin-announcement-create.jsp">Create a New Announcement</a></div>
       <div id="browse-results-list">
 <table class="table table-hover table-striped" style="width:100%">
-
-<table style="width:100%">
 
 	<tr>
 		<th>Announcement ID</th>
