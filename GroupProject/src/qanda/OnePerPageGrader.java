@@ -83,7 +83,7 @@ public class OnePerPageGrader extends HttpServlet {
 			if(attrName.startsWith("response-")) {
 				int questionId = Integer.parseInt(attrName.substring(attrName.lastIndexOf("-") + 1));
 				int score;
-				String questionResponse = request.getParameter(attrName);
+				String[] questionResponse = request.getParameterValues(attrName);
 				Question currentQuestion = new Question(connection, questionId);
 				if(currentQuestion.getType().equals("Multiple Choice")){
 					MultipleChoice q = new MultipleChoice(connection, currentQuestion.getQuestionId());

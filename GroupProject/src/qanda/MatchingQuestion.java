@@ -9,28 +9,6 @@ public class MatchingQuestion extends Question {
 		super(connection, id);
 	}
 	
-	@Override
-	public int evaluateAnswer(String answer){
-
-		int correctCount = 0;
-		ChoiceSet choices = new ChoiceSet();
-		choices.getChoicesByQuestionId(this.connection, this.id);
-		
-		for (Pair<String, Boolean> choice: choices.choicesList){
-			// If choice is true
-			if(choice.getValue()) {
-				if(choice.getKey().trim().toLowerCase().equals(answer.trim().toLowerCase())) {
-					correctCount++;
-				}
-			}
-		}
-		
-		if (correctCount > 0) {
-			return this.score;
-		} else {
-			return 0;
-		}
-	}
 
 	@Override
 	public String getResponseInputHTML() {

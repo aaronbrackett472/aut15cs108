@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" import="qanda.*, database.*, account.*" %>
+    pageEncoding="UTF-8" import="qanda.*, database.*, account.*, java.util.Arrays" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%
@@ -46,50 +46,28 @@ if (session.getAttribute("currentQuiz") == null) {
 	if(currentQuestion.getType().equals("Question-Response")){
 		QuestionResponse q = new QuestionResponse(connection, questionId);
 		out.println(q.getQuestionHTML(i));
-		//out.println(q.getResponseInputHTML());
-		
-		int currentScore = (Integer)session.getAttribute("score-" + questionId);
-		String currentResponse = (String)session.getAttribute("response-" + questionId);
-		/* if (currentScore == 0)out.print("<div class=\"row\"><div class=\"bg-danger\">");
-		else if (currentScore < currentQuestion.getScore())out.print("<div class=\"row\"><div class=\"bg-warning\">");
-		else out.print("<div class=\"row\"><div class=\"bg-success\">"); */
-		
-		if (currentScore == 0)out.print(Util.showErrorMessage("Your answer " + currentResponse + " is incorrect!", 9));
-		else out.print(Util.showSuccessMessage("Your answer " + currentResponse + " is correct!", 9));
-		
-		
 	}
 	
 	if(currentQuestion.getType().equals("Fill in the Blank")){
 		FillInTheBlank q = new FillInTheBlank(connection, currentQuestion.getQuestionId());
 		out.println(q.getQuestionHTML(i));
-		//out.println(q.getResponseInputHTML());
-		int currentScore = (Integer)session.getAttribute("score-" + questionId);
-		String currentResponse = (String)session.getAttribute("response-" + questionId);
-		if (currentScore == 0)out.print(Util.showErrorMessage("Your answer " + currentResponse + " is incorrect!", 9));
-		else out.print(Util.showSuccessMessage("Your answer " + currentResponse + " is correct!", 9));
 	}
 	
 	if(currentQuestion.getType().equals("Picture Response")){
 		PictureResponse q = new PictureResponse(connection, currentQuestion.getQuestionId());
 		out.println(q.getQuestionHTML(i));
-		//out.println(q.getResponseInputHTML());
-		int currentScore = (Integer)session.getAttribute("score-" + questionId);
-		String currentResponse = (String)session.getAttribute("response-" + questionId);
-		if (currentScore == 0)out.print(Util.showErrorMessage("Your answer " + currentResponse + " is incorrect!", 9));
-		else out.print(Util.showSuccessMessage("Your answer " + currentResponse + " is correct!", 9));
 	}
 	
 	
 	if(currentQuestion.getType().equals("Multiple Choice")){
 		MultipleChoice q = new MultipleChoice(connection, currentQuestion.getQuestionId());
 		out.println(q.getQuestionHTML(i));
-		//out.println(q.getResponseInputHTML());
-		int currentScore = (Integer)session.getAttribute("score-" + questionId);
-		String currentResponse = (String)session.getAttribute("response-" + questionId);
-		if (currentScore == 0)out.print(Util.showErrorMessage("Your answer " + currentResponse + " is incorrect!", 9));
-		else out.print(Util.showSuccessMessage("Your answer " + currentResponse + " is correct!", 9));
 	}
+	
+	int currentScore = (Integer)session.getAttribute("score-" + questionId);
+	String currentResponse = Arrays.toString((String[])session.getAttribute("response-" + questionId));
+	if (currentScore == 0)out.print(Util.showErrorMessage("Your answer " + currentResponse + " is incorrect!", 9));
+	else out.print(Util.showSuccessMessage("Your answer " + currentResponse + " is correct!", 9));
 	
 	out.println("</div>");
 	
@@ -97,7 +75,7 @@ if (session.getAttribute("currentQuiz") == null) {
 %>
 	<form action="index.jsp" name="quiz-response" method="GET">
 	<div class="add-class-container" style="text-align:center;">
-      <button type="submit" value="Submit">Back to Homepage</button>
+      <button type="submit" value="Submit">Back to Home</button>
     </div>
     </form>
 			</div>
