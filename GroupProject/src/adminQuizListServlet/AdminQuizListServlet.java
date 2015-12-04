@@ -1,6 +1,9 @@
-package reportedQuizReviewServlet;
+package adminQuizListServlet;
 
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,22 +12,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import administration.QuizReport;
-import administration.User;
+import administration.Announcement;
+import administration.Quiz;
 import database.DatabaseConnection;
-import utilities.Utilities;
 
 /**
- * Servlet implementation class ReportedQuizReviewServlet
+ * Servlet implementation class AdminQuizListServlet
  */
-@WebServlet("/ReportedQuizReviewServlet")
-public class ReportedQuizReviewServlet extends HttpServlet {
+@WebServlet("/AdminQuizListServlet")
+public class AdminQuizListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ReportedQuizReviewServlet() {
+    public AdminQuizListServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -33,24 +35,20 @@ public class ReportedQuizReviewServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		ArrayList<Quiz> quizzes = Quiz.getQuizzes();
+		
+		request.setAttribute("quizzes", quizzes);
+		RequestDispatcher dispatch = request.getRequestDispatcher("admin-quiz-list.jsp");
+		dispatch.forward(request, response);
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int id = Integer.parseInt(request.getParameter("id"));
-		QuizReport.resolveQuizReport(id);
-		if (request.getParameter("suspendAuthor") != null) {
-			int days = Integer.parseInt(request.getParameter("suspension"));
-			String author = request.getParameter("author");
-			User.suspendUser(author, days);
-		}
+		Quiz.deleteQuiz(Integer.parseInt(request.getParameter("id")));
 		
-		RequestDispatcher dispatch = request.getRequestDispatcher("ReportedQuizListServlet");
-		dispatch.forward(request, response);
+		doGet(request, response);
 	}
 
 }

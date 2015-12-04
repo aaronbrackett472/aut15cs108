@@ -42,9 +42,9 @@ public class Announcement {
 	public static void createAnnouncement(String author, String header, String body) {
 		DatabaseConnection connection = new DatabaseConnection();
 		connection.executeUpdate("INSERT INTO Announcements (author, header, body) VALUES("
-				+ author + ", "
-				+ header + ", "
-				+ body + ");");
+				+ "\"" + author + "\", "
+				+ "\"" + header + "\", "
+				+ "\"" + body + "\");");
 		connection.close();
 	}
 	
