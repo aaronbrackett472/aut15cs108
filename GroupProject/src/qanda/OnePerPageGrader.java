@@ -64,14 +64,12 @@ public class OnePerPageGrader extends HttpServlet {
 			response.getWriter().append("Quiz Not Found in Session!");
 		}
 		
-		int questionIndex;
-		
 		// Check the questionId parameter
 		if (request.getParameter("question") == null) {
 			response.getWriter().append("Invalid question num parameter!");
 		}
 		
-		questionIndex = Integer.parseInt(request.getParameter("question"));
+		int questionIndex = Integer.parseInt(request.getParameter("question"));
 		
 		int totalScore = (Integer)session.getAttribute("totalScore");
 		int perfectScore = (Integer)session.getAttribute("perfectScore");
@@ -123,6 +121,7 @@ public class OnePerPageGrader extends HttpServlet {
 			session.setAttribute("perfectScore", perfectScore);
 			
 			dispatch = request.getRequestDispatcher("gradedquiz.jsp?id=" + currentQuiz.getId());
+			
 		} else {
 			if(currentQuiz.useImmediateCorrection()){
 				dispatch = request.getRequestDispatcher("oneperpage-graded.jsp?question=" + questionIndex);
