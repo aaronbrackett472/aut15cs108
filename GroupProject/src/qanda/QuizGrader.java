@@ -69,7 +69,6 @@ public class QuizGrader extends HttpServlet {
 		}
 		
 		int quizId = Integer.parseInt(request.getParameter("id"));
-		request.setAttribute("id", quizId);
 		
 		Enumeration<String> attrList = request.getParameterNames();
 		while (attrList.hasMoreElements()) {
@@ -81,15 +80,15 @@ public class QuizGrader extends HttpServlet {
 				int score;
 				String questionResponse = request.getParameter(attrName);
 				Question currentQuestion = new Question(connection, questionId);
-				if(currentQuestion.getType().equals("MultipleChoice")){
+				if(currentQuestion.getType().equals("Multiple Choice")){
 					MultipleChoice q = new MultipleChoice(connection, currentQuestion.getQuestionId());
 					score = q.evaluateAnswer(questionResponse);
 				} else {
 					score = currentQuestion.evaluateAnswer(questionResponse);
 				}
 				
-				request.setAttribute("response-" + questionId, questionResponse);
-				request.setAttribute("score-" + questionId, score);
+				session.setAttribute("response-" + questionId, questionResponse);
+				session.setAttribute("score-" + questionId, score);
 				
 				//session.setAttribute("question-" + questionId, score);
 				//response.getWriter().append("<div>Question ID " + questionId + ", Score: " + score + "</div>");
@@ -114,10 +113,10 @@ public class QuizGrader extends HttpServlet {
 		// Need a script to check if any achievement is unlocked
 		
 		// Store this in request
-		request.setAttribute("totalScore", totalScore);
-		request.setAttribute("perfectScore", perfectScore);
+		session.setAttribute("totalScore", totalScore);
+		session.setAttribute("perfectScore", perfectScore);
 		
-		RequestDispatcher dispatch = request.getRequestDispatcher("gradedquiz.jsp");
+		RequestDispatcher dispatch = request.getRequestDispatcher("gradedquiz.jsp?id=" + quizId);
 		dispatch.forward(request, response);
 		
 		//response.getWriter().append("Total Score: " + totalScore);

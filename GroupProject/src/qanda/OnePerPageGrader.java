@@ -1,6 +1,7 @@
 package qanda;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.Enumeration;
 
 import javax.servlet.RequestDispatcher;
@@ -12,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import account.History;
+import account.HistoryItem;
 import database.DatabaseConnection;
 
 /**
@@ -54,6 +57,7 @@ public class OnePerPageGrader extends HttpServlet {
 		}
 		
 		Quiz currentQuiz = (Quiz)session.getAttribute("currentQuiz");
+		int quizId = currentQuiz.getId();
 		
 		// Check the quiz Id parameter
 		if (currentQuiz == null) {
@@ -82,7 +86,7 @@ public class OnePerPageGrader extends HttpServlet {
 				int score;
 				String questionResponse = request.getParameter(attrName);
 				Question currentQuestion = new Question(connection, questionId);
-				if(currentQuestion.getType().equals("MultipleChoice")){
+				if(currentQuestion.getType().equals("Multiple Choice")){
 					MultipleChoice q = new MultipleChoice(connection, currentQuestion.getQuestionId());
 					score = q.evaluateAnswer(questionResponse);
 				} else {
@@ -101,7 +105,31 @@ public class OnePerPageGrader extends HttpServlet {
 		session.setAttribute("perfectScore", perfectScore);
 		
 		RequestDispatcher dispatch;
-		dispatch = request.getRequestDispatcher("oneperpage.jsp?question=" + (questionIndex+1));
+		
+		if (questionIndex+1 == currentQuiz.getNumQuestions()) {
+			
+			// Store result in history
+			System.out.println("adding to history");
+			History historyClass = new History(connection);
+			historyClass.storeItem(new HistoryItem(username, totalScore, perfectScore, quizId, new Date()));
+			
+			// Increment the taken counter
+			Quiz.incrementQuizId(connection, quizId);
+			
+			// Need a script to check if any achievement is unlocked
+			
+			// Store this in request
+			session.setAttribute("totalScore", totalScore);
+			session.setAttribute("perfectScore", perfectScore);
+			
+			dispatch = request.getRequestDispatcher("gradedquiz.jsp?id=" + currentQuiz.getId());
+		} else {
+			if(currentQuiz.useImmediateCorrection()){
+				dispatch = request.getRequestDispatcher("oneperpage-graded.jsp?question=" + questionIndex);
+			} else {
+				dispatch = request.getRequestDispatcher("oneperpage.jsp?question=" + (questionIndex+1));
+			}
+		}
 		dispatch.forward(request, response);
 		
 	}
