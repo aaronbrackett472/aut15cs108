@@ -54,9 +54,9 @@ public class TakeQuiz extends HttpServlet {
 		RequestDispatcher dispatch;
 		
 		if(q.useSinglePage()) {
-			dispatch = request.getRequestDispatcher("oneperpage.jsp?question=0");
-		} else {
 			dispatch = request.getRequestDispatcher("showquiz.jsp?quizid=" + quizId);
+		} else {
+			dispatch = request.getRequestDispatcher("oneperpage.jsp?question=0");
 		}
 		
 		dispatch.forward(request, response);
