@@ -8,13 +8,17 @@
 </head>
 <body>
 <h1>Quizzes</h1>
+<form action="BrowseQuizzesServlet" method="get">
+	<input name="keyword" id="search-box" placeholder="Search by keyword" class=""
+		value="<%= request.getParameter("keyword") %>">
+</form>
 <table style="width:100%">
 	<tr>
 		<th>Name</th>
-		<th>Description</th>		
+		<th>Description</th>
+		<th>Tags</th>
 		<th>Author</th>
 		<th>Date Created</th>
-		<th>Link</th>
 	</tr>
 	<%! @SuppressWarnings("unchecked") %>
 	<%
@@ -26,11 +30,15 @@
 			formattedDescription = formattedDescription.substring(0, kDescriptionPreviewLength) + "...";
 		}
 		out.println("<tr>"
-				+ "<td>" + quiz.name + "</td>"
+				+ "<td><a href=\"quizsummary.jsp?id=" + quiz.id + "\">" + quiz.name + "</a></td>"
 				+ "<td>" + formattedDescription + "</td>"
+				+ "<td>");
+		for (String tag : quiz.tags) {
+			out.println("<a href=\"BrowseQuizzesServlet?keyword=tag:" + tag + "\">" + tag + "</a>");
+		}
+		out.println("</td>"
 				+ "<td>" + quiz.author + "</td>"
-				+ "<td>" + quiz.createdAt + "</td>"
-				+ "<td><a href=\"quizsummary.jsp?id=" + quiz.id + "\">Take Quiz!</a></td></tr>");
+				+ "<td>" + quiz.createdAt + "</td></tr>");
 	}
 	%>
 </table>

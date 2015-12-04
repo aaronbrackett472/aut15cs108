@@ -25,7 +25,8 @@
     <div class="result-selected-class">Create a new Quiz!</div>
 <form action="QuizCreateServlet" method="post">
 <p><input type="text" name="name" class="med-box" placeholder="Quiz Name" /></p>
-<p><input type="text" name="description" class="med-box" placeholder="Quiz Description" /></p><br>
+<p><input type="text" name="description" class="med-box" placeholder="Quiz Description" /></p>
+<p><input type="text" name="tags" class="med-box" placeholder="Tags (comma separated)" /></p><br>
 <p>Choose a quiz question order:</p>
 <input type="radio" name="questionOrder" value="ordered" checked> Ordered<br>
 <input type="radio" name="questionOrder" value="random"> Random<br>
