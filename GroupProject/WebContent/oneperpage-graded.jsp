@@ -12,8 +12,10 @@ if (session.getAttribute("currentQuiz") == null) {
 } else {
 	Quiz currentQuiz = (Quiz)session.getAttribute("currentQuiz");
 	int quizId = currentQuiz.getId();
-	int totalScore = (Integer)session.getAttribute("totalScore");
-	int perfectScore = (Integer)session.getAttribute("perfectScore");
+	int currentIndex = Integer.parseInt(request.getParameter("question"));
+
+	int totalScore = (Integer)request.getAttribute("totalScore");
+	int perfectScore = (Integer)request.getAttribute("perfectScore");
 %>
 <html>
 <head>
@@ -36,19 +38,19 @@ if (session.getAttribute("currentQuiz") == null) {
     			
 <%
 
- for (int i = 0; i < currentQuiz.getNumQuestions(); i++) {
-	Question currentQuestion = currentQuiz.getQuestionAtIndex(i);
+ 
+	Question currentQuestion = currentQuiz.getQuestionAtIndex(currentIndex);
 	int questionId = currentQuestion.getQuestionId();
 	
 	out.println("<div style=\"padding-top: 40px;\">");
 	
 	if(currentQuestion.getType().equals("Question-Response")){
 		QuestionResponse q = new QuestionResponse(connection, questionId);
-		out.println(q.getQuestionHTML(i));
+		out.println(q.getQuestionHTML(currentIndex));
 		//out.println(q.getResponseInputHTML());
 		
-		int currentScore = (Integer)session.getAttribute("score-" + questionId);
-		String currentResponse = (String)session.getAttribute("response-" + questionId);
+		int currentScore = (Integer)request.getAttribute("score-" + questionId);
+		String currentResponse = (String)request.getAttribute("response-" + questionId);
 		/* if (currentScore == 0)out.print("<div class=\"row\"><div class=\"bg-danger\">");
 		else if (currentScore < currentQuestion.getScore())out.print("<div class=\"row\"><div class=\"bg-warning\">");
 		else out.print("<div class=\"row\"><div class=\"bg-success\">"); */
@@ -61,20 +63,20 @@ if (session.getAttribute("currentQuiz") == null) {
 	
 	if(currentQuestion.getType().equals("Fill in the Blank")){
 		FillInTheBlank q = new FillInTheBlank(connection, currentQuestion.getQuestionId());
-		out.println(q.getQuestionHTML(i));
+		out.println(q.getQuestionHTML(currentIndex));
 		//out.println(q.getResponseInputHTML());
-		int currentScore = (Integer)session.getAttribute("score-" + questionId);
-		String currentResponse = (String)session.getAttribute("response-" + questionId);
+		int currentScore = (Integer)request.getAttribute("score-" + questionId);
+		String currentResponse = (String)request.getAttribute("response-" + questionId);
 		if (currentScore == 0)out.print(Util.showErrorMessage("Your answer " + currentResponse + " is incorrect!", 9));
 		else out.print(Util.showSuccessMessage("Your answer " + currentResponse + " is correct!", 9));
 	}
 	
 	if(currentQuestion.getType().equals("Picture Response")){
 		PictureResponse q = new PictureResponse(connection, currentQuestion.getQuestionId());
-		out.println(q.getQuestionHTML(i));
+		out.println(q.getQuestionHTML(currentIndex));
 		//out.println(q.getResponseInputHTML());
-		int currentScore = (Integer)session.getAttribute("score-" + questionId);
-		String currentResponse = (String)session.getAttribute("response-" + questionId);
+		int currentScore = (Integer)request.getAttribute("score-" + questionId);
+		String currentResponse = (String)request.getAttribute("response-" + questionId);
 		if (currentScore == 0)out.print(Util.showErrorMessage("Your answer " + currentResponse + " is incorrect!", 9));
 		else out.print(Util.showSuccessMessage("Your answer " + currentResponse + " is correct!", 9));
 	}
@@ -82,22 +84,23 @@ if (session.getAttribute("currentQuiz") == null) {
 	
 	if(currentQuestion.getType().equals("Multiple Choice")){
 		MultipleChoice q = new MultipleChoice(connection, currentQuestion.getQuestionId());
-		out.println(q.getQuestionHTML(i));
+		out.println(q.getQuestionHTML(currentIndex));
 		//out.println(q.getResponseInputHTML());
-		int currentScore = (Integer)session.getAttribute("score-" + questionId);
-		String currentResponse = (String)session.getAttribute("response-" + questionId);
+		int currentScore = (Integer)request.getAttribute("score-" + questionId);
+		String currentResponse = (String)request.getAttribute("response-" + questionId);
 		if (currentScore == 0)out.print(Util.showErrorMessage("Your answer " + currentResponse + " is incorrect!", 9));
 		else out.print(Util.showSuccessMessage("Your answer " + currentResponse + " is correct!", 9));
 	}
 	
 	out.println("</div>");
 	
-}  
+
 %>
-	<form action="index.jsp" name="quiz-response" method="GET">
-	<div class="add-class-container" style="text-align:center;">
-      <button type="submit" value="Submit">Back to Homepage</button>
-    </div>
+	<form action="oneperpage.jsp" name="quiz-response" method="GET">
+		<input type="hidden" name="question" value="<%= currentIndex+1 %>" />
+		<div class="add-class-container" style="text-align:center;">
+      	<button type="submit" value="Submit">Next</button>
+    	</div>
     </form>
 			</div>
 		</div>
