@@ -114,7 +114,7 @@ public class History {
 	 */
 	public ArrayList<HistoryItem> getHistoryByQuizId(int quizId, String orderBy, int limit) {
 		ArrayList<HistoryItem> history =  new ArrayList<HistoryItem>();
-		String query = "SELECT * FROM " + HISTORY_TABLE + " WHERE quizId='" + quizId + "' ORDER BY " + orderBy + " DESC LIMIT " + limit + ";";
+		String query = "SELECT * FROM " + HISTORY_TABLE + " WHERE quizId='" + quizId + "' ORDER BY " + orderBy + " DESC, minuteTaken LIMIT " + limit + ";";
 		try{
 			ResultSet rs = connection.executeQuery(query);	
 			while(rs.next()) {
