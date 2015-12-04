@@ -45,6 +45,13 @@ public class AnswerCreateServlet extends HttpServlet {
 		}
 		else{
 			String[] answers = request.getParameterValues("answer");
+			
+			if (type.equals("Blank")){
+				for (int i = 0; i < numAnswers; i++){
+					String answer = answers[i];
+					Answer.saveToDatabase(questionID, answer, i, true, "");
+				}
+			}
 
 			if (type.equals("Matching")){
 

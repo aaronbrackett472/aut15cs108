@@ -44,13 +44,14 @@ public class MultipleChoice extends Question {
 	public String getResponseInputHTML() {
 		ChoiceSet cs = new ChoiceSet();
 		cs.getChoicesByQuestionId(this.connection, this.id);
-		StringBuilder returnString = new StringBuilder();
-		returnString.append("<ul>");
+		String returnString = "";
+		returnString+="<ul>";
+		System.out.println(cs.choicesList.size());
 		for(Pair<String, Boolean> choice : cs.choicesList) {
 			
-			returnString.append("<li id=\"choice-list\"><input type=\"radio\" name=\"response-" + this.id + "\" value=\"" + choice.getKey() + "\"> " + choice.getKey() + "</li>");
+			returnString+="<li id=\"choice-list\"><input type=\"radio\" name=\"response-" + this.id + "\" value=\"" + choice.getKey() + "\"> " + choice.getKey() + "</li>";
 		}
-		returnString.append("</ul>");
-		return returnString.toString();
+		returnString+="</ul>";
+		return returnString;
 	}
 }
