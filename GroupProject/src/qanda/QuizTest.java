@@ -11,7 +11,7 @@ public class QuizTest {
 	@Test
 	public void testCreate() {
 		DatabaseConnection connection = new DatabaseConnection();
-		Quiz.createQuiz(connection, "awesome unittest quiz 1", false, false, false, false, "pat");
+		Quiz.createQuiz(connection, "awesome unittest quiz 1", "no desc bro", false, false, false, false, "pat");
 		//fail("Not yet implemented");
 	}
 

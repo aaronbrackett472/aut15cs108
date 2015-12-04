@@ -37,14 +37,15 @@ public class Quiz {
 	 * @param immediateCorrection
 	 * @return
 	 */
-	public static int createQuiz(DatabaseConnection connection, String name, boolean randomOrder, boolean singlePage, boolean immediateCorrection, boolean practiceModeAllowed, String createdBy) {
+	public static int createQuiz(DatabaseConnection connection, String name, String description, boolean randomOrder, boolean singlePage, boolean immediateCorrection, boolean practiceModeAllowed, String createdBy) {
 		
 		GregorianCalendar calendar = new GregorianCalendar();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String dateString = format.format(calendar.getTime());
 		
-		connection.executeUpdate("INSERT INTO " + quizzesTable + " (name, randomorder, singlepage, immediatecorrection, practiceModeAllowed, takenCounter, createdBy, createdDate) VALUES('" +
-				name + "', '"
+		connection.executeUpdate("INSERT INTO " + quizzesTable + " (name, description, randomorder, singlepage, immediatecorrection, practiceModeAllowed, takenCounter, createdBy, createdDate) VALUES('"
+				+ name + "', '"
+				+ description + "', '"
 				+ (randomOrder ? 1 : 0) + "', '"
 				+ (singlePage ? 1 : 0) + "', '"
 				+ (immediateCorrection ? 1 : 0) + "', '"

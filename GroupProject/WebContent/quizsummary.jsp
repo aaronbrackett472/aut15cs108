@@ -42,7 +42,7 @@ if(request.getParameter("id") == null){
           		Taken <% out.print(currentQuiz.getTakenCount()); %> times.</div>
       		</div>
       		<div style="padding-top: 40px;"></div>
-      		<div class="result-selected-class">Your Performance</div>
+      		<div class="result-selected-class">Your Past Performance</div>
       		
       		<div class="placeholder-container">
       		
