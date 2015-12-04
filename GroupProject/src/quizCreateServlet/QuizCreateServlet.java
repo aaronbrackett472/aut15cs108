@@ -61,11 +61,12 @@ public class QuizCreateServlet extends HttpServlet {
 			RequestDispatcher dispatch = request.getRequestDispatcher("try-again.html");
 			dispatch.forward(request, response);
 		} else {
+			String description = request.getParameter("description");
 			String questionOrder = request.getParameter("questionOrder");
 			String quizStyle = request.getParameter("quizStyle");
 			String correctionStyle = request.getParameter("correctionStyle");
 			String practiceModeEnabled = request.getParameter("practiceModeEnabled");
-			int quizID = Quiz.createQuiz(connection, name,
+			int quizID = Quiz.createQuiz(connection, name, description,
 					questionOrder.equals("random"),
 					quizStyle.equals("singlePage"),
 					correctionStyle.equals("immediateCorrection"),

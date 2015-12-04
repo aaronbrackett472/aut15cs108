@@ -32,6 +32,8 @@ public class Question {
 		
 		query += "');";
 		
+		System.out.println(query);
+		
 		connection.executeUpdate(query);
 		int id = -1;
 		
