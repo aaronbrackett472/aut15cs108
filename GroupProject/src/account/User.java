@@ -155,21 +155,7 @@ public class User{
 	 * @return achievements
 	 */	
 
-//	public ArrayList<Achievement> getAchievements() {
-//		ArrayList<Achievement> achievements = new ArrayList<Achievement>();
-//		String query = "SELECT * FROM " + achievementsTable + " WHERE username='"+ username + "'";
-//		try{
-//			ResultSet rs = statement.executeQuery(query);	
-//			while(rs.next()) {
-//				String name = rs.getString(2);
-//				String time = rs.getString(3);
-//				Achievement item = new Achievement(name, time);
-//				achievements.add(item);		
-//			}
-//		} catch(SQLException e) {
-//			e.printStackTrace();
-//		}				
-//		return achievements;
+
 
 	public ArrayList<AchievementItem> getAchievements() {
 		Achievement achievements = new Achievement(connection);

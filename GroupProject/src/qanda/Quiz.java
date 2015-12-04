@@ -201,4 +201,24 @@ public class Quiz {
 		}
 		return returnIDs;
 	}
+	
+	/**
+	 * Counts the number of quizzes made by the given user
+	 * @param username the user name
+	 * @param connection database connection
+	 * @return count the number of quizes by user
+	 */
+	public static int countQuizzesByUser(String username, DatabaseConnection connection) {
+		int count = 0;
+		String querry = "SELECT * FROM " + quizzesTable + " WHERE createdBy='" + username +"'";
+		ResultSet result = connection.executeQuery(querry);
+		try{
+			if(result.last()) {
+				count = result.getRow();
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return count;
+	}
 }
