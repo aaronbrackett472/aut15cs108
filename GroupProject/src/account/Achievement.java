@@ -179,7 +179,7 @@ public class Achievement {
 	 */
 	private boolean hasHighestQuizScore(String username, int quizId) {
 		History history = new History(connection);
-		ArrayList<HistoryItem> quizIdHistory = history.getHistoryByQuizId("" + quizId);
+		ArrayList<HistoryItem> quizIdHistory = history.getHistoryByQuizId(quizId, "score", 10);
 		int highestScoreGenerally = 0;
 		int highestScoreUser = 0;
 		for(HistoryItem item: quizIdHistory) {

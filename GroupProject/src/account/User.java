@@ -68,6 +68,7 @@ public class User{
 	 * @param friendName name of the friend
 	 */
 	public void addFriend(String friendName) {
+		System.out.println("friend to be added: " + friendName);
 		if(!accounts.checkAccountExists(friendName)) return;
 		//Ignore if the frindName is  already a friend to this user
 		if(checkFriend(friendName)) return;

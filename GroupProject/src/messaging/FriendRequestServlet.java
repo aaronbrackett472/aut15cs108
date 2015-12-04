@@ -1,6 +1,6 @@
 package messaging;
 import account.*;
-
+import database.*;
 import java.io.IOException;
 import java.sql.Timestamp;
 
@@ -50,6 +50,8 @@ public class FriendRequestServlet extends HttpServlet {
 //		User us = (User)request.getSession().getAttribute("user"); //request send to them?
 //		String userName = us.getUserName();
 		MessageManager mm = (MessageManager)getServletContext().getAttribute("messageManager");	
+		DatabaseConnection connection = (DatabaseConnection) getServletContext().getAttribute("databaseconnection");
+
 		
 		if (toUser != null) {
 			FriendRequest msg = new FriendRequest(0, from, toUser, new Timestamp(System.currentTimeMillis()));
@@ -59,7 +61,11 @@ public class FriendRequestServlet extends HttpServlet {
 		if (confirm != null) {
 			request.setAttribute("successMessage", "You are now "
 					+ "friends with " + friend);
-			int msg_id = Integer.parseInt(id);
+			User user = new User(from, connection);
+			user.addFriend(toUser);
+			System.out.println(from);
+			System.out.println(toUser);
+			int msg_id = Integer.parseInt(id);	
 			mm.deleteRequest(msg_id);
 		} else if (reject != null) {
 			request.setAttribute("failureMessage", "Friend request removed");

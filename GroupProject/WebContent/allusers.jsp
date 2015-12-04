@@ -93,7 +93,7 @@
 
 			if (pagenum > 1) {
 		%>
-		<br></br> <label class+="page"><a href=<%=prevLink%>>Previous</a></label>
+		<br></br> <label class="page"><a href=<%=prevLink%>>Previous</a></label>
 		<%
 			}
 			if (numDisplayed < numUsers) {
@@ -109,8 +109,8 @@
 				int limit = Math.min(numUsers, userEnd);
 
 				for (int i = userStart; i < limit; i++) {
-					User usr = users.get(i);
-					String friendUsername = usr.getUserName();
+
+					String friendUsername = users.get(i);
 					if (!userName.equals(friendUsername)) {
 						String friendLink = "userpage.jsp?who=" + friendUsername;
 						if (us == null)
