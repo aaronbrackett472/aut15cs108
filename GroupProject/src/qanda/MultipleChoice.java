@@ -43,6 +43,7 @@ public class MultipleChoice extends Question {
 		int numCorrect = 0;
 		System.out.println("got here 1");
 		for (int i = 0; i < answers.length; i++){
+			boolean answerFound = false;
 			System.out.println("got here 2");
 			String answer = answers[i];
 			System.out.println(answer);
@@ -53,11 +54,14 @@ public class MultipleChoice extends Question {
 					System.out.println("correctindex: " + correctAnswer.answerIndex);
 					System.out.println("index: " + i);
 					numCorrect++;
+					answerFound = true;
 					System.out.println("Correct!");
 					break;
 				}
 			}
-			numCorrect--;
+			if (!answerFound){
+				numCorrect--;
+			}
 		}
 		System.out.println("numCorrect: " + numCorrect);
 		System.out.println("score for this question: " + score);

@@ -124,7 +124,7 @@ public class QuizGrader extends HttpServlet {
                     session.setAttribute("score-" + questionId, score);
 					
 					totalScore += score;
-					perfectScore += currentQuestion.getScore();
+					perfectScore += currentQuestion.getPerfectScore(questionId);
 					usedQuestions.add(attrName);
 				//}
 

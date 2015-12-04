@@ -8,7 +8,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 public class Question {
@@ -141,4 +144,17 @@ public class Question {
 		return this.score;
 	}
 	
+	public int getPerfectScore(int questionID){
+		List<Answer> correctAnswers = Answer.getCorrectAnswersByQuestionId(connection, questionID);
+		int numAnswers = 0;
+		Set<Integer> usedAnswerIndices = new HashSet<Integer>();
+		for (Answer answer:correctAnswers){
+			if (!usedAnswerIndices.contains(answer.answerIndex)){
+				numAnswers++;
+				usedAnswerIndices.add(answer.answerIndex);
+			}
+		}
+		System.out.println("Perfect Score: " + numAnswers*score);
+		return numAnswers*score;
+	}
 }
