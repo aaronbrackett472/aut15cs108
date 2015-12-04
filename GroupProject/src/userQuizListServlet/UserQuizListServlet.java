@@ -1,8 +1,6 @@
-package browseQuizzesServlet;
+package userQuizListServlet;
 
 import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
@@ -13,19 +11,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import administration.Quiz;
-import database.DatabaseConnection;
 
 /**
- * Servlet implementation class BrowseQuizzesServlet
+ * Servlet implementation class UserQuizListServlet
  */
-@WebServlet("/BrowseQuizzesServlet")
-public class BrowseQuizzesServlet extends HttpServlet {
+@WebServlet("/UserQuizListServlet")
+public class UserQuizListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public BrowseQuizzesServlet() {
+    public UserQuizListServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -34,11 +31,11 @@ public class BrowseQuizzesServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String keyword = request.getParameter("keyword");
-		ArrayList<Quiz> quizzes = (keyword == null || keyword.isEmpty()) ? Quiz.getQuizzes() : Quiz.getQuizzesByKeyword(keyword);
+		String username = (String) request.getSession().getAttribute("loggedin_user");
+		ArrayList<Quiz> quizzes = Quiz.getQuizzesByUsername(username);
 		
 		request.setAttribute("quizzes", quizzes);
-		RequestDispatcher dispatch = request.getRequestDispatcher("browse-quizzes.jsp");
+		RequestDispatcher dispatch = request.getRequestDispatcher("user-quiz-list.jsp");
 		dispatch.forward(request, response);
 	}
 
@@ -46,7 +43,15 @@ public class BrowseQuizzesServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		Quiz.updateQuiz(Integer.parseInt(request.getParameter("id")),
+				request.getParameter("name"),
+				request.getParameter("description"),
+				request.getParameter("order").equals("random"),
+				request.getParameter("pages").equals("single"),
+				request.getParameter("correction").equals("immediate"),
+				request.getParameter("practice").equals("enabled"),
+				request.getParameter("tags"));
+		
 		doGet(request, response);
 	}
 

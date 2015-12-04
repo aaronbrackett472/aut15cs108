@@ -1,37 +1,20 @@
 package qanda;
 
-import database.DatabaseConnection;
+import java.util.Arrays;
+import java.util.List;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.*;
+import database.DatabaseConnection;
+import administration.Quiz;
 
 public class Tag {
-
-	public static void saveToDatabase(String tag, int quizID){
+	
+	public static void createTags(String tags, int quizID) {
 		DatabaseConnection connection = new DatabaseConnection();
-		String query = "INSERT INTO Tags (tag, quizID) VALUES(\"" +
-			 tag + "\", " + quizID + ");";
-		connection.executeUpdate(query);
+		
+		// Split comma-separated list (regular expression: whitespace, comma, whitespace).
+		List<String> tagList = Arrays.asList(tags.split("\\s*,\\s*"));
+		Quiz.createTags(connection, tagList, quizID);
 		connection.close();
 	}
-	
-	public static ArrayList<Integer> searchByTag(String tag){
-		ArrayList<Integer> returnIDs = new ArrayList<Integer>();
-		String query = "SELECT * FROM Tags WHERE tag =\"" + tag + "\";";
-		DatabaseConnection connection = new DatabaseConnection();
-		ResultSet rs = connection.executeQuery(query);
-		try {
-			while (rs.next()){
-				int newID = rs.getInt("quizID");
-				returnIDs.add(newID);
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return returnIDs;
-	}
-	
-	
+
 }

@@ -180,46 +180,5 @@ public class Quiz {
 		connection2.close();
 		return quizzes;
 	}
-	
-	/*
-	 * Search through questions by keyword
-	 * @param keyword - what we're searching by
-	 * @return ArrayList<Integer> - all of the quiz id's that fit that criteria
-	 */
-	public static ArrayList<Integer> searchByKeyword(String keyword){
-		ArrayList<Integer> returnIDs = new ArrayList<Integer>();
-		String query = "SELECT * FROM Quizzes WHERE name LIKE \"%" + keyword + "%\";";
-		DatabaseConnection connection = new DatabaseConnection();
-		ResultSet rs = connection.executeQuery(query);
-		try {
-			while (rs.next()){
-				int newID = rs.getInt("quizID");
-				returnIDs.add(newID);
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return returnIDs;
-	}
-	
-	/**
-	 * Counts the number of quizzes made by the given user
-	 * @param username the user name
-	 * @param connection database connection
-	 * @return count the number of quizzes by user
-	 */
-	public static int countQuizzesByUser(String username, DatabaseConnection connection) {
-		int count = 0;
-		String querry = "SELECT * FROM " + quizzesTable + " WHERE createdBy='" + username +"'";
-		ResultSet result = connection.executeQuery(querry);
-		try{
-			if(result.last()) {
-				count = result.getRow();
-			}
-		} catch(SQLException e) {
-			e.printStackTrace();
-		}
-		return count;
-	}
+
 }

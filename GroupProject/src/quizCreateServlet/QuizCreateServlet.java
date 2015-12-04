@@ -2,6 +2,8 @@ package quizCreateServlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -14,6 +16,7 @@ import javax.servlet.http.HttpSession;
 
 import database.DatabaseConnection;
 import qanda.Quiz;
+import qanda.Tag;
 
 /**
  * Servlet implementation class QuizCreateServlet
@@ -62,6 +65,8 @@ public class QuizCreateServlet extends HttpServlet {
 			RequestDispatcher dispatch = request.getRequestDispatcher("try-again.html");
 			dispatch.forward(request, response);
 		} else {
+			
+			// Create quiz in Quizzes database.
 			String description = request.getParameter("description");
 			String questionOrder = request.getParameter("questionOrder");
 			String quizStyle = request.getParameter("quizStyle");
@@ -78,18 +83,13 @@ public class QuizCreateServlet extends HttpServlet {
 				response.getWriter().println("Error creating quiz. Please try again.");
 			}
 			
+			// Enter tags into Tags database.
+			Tag.createTags(request.getParameter("tags"), quizID);
+			
 			// Move on to question adding flow.
 			request.setAttribute("quizID", quizID);
 			RequestDispatcher rd = request.getRequestDispatcher("QuestionCreationPage.jsp");
 			rd.forward(request, response);
-			
-			/*
-			TODO:
-				- add quizID to user's list of quizzes
-				-link up question creation page
-			RequestDispatcher dispatch = request.getRequestDispatcher("[insert question creation page name]");
-			dispatch.forward(request, response);
-			*/
 		}
 	}
 
