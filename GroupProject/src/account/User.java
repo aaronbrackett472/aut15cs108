@@ -29,11 +29,6 @@ public class User{
 	public static String FRIENDSHIP_TABLE = "Friendship";
 
 	
-	//temporarry to get ride of errors on code
-	public User(String username, DatabaseConnection con) {
-		this.username = username;
-		this.connection = con;
-	}
 	/**
 	 * Constructor
 	 */

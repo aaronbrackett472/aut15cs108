@@ -1,5 +1,5 @@
 package messaging;
-<<<<<<< HEAD
+
 import account.*;
 
 import java.io.IOException;
