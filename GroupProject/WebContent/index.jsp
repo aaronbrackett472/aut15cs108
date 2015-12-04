@@ -128,7 +128,16 @@
     	  } else {
     		  for(AchievementItem aItem: acItems) {
       %>
-      	<div><%= aItem.getAchievementName() %>, <%= aItem.getDescription() %></div>
+      	<div><div class="result-relation-title"><%= aItem.getAchievementName() %> (unlocked on <%= aItem.getDateAcquired() %>)</div>
+      	<div class="prereqs">
+        <ul>
+          <div class="placeholder-text">
+            <%= aItem.getDescription() %>  
+          </div>
+        </ul>
+      </div>
+      	
+      	 
       	<%
       		}
       	}

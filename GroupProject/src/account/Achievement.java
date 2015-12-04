@@ -45,16 +45,13 @@ public class Achievement {
 	
 	
 	private static String[] IMAGE_LINKS = new String[] {
-			"imageLinks/amateur",
-			"imageLinks/profilic",
-			"imageLinks/prodigious",
-			"imageLinks/quiz-machine",
-			"imageLinks/greatest",
-			"imageLinks/practice"			
+			"static/images/amateur.png",
+			"static/images/profilic.png",
+			"static/images/prodigious.png",
+			"static/images/quiz-machine.png",
+			"static/images/greatest.png",
+			"static/images/practice.png"			
 	};
-	
-			
-	
 	
 	
 	/**
@@ -71,15 +68,8 @@ public class Achievement {
 	 */
 	public void storeAchievementItem(AchievementItem item) {
 		String querry;
-		if(item.getDateAcquired().isEmpty()) {
-			//default to now
-			querry = "INSERT INTO "+ ACHIEVEMENT_TABLE + " (username, achievementName, achievementDescription, image) " + 
+		querry = "INSERT INTO "+ ACHIEVEMENT_TABLE + " (username, achievementName, achievementDescription, image) " + 
 					 "VALUES('" + item.getUserName() + "', '" + item.getAchievementName() + "', '" + item.getDescription() + "', '"+ item.getImageLink()+ "')" ;		
-		} else {
-			querry = "INSERT INTO "+ ACHIEVEMENT_TABLE + " (username, achievementName, achievementDescription, image, dateAcquired) " + 
-					 "VALUES('" + item.getUserName() + "', '" + item.getAchievementName() + "', '" + item.getDescription() + "', '"+ item.getImageLink()+ "', '" + item.getDateAcquired()+ "')" ;
-
-		}
 		connection.executeUpdate(querry);
 	}
 	
@@ -114,11 +104,11 @@ public class Achievement {
 		try{
 			ResultSet rs = connection.executeQuery(querry);	
 			while(rs.next()) {
-				String username = rs.getString(1);
-				String achievementName = rs.getString(2);
-				String achievementDescription = rs.getString(3);
-				String imageLink =  rs.getString(4);
-				String dateAcquired =  rs.getString(5);
+				String username = rs.getString("username");
+				String achievementName = rs.getString("achivementName");
+				String achievementDescription = rs.getString("achivementDescription");
+				String imageLink =  rs.getString("image");
+				Date dateAcquired =  rs.getDate("dateAcquired");
 				AchievementItem item = new AchievementItem(username, achievementName, achievementDescription, imageLink, dateAcquired);
 				achievements.add(item);		
 			}
@@ -223,7 +213,7 @@ public class Achievement {
 					ACHIEVEMENT_NAMES[achievementIndex],
 					ACHIEVEMENT_DESCRIPTION[achievementIndex],
 					IMAGE_LINKS[achievementIndex],
-					"") ;
+					null) ;
 			storeAchievementItem(item);
 			unlocked.add(item);
 		}
