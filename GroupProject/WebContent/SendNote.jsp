@@ -68,11 +68,11 @@
 		<form id="form1" name="form1" method="post" action="MessageServlet">
 			<input type="hidden" name="type" value="note"></input> <label style="text-align:left;float:left;"
 				class="message"><b>From:</b></label> <input class="messagefield"
-				type="text" name="fromname" id="from" value="<%=username%>" size=30 />
+				type="text" name="from" id="fromname" value="<%=username%>" size=30 />
 
 			<label class="message"><b>To:</b></label> <input class="messagefield"
-				type="text" name="toname" id="toname" value="<%=receiverName%>"
-				size=30 /> <input type="hidden" name="to" value="<%=receiverName%>"></input>
+				type="text" name="to" id="toname" value="<%=receiverName%>"
+				size=30 /> </input>
 			<p>
 				<label class="message"><b>Subject</b></label>
 			</p>

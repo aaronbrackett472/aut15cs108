@@ -169,15 +169,18 @@ public class Quiz {
 		
 		ResultSet resultSet = connection.executeQuery(queryString);
 		List<Quiz> quizzes = new ArrayList<Quiz>(limit);
-		try {
-			while (resultSet.next()) {
-				quizzes.add(new Quiz(connection2, resultSet.getInt("id")));
+		
+		if(resultSet != null){
+			try {
+				while (resultSet.next()) {
+					quizzes.add(new Quiz(connection2, resultSet.getInt("id")));
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		connection2.close();
+			connection2.close();
+			}
 		return quizzes;
 	}
 	
