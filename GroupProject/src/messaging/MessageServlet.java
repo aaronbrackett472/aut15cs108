@@ -41,7 +41,8 @@ public class MessageServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		String sender = request.getParameter("sender");
+		String sender = request.getParameter("from");
+		System.out.print("from: " + sender);
 		String receiver = request.getParameter("to");
 		String subject = request.getParameter("subject");
 		String action = request.getParameter("action");
@@ -52,7 +53,7 @@ public class MessageServlet extends HttpServlet {
 		
 		if (action != null) {
 			if(action.equals("Send")){ //send three types of messages(add them to table)
-				m = new Message(0, "note",sender, receiver, subject, new Timestamp(System.currentTimeMillis()), body, 0);
+				m = new Message(0, "note", sender, receiver, subject, new Timestamp(System.currentTimeMillis()), body, 0);
 				mm.addMessage(m);
 				request.setAttribute("send", "Your message has been sent");
 				RequestDispatcher rd = request.getRequestDispatcher("MessageStatus.jsp");
@@ -78,7 +79,6 @@ public class MessageServlet extends HttpServlet {
 			} else if (action.equals("compose")) {
 				String type = request.getParameter("type");
 				String recepient = request.getParameter("receiver");
-				System.out.println(recepient);
 				if (type.equals("note")) {
 					response.sendRedirect("SendNote.jsp?receiver="+recepient);
 				} else if (type.equals("friendrequest")) {
@@ -86,10 +86,6 @@ public class MessageServlet extends HttpServlet {
 				} else if (type.equals("challenge")) {
 					response.sendRedirect("selectchallenges.jsp?to=" +recepient);
 				} 
-//				request.setAttribute("to", recepient);
-//				RequestDispatcher rd = request.getRequestDispatcher("SendNote.jsp");
-//				if(rd != null)
-//					rd.forward(request, response);
 			}
 		} else if (request.getParameter("inbox_update") != null) {
 			String update = request.getParameter("update_type");
@@ -120,17 +116,20 @@ public class MessageServlet extends HttpServlet {
 			if (checkedIds != null) {
 				for (String id: checkedIds) {
 					int quiz_id = Integer.parseInt(id);
-					System.out.println(quiz_id);
+					subject = "";
+					sender = request.getParameter("sender");
+					receiver = request.getParameter("to");
+					body = "New challenge";
+					System.out.print(receiver);
 					System.out.println(sender);
-					System.out.println(receiver);
 					m = new Message(0, "challenge", sender, receiver, subject, new Timestamp(System.currentTimeMillis()), body, quiz_id);
 					mm.addMessage(m);
 				}
 			}
-//			request.setAttribute("challenge", "Your challenge has been sent");
-//			RequestDispatcher rd = request.getRequestDispatcher("MessageStatus.jsp");
-//			if(rd != null)
-//				rd.forward(request, response);
+			request.setAttribute("challenge", "Your challenge has been sent");
+			RequestDispatcher rd = request.getRequestDispatcher("MessageStatus.jsp");
+			if(rd != null)
+				rd.forward(request, response);
 		}
 	}
 

@@ -58,7 +58,7 @@
 	</div>
 	<hr style="clear:both;"/>
 	<%
-	
+	if(messages == null){ out.print("messages is null!"); out.close(); }
  	if (messages.isEmpty()) {
 		%><center><h4> No new mail! </h4></center><% 
 	} else {

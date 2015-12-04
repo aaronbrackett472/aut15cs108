@@ -1,5 +1,7 @@
 package account;
 
+import java.util.Date;
+
 /**
  * Holds a single achievement object
  * @author Musyoka
@@ -10,7 +12,7 @@ public class AchievementItem {
 	private String achievementName;
 	private String achievementDescription;
 	private String imageLink;
-	private String dateAcquired;
+	private Date dateAcquired;
 	
 	
 	/**
@@ -23,7 +25,7 @@ public class AchievementItem {
 	 * 
 	 */
 	public AchievementItem(String username, String achievementName, String achievementDescription,
-			String imageLink, String dateAcquired)
+			String imageLink, Date dateAcquired)
 	{
 		this.username = username;
 		this.achievementName = achievementName;
@@ -65,7 +67,7 @@ public class AchievementItem {
 	/**
 	 * Returns the date and time the achievement was acquired
 	 */
-	public String getDateAcquired() {
+	public Date getDateAcquired() {
 		return dateAcquired;
 	}
 

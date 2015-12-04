@@ -91,7 +91,7 @@
 			Subject: <%=subject%><br /> <br /> </label> <label class="body"><%=body%></label><br></br>
 		<br></br>
 		<%
-			String replyLink = "quizsummary.jsp?quiz_id=" + msg.getQuizId();
+			String replyLink = "quizsummary.jsp?id=" + msg.getQuizId();
 		%><label class="message"><a href=<%=replyLink%>>Click here to view challenge</a></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	</div>
 			
