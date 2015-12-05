@@ -17,7 +17,6 @@
 	HttpSession ses = request.getSession();
 	ServletContext context = request.getServletContext();
 	String user = (String) session.getAttribute("loggedin_user");
-	user="nzioka";
 	int id = Integer.parseInt(request.getParameter("msg_id"));
 	List<Message> messages = new ArrayList<Message>();
 	MessageManager manager = (MessageManager) context.getAttribute("messageManager");

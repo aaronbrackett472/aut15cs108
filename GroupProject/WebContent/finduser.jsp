@@ -52,7 +52,7 @@
 			} else {
 				%>
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<h1 style="text-align:center;color:#BF5555"> No matching friend names</h1>
+					<h1 style="text-align:center;color:#BF5555"> No such name found!</h1>
 				<%
 			}	
 		%>

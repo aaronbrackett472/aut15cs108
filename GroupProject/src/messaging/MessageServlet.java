@@ -46,10 +46,8 @@ public class MessageServlet extends HttpServlet {
 		String subject = request.getParameter("subject");
 		String action = request.getParameter("action");
 		String body = request.getParameter("body");
-
 		MessageManager mm = (MessageManager)getServletContext().getAttribute("messageManager");		
 		Message m = null;
-		
 		if (action != null) {
 			if(action.equals("Send")){ //send three types of messages(add them to table)
 				m = new Message(0, "note",sender, receiver, subject, new Timestamp(System.currentTimeMillis()), body, 0);
@@ -78,7 +76,6 @@ public class MessageServlet extends HttpServlet {
 			} else if (action.equals("compose")) {
 				String type = request.getParameter("type");
 				String recepient = request.getParameter("receiver");
-				System.out.println(recepient);
 				if (type.equals("note")) {
 					response.sendRedirect("SendNote.jsp?receiver="+recepient);
 				} else if (type.equals("friendrequest")) {

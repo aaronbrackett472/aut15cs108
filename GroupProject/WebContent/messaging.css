@@ -10,6 +10,18 @@
 	background-color: #966363;
 }
 
+.box {
+    float: left;
+    width: 200px;
+    margin-left: 10px;
+    margin-top: 10px;
+    padding: 5px;
+    border: 2px solid blue;
+}
+.floated_img
+{
+    float: left;
+}
 #apDiv2 {
  	position: absolute;
  	width: 100%;
