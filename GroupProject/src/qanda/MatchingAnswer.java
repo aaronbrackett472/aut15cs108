@@ -3,6 +3,7 @@ package qanda;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import database.DatabaseConnection;
@@ -48,6 +49,9 @@ public static String choicesTable = Answer.answerTable;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		Collections.shuffle(this.column2);
+		
 	}
 	
 	int convertBooleanToInt(Boolean val) {
