@@ -1,7 +1,6 @@
 package qanda;
 
 import database.DatabaseConnection;
-import javafx.util.Pair;
 
 public class MatchingQuestion extends Question {
 	
@@ -12,13 +11,17 @@ public class MatchingQuestion extends Question {
 
 	@Override
 	public String getResponseInputHTML() {
-		ChoiceSet cs = new ChoiceSet();
-		cs.getChoicesByQuestionId(this.connection, this.id);
+		MatchingAnswer ma = new MatchingAnswer();
+		ma.getMatchingByQuestionId(connection, this.id);
+		
 		StringBuilder returnString = new StringBuilder();
 		returnString.append("<ul>");
-		for(Pair<String, Boolean> choice : cs.choicesList) {
-			
-			returnString.append("<li id=\"choice-list\"><input type=\"radio\" name=\"response-" + this.id + "\" value=\"" + choice.getKey() + "\"> " + choice.getKey() + "</li>");
+		for(String answer: ma.column1) {
+			returnString.append("<li id=\"choice-list\">" + answer + "&nbsp;&nbsp;&nbsp;<select name=\"response-" + this.id + "\" >");
+			for(String choice: ma.column2) {
+				returnString.append("<option value=\"" + choice + "\">" + choice + "</option>");
+			}
+			returnString.append("</select></li>");
 		}
 		returnString.append("</ul>");
 		return returnString.toString();

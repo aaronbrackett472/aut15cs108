@@ -65,6 +65,12 @@ if (session.getAttribute("currentQuiz") == null) {
 		out.println(q.getResponseInputHTML());
 	}
 	
+	if(currentQuestion.getType().equals("Matching")){
+		MatchingQuestion q = new MatchingQuestion(connection, currentQuestion.getQuestionId());
+		out.println(q.getQuestionHTML(currentIndex));
+		out.println(q.getResponseInputHTML());
+	}
+	
 	out.println("</div>");
 	
 

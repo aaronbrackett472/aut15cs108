@@ -77,6 +77,11 @@ if (session.getAttribute("currentQuiz") == null) {
 		out.println(q.getQuestionHTML(i));
 	}
 	
+	if(currentQuestion.getType().equals("Matching")){
+		MatchingQuestion q = new MatchingQuestion(connection, currentQuestion.getQuestionId());
+		out.println(q.getQuestionHTML(i));
+	}
+	
 	int currentScore = (Integer)session.getAttribute("score-" + questionId);
 	String currentResponse = Arrays.toString((String[])session.getAttribute("response-" + questionId));
 	if (currentScore == 0)out.print(Util.showErrorMessage("Your answer " + currentResponse + " is incorrect!", 9));
