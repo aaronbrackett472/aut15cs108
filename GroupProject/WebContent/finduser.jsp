@@ -26,20 +26,24 @@
 </head>
 <body>
 	<jsp:include page="header.jsp"/> 	
-	<div >
+	    <main>
+    <div>
+<div id="main-browse-container-center">
+  <div id="result-info-container" style="width:100%;">
+  <div class="result-selected-class">
 		<%
 			if (!users.isEmpty()) {
 				for (int i = 0; i < users.size(); i++) {
 					String username = users.get(i);
 					if (!currentUser.equals(username)) {
 						String friendLink = "userpage.jsp?who = " +username;
-						%><label class="user"><a href=<%=friendLink%>><%=username%></a></label><br />
+						%><label><a href=<%=friendLink%>><%=username%></a></label><br />
 						<%
 					}
 					if (!us.checkFriend(username) && us != null) {
 						String addFriend = "FriendRequestServlet?to=" + username + "&from=" + currentUser;
 						%>
-						<label class="user"><a class="link" href=<%=addFriend%>>Add
+						<label><a class="link" href=<%=addFriend%>>Add
 								<%=username%> as a friend
 						</a></label><br /> <br />
 						<%
@@ -54,7 +58,10 @@
 		%>
 	
 	</div>
-	
+	</div>
+	</div>
+	</div>
+	</main>
 	
 	
 </body>
