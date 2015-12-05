@@ -60,6 +60,12 @@ public class TakeQuiz extends HttpServlet {
 		
 		RequestDispatcher dispatch;
 		
+		if (request.getParameter("mode").equals("practice")) {
+			session.setAttribute("practiceMode", true);
+		} else {
+			session.setAttribute("practiceMode", false);
+		}
+		
 		if(q.useSinglePage()) {
 			dispatch = request.getRequestDispatcher("showquiz.jsp?quizid=" + quizId);
 		} else {

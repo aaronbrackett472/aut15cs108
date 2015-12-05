@@ -41,7 +41,7 @@ public class History {
 		
 		String query = "INSERT INTO "+ HISTORY_TABLE + " (username, score, maxScore, quizId, minuteTaken) " + 
 						"VALUES('" + item.getUserName() + "', '" + item.getScore()+ "', '" + item.getMaxScore()+ "', '" + item.getQuizId()+ "', '" + item.getMinuteTaken() + "')" ;
-		System.out.println(query);
+		//System.out.println(query);
 		connection.executeUpdate(query);
 	}
 	
@@ -96,6 +96,38 @@ public class History {
 		}	
 		return history;
 		
+	}
+	
+	public ArrayList<HistoryItem> getHistoryByFieldWithLimit(String fieldName, String fieldValue, int limit) {
+		ArrayList<HistoryItem> history =  new ArrayList<HistoryItem>();
+		String query = "SELECT * FROM " + HISTORY_TABLE + " WHERE " + fieldName + "='"+ fieldValue + "' LIMIT " + limit + ";";
+		System.out.println(query);
+		try{
+			ResultSet rs = connection.executeQuery(query);	
+			while(rs.next()) {
+				String username = rs.getString("username");
+				int score  =  rs.getInt("score");
+				int maxScore =  rs.getInt("maxScore");
+				int quizId = rs.getInt("quizId");
+				int minuteTaken = rs.getInt("minuteTaken");
+				Date dateTaken = rs.getDate("dateTaken");
+				HistoryItem item = new HistoryItem(username, score, maxScore, quizId, minuteTaken, dateTaken);
+				history.add(item);		
+			}
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}	
+		return history;
+		
+	}
+	
+	/** 
+	 *  Gets history items given a username as a criteria
+	 * @param username any one of the HISTORY_TABLE fields
+	 * @return history history items for the given username
+	 */
+	public ArrayList<HistoryItem> getHistoryByUsernameWithLimit(String username, int limit) {
+		return getHistoryByFieldWithLimit("username", username, limit);
 	}
 	
 	/** 

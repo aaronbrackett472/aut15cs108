@@ -2,10 +2,12 @@ package qanda;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.RequestDispatcher;
@@ -72,9 +74,11 @@ public class QuizGrader extends HttpServlet {
 		}
 		
 		int quizId = Integer.parseInt(request.getParameter("id"));
+		
+		boolean practiceMode = (boolean)session.getAttribute("practiceMode");
 
 		request.setAttribute("id", quizId);
-		Set<String> usedQuestions = new HashSet<String>();
+		//Set<String> usedQuestions = new HashSet<String>();
 		
 		Enumeration<String> attrList = request.getParameterNames();
 		while (attrList.hasMoreElements()) {
@@ -125,30 +129,36 @@ public class QuizGrader extends HttpServlet {
 					
 					totalScore += score;
 					perfectScore += currentQuestion.getPerfectScore(questionId);
-					usedQuestions.add(attrName);
+					//usedQuestions.add(attrName);
 				//}
 
 			}
 		}
 		
-//		GregorianCalendar calendar = new GregorianCalendar();
-//		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//		String curDateString = format.format(calendar.getTime());
-		
-		// Store result in history
-		System.out.println("adding to history");
-		History historyClass = new History(connection);
-		
+		// Calculate time taken
 		Date quizFinishTime = new Date();
 		Date quizStartTime = (Date)session.getAttribute("quizStartTime");
 		int minuteTaken = (int) ((quizFinishTime.getTime() - quizStartTime.getTime())/1000);
+		session.setAttribute("minuteTaken", minuteTaken);
 		
-		historyClass.storeItem(new HistoryItem(username, totalScore, perfectScore, quizId, minuteTaken, quizFinishTime));
+		if(!practiceMode) {
+			// Store result in history
+			System.out.println("adding to history");
+			History historyClass = new History(connection);
+			historyClass.storeItem(new HistoryItem(username, totalScore, perfectScore, quizId, minuteTaken, quizFinishTime));
+
+			// Increment the taken counter
+			Quiz.incrementQuizId(connection, quizId);
+		}
+
 		
-		// Increment the taken counter
-		Quiz.incrementQuizId(connection, quizId);
-		
-		// Need a script to check if any achievement is unlocked
+		// Check if any achievement is unlocked
+		Achievement ac = new Achievement(connection);
+		List<AchievementItem> unlockedAchievements = ac.unlockAchievementsIfAny(username, quizId, practiceMode);
+		for(AchievementItem aItem: unlockedAchievements) {
+			ac.storeAchievementItem(aItem);
+		}
+		session.setAttribute("unlockedAchievements", unlockedAchievements);
 		
 		// Store this in request
 		session.setAttribute("totalScore", totalScore);
@@ -156,8 +166,6 @@ public class QuizGrader extends HttpServlet {
 		
 		RequestDispatcher dispatch = request.getRequestDispatcher("gradedquiz.jsp?id=" + quizId);
 		dispatch.forward(request, response);
-		
-		//response.getWriter().append("Total Score: " + totalScore);
 	
 	}
 

@@ -68,7 +68,7 @@ public class Achievement {
 	 */
 	public void storeAchievementItem(AchievementItem item) {
 		String querry;
-		querry = "INSERT INTO "+ ACHIEVEMENT_TABLE + " (username, achievementName, achievementDescription, image) " + 
+		querry = "INSERT INTO "+ ACHIEVEMENT_TABLE + " (username, achivementName, achivementDescription, image) " + 
 					 "VALUES('" + item.getUserName() + "', '" + item.getAchievementName() + "', '" + item.getDescription() + "', '"+ item.getImageLink()+ "')" ;		
 		connection.executeUpdate(querry);
 	}
@@ -150,7 +150,7 @@ public class Achievement {
 		if(quizzesByUser >= 1 && quizzesByUser < 5) {
 			saveRecentlyUnlocked(username, AMATEUR_AUTHOR, unlocked) ;
 		} else if(quizzesByUser >= 5 && quizzesByUser < 10 ) {
-			//both amateur and profilic
+			//both amateur and prolific
 			saveRecentlyUnlocked(username, AMATEUR_AUTHOR, unlocked) ;
 			saveRecentlyUnlocked(username, PROFILIC_AUTHOR, unlocked) ;
 		} else if(quizzesByUser >= 10) {
@@ -158,7 +158,6 @@ public class Achievement {
 			saveRecentlyUnlocked(username, PROFILIC_AUTHOR, unlocked) ;
 			saveRecentlyUnlocked(username, PRODIGIOUS_AUTHOR, unlocked) ;		
 		}
-		
 		
 		return unlocked;
 	}
@@ -171,7 +170,7 @@ public class Achievement {
 		History history = new History(connection);
 		ArrayList<HistoryItem> quizIdHistory = history.getHistoryByQuizId(quizId, "score", 10);
 		int highestScoreGenerally = 0;
-		int highestScoreUser = 0;
+		int highestScoreUser = -1;
 		for(HistoryItem item: quizIdHistory) {
 			if(item.getScore() > highestScoreGenerally) {
 				highestScoreGenerally = item.getScore();
