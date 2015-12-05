@@ -80,7 +80,7 @@ function showQuestionHTML(){
           default:
             console.log("Things have gone wrong");
         }
-        questionHTML+='<div class="add-class-container" style="text-align:center;"><button type="submit" id="saveQuestion">Save Question< /button></div>';
+        questionHTML+='<div class="add-class-container" style="text-align:center;"><button type="submit" id="saveQuestion">Save Question</div>';
         var div = document.getElementById('QuestionData');
         div.innerHTML = questionHTML;
     }
