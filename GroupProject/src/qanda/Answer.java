@@ -98,9 +98,11 @@ public class Answer {
 		return false;
 	}
 	
-	public boolean isCorrectMatching(String prompt, String answer){
-		if (answer.trim().toLowerCase().equals(this.answer.trim().toLowerCase())){
-			if (prompt.trim().toLowerCase().equals(this.prompt.trim().toLowerCase())){
+	public boolean isCorrectMatching(String answer, int answerIndex){
+		System.out.println("Answer: "+ answer);
+		System.out.println("Prompt: " + this.prompt);
+		if (answer.trim().toLowerCase().equals(this.prompt.trim().toLowerCase())){
+			if (answerIndex == this.answerIndex){
 				return true;
 			}
 		}

@@ -86,20 +86,60 @@ public class OnePerPageGrader extends HttpServlet {
 			if(attrName.startsWith("response-")) {
 				int questionId = Integer.parseInt(attrName.substring(attrName.lastIndexOf("-") + 1));
 				int score;
-				String[] questionResponse = request.getParameterValues(attrName);
+				String[] responses = request.getParameterValues(attrName);
 				Question currentQuestion = new Question(connection, questionId);
-				if(currentQuestion.getType().equals("Multiple Choice")){
-					MultipleChoice q = new MultipleChoice(connection, currentQuestion.getQuestionId());
-					score = q.evaluateAnswer(questionResponse);
-				} else {
-					score = currentQuestion.evaluateAnswer(questionResponse);
+				//System.out.println("type: " + currentQuestion.getType());
+				if(currentQuestion.getType().equals("Question-Response")||currentQuestion.getType().equals("Response")){
+					QuestionResponse q = new QuestionResponse(connection, currentQuestion.getQuestionId());
+					score = q.evaluateAnswer(responses);
 				}
 				
-				session.setAttribute("response-" + questionId, questionResponse);
-				session.setAttribute("score-" + questionId, score);
+				else if(currentQuestion.getType().equals("Fill in the Blank")||currentQuestion.getType().equals("Blank")){
+					FillInTheBlank q = new FillInTheBlank(connection, currentQuestion.getQuestionId());
+					score = q.evaluateAnswer(responses);
+				}
+				
+				else if(currentQuestion.getType().equals("Picture Response")||currentQuestion.getType().equals("Picture")){
+					PictureResponse q = new PictureResponse(connection, currentQuestion.getQuestionId());
+					score = q.evaluateAnswer(responses);
+				}
+				
+				else if(currentQuestion.getType().equals("Multiple Choice")||currentQuestion.getType().equals("MultipleChoice")){
+					MultipleChoice q = new MultipleChoice(connection, currentQuestion.getQuestionId());
+					score = q.evaluateAnswer(responses);
+					for (String r: responses){
+						System.out.println(r);
+					}
+				}
+				else if(currentQuestion.getType().equals("Matching")){
+					//System.out.println("type: " + currentQuestion.getType());
+					MatchingQuestion q = new MatchingQuestion(connection, currentQuestion.getQuestionId());
+					score = q.evaluateAnswer(responses);
+				}
+				else if(currentQuestion.getType().equals("List")){
+					ListQuestion q = new ListQuestion(connection, currentQuestion.getQuestionId());
+					score = q.evaluateAnswer(responses);
+				}
+				
+				else{
+					System.out.println("type: " + currentQuestion.getType());
+					Question q = new Question();
+					score = q.evaluateAnswer(responses);
+				}
+				System.out.println("Score: " + score);
+				for (String stringResponse: responses){
+					request.setAttribute("response-" + questionId, stringResponse);
+				}
+				request.setAttribute("score-" + questionId, score);
+				
+				//session.setAttribute("question-" + questionId, score);
+				//response.getWriter().append("<div>Question ID " + questionId + ", Score: " + score + "</div>");
+            
+                session.setAttribute("response-" + questionId, responses);
+                session.setAttribute("score-" + questionId, score);
 				
 				totalScore += score;
-				perfectScore += currentQuestion.getScore();
+				perfectScore += currentQuestion.getPerfectScore(questionId);
 			}
 		}
 		
