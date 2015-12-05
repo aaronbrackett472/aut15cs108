@@ -30,6 +30,7 @@
 	<%
 	int kDescriptionPreviewLength = 80;
 	ArrayList<Quiz> quizzes = (ArrayList<Quiz>) request.getAttribute("quizzes");
+	if(quizzes != null){
 	for (Quiz quiz : quizzes) {
 		String formattedDescription = quiz.description;
 		if (formattedDescription.length() > kDescriptionPreviewLength) {
@@ -65,6 +66,7 @@
 					+ (quiz.practiceModeAllowed ? "enabled" : "disabled") + "\">"
 				+ "<input name=\"tags\" type=\"hidden\" value=\"" + quiz.tagString + "\">"
 				+ "<input type=\"submit\" value=\"Edit\"></form></td></tr>");
+	}
 	}
 	%>
 </table>
