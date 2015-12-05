@@ -3,6 +3,7 @@ package qanda;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -13,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import account.Achievement;
+import account.AchievementItem;
 import account.History;
 import account.HistoryItem;
 import database.DatabaseConnection;
@@ -105,22 +108,33 @@ public class OnePerPageGrader extends HttpServlet {
 		
 		RequestDispatcher dispatch;
 		
+		// If this is the last question, grade it, store result in history, and check if any achievement is unlocked
 		if (questionIndex+1 == currentQuiz.getNumQuestions()) {
 			
-			// Store result in history
-			System.out.println("adding to history");
-			History historyClass = new History(connection);
-			
+			// Calculate time taken
 			Date quizFinishTime = new Date();
 			Date quizStartTime = (Date)session.getAttribute("quizStartTime");
 			int minuteTaken = (int) ((quizFinishTime.getTime() - quizStartTime.getTime())/1000);
+			session.setAttribute("minuteTaken", minuteTaken);
 			
-			historyClass.storeItem(new HistoryItem(username, totalScore, perfectScore, quizId, minuteTaken, quizFinishTime));
-			
-			// Increment the taken counter
-			Quiz.incrementQuizId(connection, quizId);
-			
-			// Need a script to check if any achievement is unlocked
+			boolean practiceMode = (boolean)session.getAttribute("practiceMode");
+			if(!practiceMode) {
+				// Store result in history
+				System.out.println("adding to history");
+				History historyClass = new History(connection);
+				historyClass.storeItem(new HistoryItem(username, totalScore, perfectScore, quizId, minuteTaken, quizFinishTime));
+				
+				// Increment the taken counter
+				Quiz.incrementQuizId(connection, quizId);
+			}
+						
+			// Check if any achievement is unlocked
+			Achievement ac = new Achievement(connection);
+			List<AchievementItem> unlockedAchievements = ac.unlockAchievementsIfAny(username, quizId, practiceMode);
+			for(AchievementItem aItem: unlockedAchievements) {
+				ac.storeAchievementItem(aItem);
+			}
+			session.setAttribute("unlockedAchievements", unlockedAchievements);
 			
 			// Store this in request
 			session.setAttribute("totalScore", totalScore);

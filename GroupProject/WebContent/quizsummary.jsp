@@ -79,6 +79,9 @@ if(request.getParameter("id") == null){
       				<button type="submit" value="Submit">Take This Quiz!</button>
     			</div>
     		</form>
+    		<%
+    		if(currentQuiz.practiceMode()) {
+    		%>
     		<form action="TakeQuiz" method="GET">
     			<input type="hidden" name="id" value="<% out.print(currentQuiz.getId()); %>">
     			<input type="hidden" name="mode" value="practice">
@@ -86,6 +89,9 @@ if(request.getParameter("id") == null){
       				<button type="submit" value="Submit">Take This Quiz in Practice Mode</button>
     			</div>
     		</form>
+    		<%
+    		}
+    		%>
     		<form action="ReportQuizServlet" method="GET">
     			<input type="hidden" name="id" value="<% out.print(currentQuiz.getId()); %>">
 				<div class="red-class-container">

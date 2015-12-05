@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" import="qanda.*, database.*, account.*, java.util.Arrays" %>
+    pageEncoding="UTF-8" import="qanda.*, database.*, account.*, java.util.Arrays, java.util.List" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%
@@ -14,6 +14,9 @@ if (session.getAttribute("currentQuiz") == null) {
 	int quizId = currentQuiz.getId();
 	int totalScore = (Integer)session.getAttribute("totalScore");
 	int perfectScore = (Integer)session.getAttribute("perfectScore");
+	int minuteTaken = (Integer)session.getAttribute("minuteTaken");
+	List<AchievementItem> unlockedAchievements = (List<AchievementItem>)session.getAttribute("unlockedAchievements");
+
 %>
 <html>
 <head>
@@ -34,6 +37,16 @@ if (session.getAttribute("currentQuiz") == null) {
     	<div id="main-browse-container-center">
   			<div id="result-info-container" style="width:100%;">
   			<div class="result-selected-class">Your Score: <% out.print(totalScore); %> / <% out.print(perfectScore); %></div>
+  			<div style="padding-top: 20px;"></div>
+  			<div class="result-selected-class">Time Spent: <% out.print(minuteTaken); %> Seconds</div>
+  			<div style="padding-top: 20px;"></div>
+  			<% if(unlockedAchievements.size() > 0) {%>
+  				<div class="result-selected-class">You Have Unlocked New Achievements!</div>
+  			<% for(AchievementItem a: unlockedAchievements) { %>
+  				<p> <%= a.getAchievementName() %>: <%= a.getDescription() %></p>
+  			<% } %>
+  			<div style="padding-top: 20px;"></div>
+  			<% } %>
     			
 <%
 
@@ -61,6 +74,11 @@ if (session.getAttribute("currentQuiz") == null) {
 	
 	if(currentQuestion.getType().equals("Multiple Choice")){
 		MultipleChoice q = new MultipleChoice(connection, currentQuestion.getQuestionId());
+		out.println(q.getQuestionHTML(i));
+	}
+	
+	if(currentQuestion.getType().equals("Matching")){
+		MatchingQuestion q = new MatchingQuestion(connection, currentQuestion.getQuestionId());
 		out.println(q.getQuestionHTML(i));
 	}
 	

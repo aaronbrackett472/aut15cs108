@@ -80,7 +80,7 @@ public class MultipleChoice extends Question {
 		System.out.println(cs.choicesList.size());
 		for(Pair<String, Boolean> choice : cs.choicesList) {
 			
-			returnString+="<li id=\"choice-list\"><input type=\"radio\" name=\"response-" + this.id + "\" value=\"" + choice.getKey() + "\"> " + choice.getKey() + "</li>";
+			returnString+="<li id=\"choice-list\"><input type=\"checkbox\" name=\"response-" + this.id + "\" value=\"" + choice.getKey() + "\"> " + choice.getKey() + "</li>";
 		}
 		returnString+="</ul>";
 		return returnString;

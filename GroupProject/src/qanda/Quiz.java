@@ -22,6 +22,7 @@ public class Quiz {
 	private boolean random;
 	private boolean singlePage;
 	private boolean immediateCorrection;
+	private boolean practiceModeAllowed;
 	private int taken_count;
 	private String createdBy;
 	private Date createdDate;
@@ -93,6 +94,7 @@ public class Quiz {
 			this.createdBy = resultSet.getString("createdBy");
 			this.taken_count = resultSet.getInt("takenCounter");
 			this.createdDate = resultSet.getDate("createdDate");
+			this.practiceModeAllowed = resultSet.getBoolean("practiceModeAllowed");
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -118,6 +120,10 @@ public class Quiz {
 	
 	public boolean useSinglePage() {
 		return singlePage;
+	}
+	
+	public boolean practiceMode() {
+		return practiceModeAllowed;
 	}
 	
 	public boolean useImmediateCorrection() {
@@ -164,7 +170,7 @@ public class Quiz {
 	 */
 	public static List<Quiz> getRecentQuizzes(DatabaseConnection connection, int limit) {
 		
-		String queryString = "SELECT * FROM " + quizzesTable + " ORDER BY id DESC LIMIT "+ Integer.toString(limit) + ";";
+		String queryString = "SELECT * FROM " + quizzesTable + " ORDER BY id DESC LIMIT "+ limit + ";";
 		DatabaseConnection connection2 = new DatabaseConnection();
 		
 		ResultSet resultSet = connection.executeQuery(queryString);
@@ -180,6 +186,30 @@ public class Quiz {
 				e.printStackTrace();
 			}
 			connection2.close();
+
+			}
+		return quizzes;
+	}
+	
+public static List<Quiz> getRecentQuizzesByCreator(DatabaseConnection connection, String username, int limit) {
+		
+		String queryString = "SELECT * FROM " + quizzesTable + " WHERE createdBy='" + username + "' ORDER BY id DESC LIMIT " + limit + ";";
+		DatabaseConnection connection2 = new DatabaseConnection();
+		
+		ResultSet resultSet = connection.executeQuery(queryString);
+		List<Quiz> quizzes = new ArrayList<Quiz>(limit);
+		
+		if(resultSet != null){
+			try {
+				while (resultSet.next()) {
+					quizzes.add(new Quiz(connection2, resultSet.getInt("id")));
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			connection2.close();
+
 			}
 		return quizzes;
 	}

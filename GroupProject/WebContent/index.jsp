@@ -80,14 +80,14 @@
     </div>
     
     <div style="padding-top: 40px;">
-    <div class="result-selected-class">Previous Quizzes</div>	
+    <div class="result-selected-class">Last 10 Quizzes You Took</div>	
       <div class="placeholder-container">
       <%
       if (username == null) {
       	out.println("You are not logged in. Please log in to see previous quizzes taken")	;
       } else {
-    	  History historyForHomepage = new History(connection);
-    	  List<HistoryItem> prevQuiz = historyForHomepage.getHistoryByUsername(username);
+    	  History historyForHomepage = new History(new DatabaseConnection());
+    	  List<HistoryItem> prevQuiz = historyForHomepage.getHistoryByUsernameWithLimit(username, 10);
     	  if ( prevQuiz.size() == 0 ) {
     		  out.println("You haven't done any quiz. Perhaps you want to change that?");
     	  } else {
@@ -102,6 +102,31 @@
       	%>
       </div>
     </div>
+    
+    <div style="padding-top: 40px;">
+    <div class="result-selected-class">Previous Quizzes You Created</div>	
+      <div class="placeholder-container">
+      <%
+      if (username == null) {
+      	out.println("You are not logged in. Please log in to see previous quizzes taken")	;
+      } else {
+    	  
+    	  List<Quiz> createdQuizzes = Quiz.getRecentQuizzesByCreator(connection, username, 5);
+    	  if ( createdQuizzes.size() == 0 ) {
+    		  out.println("You haven't created any quiz. Perhaps you want to change that?");
+    	  } else {
+    		  for(Quiz qItem: createdQuizzes) {
+      %>
+      	<div><a href="quizsummary.jsp?id=<%= qItem.getId() %>"><%= qItem.getName() %></a> created on <%= qItem.getCreationDate() %></div>
+      	<%
+      		}
+      	}
+      }
+      	%>
+      </div>
+    </div>
+    
+    
     <%
     if (username != null) {
     %>
