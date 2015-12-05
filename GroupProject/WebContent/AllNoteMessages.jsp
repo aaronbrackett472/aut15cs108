@@ -79,16 +79,20 @@
 					String snippet = m.getMessageBody().substring(0, length);
 					String display = subject + ":" + snippet;
 				%>
-				<tr>
+				<%if (m.isRead()) { %>
+				<tr style="background-color: #ffffff;">
+				<% } else { %>
+				<tr style="background-color: #d9edf7;">
+				<% } %>
 					<td align="left" width="7%" >
 					<input type="checkbox" id="checkbox<%=i%>" name="check" value="<%=id%>"></td>
 					<%if (m.isRead()) { %>
-					<td align="left" width="22%"><a href="user/profile.jsp?user=<%=sender %>"><font color="#000000"><b><%=sender%></b></font></a></td>
-					<td align="left" width="49%"><a href="ViewNote.jsp?msg_id=<%=id%>"><font color="#000000"><b><%=snippet%></b></font></a></td>
+					<td align="left" width="22%"><a href="userpage.jsp?who=<%=sender %>"><font color="#000000"><b><%=sender%></b></font></a></td>
+					<td align="left" width="49%"><a href="ViewNote.jsp?msg_id=<%=id%>"><%= subject %>: <font color="#000000"><b><%=snippet%></b></font></a></td>
 					<td align="right" width="20%"><b><%=sdf.format(time)%></b></td>
 					<%} else {%>
-						<td align="left" width="22%"><a href="user/profile.jsp?user=<%=sender %>"><font color="#000000"><%=sender%></font></a></td>		
-						<td align="left" width="49%"><a href="ViewNote.jsp?msg_id=<%=id%>"><font color="#000000"><%=snippet%></font></a></td>
+						<td align="left" width="22%"><a href="userpage.jsp?who=<%=sender %>"><font color="#000000"><%=sender%></font></a></td>		
+						<td align="left" width="49%"><a href="ViewNote.jsp?msg_id=<%=id%>"><%= subject %>: <font color="#000000"><%=snippet%></font></a></td>
 						<td align="right" width="20%"><%=sdf.format(time)%></td>
 					<%}%>
 				</tr>

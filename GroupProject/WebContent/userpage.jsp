@@ -40,10 +40,11 @@
 			String addFriend = "FriendRequestServlet?to=" + username + "&from=" + currentUser;
 			
 			%>
-			<label class="user"><a class="link" href=<%=addFriend%>>Add
-					<%=username%> as a friend
-			</a></label><br /> <br />
-			<%
+			<label class="user"><a class="link" href=<%=addFriend%>>Add <%=username%> as a friend </a></label><br /> <br />
+			<% } else {
+				%>
+				<label class="user"><%=username%> is already your friend!</label><br /> <br />
+				<%
 		}
 		String sendNote = "SendNote.jsp?receiver=" + username;
 		%>
