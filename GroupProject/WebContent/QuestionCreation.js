@@ -20,6 +20,9 @@ function showQuestionHTML(){
         '<p><input type="radio" name="type" value="3">Picture Response</p>' +
         '' +
         '<p><input type="radio" name="type" value="4">Matching</p>' +
+        '' +
+        '<p><input type="radio" name="type" value="5">List</p>' +
+        ''+
         '</div></div><div style="padding-top: 40px;"></div>';
     var typeRadios = document.getElementsByName('type');
     for (var i = 0; i < typeRadios.length; i++){
@@ -39,7 +42,7 @@ function showQuestionHTML(){
         
         switch(+index){
           case 0:
-           document.getElementById('type').setAttribute('value','Response');
+            document.getElementById('type').setAttribute('value','Response');
             break;
           case 1:
             document.getElementById('type').setAttribute('value','Blank');
@@ -66,6 +69,14 @@ function showQuestionHTML(){
             '<div style="padding-top: 20px;"></div><input type="text" name="number" class="med-box">' +
             '<div style="padding-top: 20px;"></div>';
             break;
+          case 5:
+        	document.getElementById('type').setAttribute('value', 'List');
+        	questionHTML+='<div class="prereqs"> <div class="placeholder-text">How many items are in the list?</div></div>' +
+            '<div style="padding-top: 20px;"></div><input type="text" name="number" class="med-box">' +
+            '<br>'+
+            '<div class="prereqs"> <div class="placeholder-text">Does the order matter for the list?</div></div>' +
+            '<div style="padding-top: 20px;"></div><input type="text" name="url" class="med-box">' +
+            '<br>';
           default:
             console.log("Things have gone wrong");
         }

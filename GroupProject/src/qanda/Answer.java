@@ -106,6 +106,13 @@ public class Answer {
 		}
 		return false;
 	}
+	
+	public boolean isCorrectString(String answer){
+		if (answer.trim().toLowerCase().equals(this.answer.trim().toLowerCase())){
+			return true;
+		}
+		return false;
+	}
 }
 	
 	

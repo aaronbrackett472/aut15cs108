@@ -111,6 +111,10 @@ public class QuizGrader extends HttpServlet {
 						MultipleChoice q = new MultipleChoice(connection, currentQuestion.getQuestionId());
 						score = q.evaluateAnswer(responses);
 					}
+					else if(currentQuestion.getType().equals("List")){
+						ListQuestion q = new ListQuestion(connection, currentQuestion.getQuestionId());
+						score = q.evaluateAnswer(responses);
+					}
 					else{
 						Question q = new Question();
 						score = q.evaluateAnswer(responses);
