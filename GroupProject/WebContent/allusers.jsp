@@ -35,10 +35,7 @@
 	    <span style="font-weight:normal;"><a href="AllFriendRequests.jsp">Friend Requests <%if (numReqs >0) { %>(<%=numReqs%>)<%}%></a></span>	    
 	</h4>
 	</div>
-	<form id="searchform" method="post" action="finduser.jsp">
-		  	<label class="search">Search:
-		  	<input type="text" name="search" size=40 maxlength=255></input> </label>
-	</form>
+	
 	<div style="float:right;padding-left:15px;padding-top:5px">
 		<form method="post" action="compose.jsp">
 			<input type="submit" style="margin:15px;font-size:17px;font-weight:bold" value="Compose" />
@@ -124,16 +121,17 @@
 				<%=friendUsername%> as a friend
 		</a></label><br /> <br />
 		<%
-			}
+			} else {
 		%>
+		<label class="user">Already a friend</label><br /> <br />		
+		<% } %>
 		<br></br>
 		<%
+			
 			}
-				}
 			}
+		}
 		%>
-		
-		String sendNote = "Send"
 
 	</div>  
 

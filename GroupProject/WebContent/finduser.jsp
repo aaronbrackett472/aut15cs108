@@ -26,10 +26,6 @@
 </head>
 <body>
 	<jsp:include page="header.jsp"/> 	
-	<form id="searchform" method="post" action="finduser.jsp">
-		  	<label class="search">Search:
-		  	<input type="text" name="search" size=40 maxlength=255></input> </label>
-	</form>
 	<div >
 		<%
 			if (!users.isEmpty()) {
