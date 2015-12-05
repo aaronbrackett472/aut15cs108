@@ -25,13 +25,13 @@
        			%>
        		</div>
        	</div>
-      
       <nav>
       	<a class="nav-item" href="index.jsp">Home</a>
       	<a class="nav-item" href="quiz-create.jsp">Create a Quiz</a>
         <a class="nav-item" href="BrowseQuizzesServlet">Browse Quizzes</a>
         <a class="nav-item" href="AllNoteMessages.jsp">Inbox</a>
         <a class="nav-item" href="friends.jsp">Friends</a>
+        <a class="nav-item" href="allusers.jsp">Find Friends</a>
         <%
         	User currentUserObject = (User)session.getAttribute("userobject");
         	if (currentUserObject != null) {
