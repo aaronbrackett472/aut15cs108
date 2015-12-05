@@ -55,11 +55,10 @@ public class LoginServlet extends HttpServlet {
 			{
 				session.setAttribute("loggedin_user", username);
 				session.setAttribute("userobject", userObject);
+				session.setAttribute("isAdmin", 0);
 				
 				if(userObject.isAdmin()) {
-					session.setAttribute("isAdmin", true);
-				} else {
-					session.setAttribute("isAdmin", false);
+					session.setAttribute("isAdmin", 1);
 				}
 				
 				response.sendRedirect("/GroupProject/");

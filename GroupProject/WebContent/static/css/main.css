@@ -379,6 +379,14 @@ td, th {
   margin: 0 auto;
 }
 
+.navbar-box {
+  width: 150px;
+  padding: 5px;
+  height: 15px;
+  font-size: 12px;
+  margin: 0 auto;
+}
+
 .small-box {
   width: 250px;
   padding: 10px;

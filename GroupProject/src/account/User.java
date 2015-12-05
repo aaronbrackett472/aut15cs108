@@ -34,10 +34,8 @@ public class User{
 	 */
 	public User(String username, DatabaseConnection connection){
 
-		
 		ResultSet resultSet = connection.executeQuery("SELECT * FROM " + accountTable + " WHERE username = '" + username + "';");
 		try {
-			
 			if(resultSet.next()){
 				this.username = username;
 				this.connection = connection;
@@ -47,19 +45,39 @@ public class User{
 				resultSet.first();
 				this.isAdmin = resultSet.getBoolean("isAdmin");
 				this.isSuspended = resultSet.getBoolean("suspended");
-
 				this.suspensionEnd = resultSet.getDate("suspensionEnd");
-				
-			} else {
-				
-			}
-			
+			} 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
 		
 	}
+	
+	public static int getUnreadMailCount(DatabaseConnection connection, String username){
+		ResultSet resultSet = connection.executeQuery("SELECT COUNT(*) FROM messages WHERE Receiver = '" + username + "' AND IsRead=0;");
+		try {
+			resultSet.first();
+			return resultSet.getInt(1);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	
+	
+	public static int getFriendRequestCount(DatabaseConnection connection, String username){
+		ResultSet resultSet = connection.executeQuery("SELECT COUNT(*) FROM FriendRequest WHERE Receiver = '" + username + "';");
+		try {
+			resultSet.first();
+			return resultSet.getInt(1);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
+	
 
 	/**
 	 * Adds a friend to this user
