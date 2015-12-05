@@ -67,10 +67,26 @@ public class Achievement {
 	 * @param  item the achievement item
 	 */
 	public void storeAchievementItem(AchievementItem item) {
-		String querry;
-		querry = "INSERT INTO "+ ACHIEVEMENT_TABLE + " (username, achivementName, achivementDescription, image) " + 
+		String query;
+		
+		query = "SELECT * FROM " + ACHIEVEMENT_TABLE + " WHERE username='" + item.getUserName() + "' AND achivementName='" + item.getAchievementName() + "';";
+		
+		// Check if this achievement is already exist
+		connection = new DatabaseConnection();
+		ResultSet rs = connection.executeQuery(query);
+		try {
+			if (rs.next()) {
+			    return;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		// If not, insert into the table
+		query = "INSERT INTO "+ ACHIEVEMENT_TABLE + " (username, achivementName, achivementDescription, image) " + 
 					 "VALUES('" + item.getUserName() + "', '" + item.getAchievementName() + "', '" + item.getDescription() + "', '"+ item.getImageLink()+ "')" ;		
-		connection.executeUpdate(querry);
+		connection.executeUpdate(query);
 	}
 	
 	/**

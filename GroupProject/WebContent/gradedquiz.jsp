@@ -38,7 +38,7 @@ if (session.getAttribute("currentQuiz") == null) {
   			<div id="result-info-container" style="width:100%;">
   			<div class="result-selected-class">Your Score: <% out.print(totalScore); %> / <% out.print(perfectScore); %></div>
   			<div style="padding-top: 20px;"></div>
-  			<div class="result-selected-class">Time Spent: <% out.print(minuteTaken); %></div>
+  			<div class="result-selected-class">Time Spent: <% out.print(minuteTaken); %> Seconds</div>
   			<div style="padding-top: 20px;"></div>
   			<% if(unlockedAchievements.size() > 0) {%>
   				<div class="result-selected-class">You Have Unlocked New Achievements!</div>
@@ -47,7 +47,6 @@ if (session.getAttribute("currentQuiz") == null) {
   			<% } %>
   			<div style="padding-top: 20px;"></div>
   			<% } %>
-  			<div class="result-selected-class">Time Spent: <% out.print(minuteTaken); %></div>
     			
 <%
 
