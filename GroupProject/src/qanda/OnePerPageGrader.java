@@ -117,7 +117,7 @@ public class OnePerPageGrader extends HttpServlet {
 			int minuteTaken = (int) ((quizFinishTime.getTime() - quizStartTime.getTime())/1000);
 			session.setAttribute("minuteTaken", minuteTaken);
 			
-			boolean practiceMode = (boolean)session.getAttribute("practiceMode");
+			Boolean practiceMode = (Boolean)session.getAttribute("practiceMode");
 			if(!practiceMode) {
 				// Store result in history
 				System.out.println("adding to history");
