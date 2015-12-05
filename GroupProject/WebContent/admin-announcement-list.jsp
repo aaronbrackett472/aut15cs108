@@ -34,7 +34,6 @@
       <div class="result-selected-class"><a href="admin-announcement-create.jsp">Create a New Announcement</a></div>
       <div id="browse-results-list">
 <table class="table table-hover table-striped" style="width:100%">
-
 	<tr>
 		<th>Announcement ID</th>
 		<th>Header</th>		
@@ -56,7 +55,7 @@
 				+ "<td>" + announcement.id + "</td>"
 				+ "<td>" + announcement.header + "</td>"
 				+ "<td>" + formattedBody + "</td>"
-				+ "<td>" + announcement.author + "</td>"
+				+ "<td><a href=\"userpage.jsp?who=" + announcement.author + "\">" + announcement.author + "</a></td>"
 				+ "<td>" + announcement.createdAt + "</td>"
 				+ "<td><form action=\"admin-announcement-update.jsp\" method=\"post\">"
 				+ "<input name=\"id\" type=\"hidden\" value=\"" + announcement.id + "\">"

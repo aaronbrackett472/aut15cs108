@@ -52,7 +52,7 @@
 			out.println("<a href=\"BrowseQuizzesServlet?keyword=tag:" + tag + "\">" + tag + "</a>");
 		}
 		out.println("</td>"
-				+ "<td>" + quiz.author + "</td>"
+				+ "<td><a href=\"userpage.jsp?who=" + quiz.author + "\">" +quiz.author + "</a></td>"
 				+ "<td>" + quiz.createdAt + "</td></tr>");
 	}
 	%>

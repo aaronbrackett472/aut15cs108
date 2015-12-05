@@ -48,7 +48,7 @@
         
         <li class="browse-result">
           <div class="title"><a href="quizsummary.jsp?id=<% out.print(q.getId()); %>"><% out.print(q.getName()); %></a></div>
-          <div class="description">Created by <% out.print(q.getCreator()); %> on <% out.print(q.getCreationDate()); %>. Taken <% out.print(q.getTakenCount()); %> times</div>
+          <div class="description">Created by <a href="userpage.jsp?who=<% out.print(q.getCreator()); %>"><% out.print(q.getCreator()); %></a> on <% out.print(q.getCreationDate()); %>. Taken <% out.print(q.getTakenCount()); %> times</div>
         </li>
         <%
         	}
@@ -65,7 +65,7 @@
         	for (Announcement a: recentAnnouncements) {
         %>   
     
-      <div class="result-relation-title"><%= a.header %> (<%= a.createdAt.toString() %>) by <%= a.author %></div>
+      <div class="result-relation-title"><%= a.header %> (<%= a.createdAt.toString() %>) by <a href="userpage.jsp?who=<%= a.author %>"><%= a.author %></a></div>
       <div class="prereqs">
         <ul>
           <div class="placeholder-text">
