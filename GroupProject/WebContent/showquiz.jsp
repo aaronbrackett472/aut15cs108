@@ -70,7 +70,7 @@ if (request.getParameter("quizid") == null) {
 	}
 	if (currentQuestion.getType().equals("List")){
 		ListQuestion q = new ListQuestion(connection, currentQuestion.getQuestionId());
-		out.println(q.getQuestionHTML(i));
+		out.println(q.getQuestionHTML(currentIndex));
 		out.println(q.getResponseInputHTML());
 	}
 	out.println("</div>");

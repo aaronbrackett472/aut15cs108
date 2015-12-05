@@ -75,7 +75,7 @@ public class QuizGrader extends HttpServlet {
 		
 		int quizId = Integer.parseInt(request.getParameter("id"));
 		
-		boolean practiceMode = (boolean)session.getAttribute("practiceMode");
+		Boolean practiceMode = (Boolean)session.getAttribute("practiceMode");
 
 		request.setAttribute("id", quizId);
 		//Set<String> usedQuestions = new HashSet<String>();
@@ -110,6 +110,9 @@ public class QuizGrader extends HttpServlet {
 					else if(currentQuestion.getType().equals("Multiple Choice")||currentQuestion.getType().equals("MultipleChoice")){
 						MultipleChoice q = new MultipleChoice(connection, currentQuestion.getQuestionId());
 						score = q.evaluateAnswer(responses);
+						for (String r: responses){
+							System.out.println(r);
+						}
 					}
 					else if(currentQuestion.getType().equals("List")){
 						ListQuestion q = new ListQuestion(connection, currentQuestion.getQuestionId());
