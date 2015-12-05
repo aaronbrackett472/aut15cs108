@@ -40,48 +40,46 @@ public class AnswerCreateServlet extends HttpServlet {
 		String type = request.getParameter("type");
 		int questionID = Integer.parseInt(request.getParameter("questionID"));
 		int numAnswers = Integer.parseInt(request.getParameter("number"));
-		if (numAnswers == 1){
-			String answer = request.getParameter("answer");
-			Answer.saveToDatabase(questionID, answer, 0, true, "");
+		
+		String[] answers = request.getParameterValues("answer");
+		
+		if (type.equals("Fill in the Blank")||type.equals("Question-Response")||type.equals("Picture Response")||type.equals("List")){
+			for (int i = 0; i < numAnswers; i++){
+				String answer = answers[i];
+				String[] splitAnswers = answer.split(";");
+				for (String a: splitAnswers){
+					Answer.saveToDatabase(questionID, a, i, true, "");
+				}
+			}
 		}
-		else{
-			String[] answers = request.getParameterValues("answer");
-			
-			if (type.equals("Fill in the Blank")){
-				for (int i = 0; i < numAnswers; i++){
-					String answer = answers[i];
-					Answer.saveToDatabase(questionID, answer, i, true, "");
-				}
-			}
-			
-			
-			if (type.equals("Matching")){
+		
+		
+		if (type.equals("Matching")){
 
-				String[] prompts = request.getParameterValues("prompt");
-				for (int i = 0; i < numAnswers; i++){
-					String answer = answers[i];
-					String prompt = prompts[i];
-					Answer.saveToDatabase(questionID, answer, i, true, prompt);
-				}
+			String[] prompts = request.getParameterValues("prompt");
+			for (int i = 0; i < numAnswers; i++){
+				String answer = answers[i];
+				String prompt = prompts[i];
+				Answer.saveToDatabase(questionID, answer, i, true, prompt);
 			}
-			if (type.equals("Multiple Choice")){
-				String checkboxes = request.getParameter("correct");
-				String[] splitCheckboxes = checkboxes.split(",");
-				for (int i = 0; i < numAnswers; i++){
-					String answer = answers[i];
-					String iString = Integer.toString(i);
-					boolean saved = false;
-					for (String check : splitCheckboxes){
-						if (iString == check){	
-							Answer.saveToDatabase(questionID, answer, i, true, "");
-							saved = true;
-							break;
-						}
-							
+		}
+		if (type.equals("Multiple Choice")){
+			String checkboxes = request.getParameter("correct");
+			String[] splitCheckboxes = checkboxes.split(",");
+			for (int i = 0; i < numAnswers; i++){
+				String answer = answers[i];
+				String iString = Integer.toString(i);
+				boolean saved = false;
+				for (String check : splitCheckboxes){
+					if (iString == check){	
+						Answer.saveToDatabase(questionID, answer, i, true, "");
+						saved = true;
+						break;
 					}
-					if (!saved){
-						Answer.saveToDatabase(questionID, answer, i, false, "");
-					}
+						
+				}
+				if (!saved){
+					Answer.saveToDatabase(questionID, answer, i, false, "");
 				}
 			}
 		}

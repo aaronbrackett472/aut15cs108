@@ -50,7 +50,8 @@ public class QuestionCreateServlet extends HttpServlet {
 				"Fill in the Blank", 
 				"Multiple Choice", 
 				"Picture Response",
-				"Matching"
+				"Matching", 
+				"List"
 		};
 		
 		int typeIndex = Integer.parseInt(request.getParameter("type"));

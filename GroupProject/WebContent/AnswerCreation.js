@@ -1,17 +1,17 @@
 var answerHTML = document.getElementById('answerData').innerHTML;
 var type = document.getElementById('type').getAttribute('value');
-if (type == 'Question-Response'){
+if (type == 'Question-Response' || type == 'Picture Response'){
   answerHTML+='<p>What Answer are you looking for?</p>'+
   '<div style="padding-top: 20px;"></div>'+
   '<input type="text" name="answer" class="med-box">'+
   '<div style="padding-top: 20px;"></div>';
 }
-if (type == 'Fill in the Blank' || type == 'Picture Response'){
-	answerHTML+='<p>What Answer(s) are you looking for? Separate multiple blanks with Semicolons.</p>'+
+if (type == 'Fill in the Blank'){
+	answerHTML+='<p>What Answer(s) are you looking for?</p>'+
 	'<div style="padding-top: 20px;"></div>';
 	var numBlanks = +document.getElementById('number').value;
 	for (var i = 0; i < numBlanks; i++){
-	  answerHTML+='<input type="text" name="answer" value="default" class="med-box">'+
+	  answerHTML+='<input type="text" name="answer" class="med-box">'+
 	  '<div style="padding-top: 20px;"></div>';
 	}
 }
@@ -36,6 +36,15 @@ if (type == 'Matching'){
 	for (var i = 0; i < numPairs; i++){
 		answerHTML+='<input type="text" name="prompt" class="small-box"><input type="text" name="answer" class="small-box"><br>'+
 		'<div style="padding-top: 10px;"></div>';
+	}
+}
+if (type == 'List'){
+	answerHTML+='<p>Fill in the expected items of the list. If one item can be multiple acceptable answers, separate them in the same box with semicolons. If your list is ordered, enter them in order.</p>'+
+	'<div style="padding-top: 20px;"></div>';
+	var numItems = +document.getElementById('number').value;
+	for (var i = 0; i < numItems; i++){
+	  answerHTML+='<input type="text" name="answer" class="med-box">'+
+	  '<div style="padding-top: 20px;"></div>';
 	}
 }
 answerHTML+='<div class="add-class-container" style="text-align:center;"><button type="submit" name="answerSumbit">Add this Answer!</button></div>';
