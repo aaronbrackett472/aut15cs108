@@ -74,7 +74,7 @@ function showQuestionHTML(){
         	questionHTML+='<div class="prereqs"> <div class="placeholder-text">How many items are in the list?</div></div>' +
             '<div style="padding-top: 20px;"></div><input type="text" name="number" class="med-box">' +
             '<br>'+
-            '<div class="prereqs"> <div class="placeholder-text">Does the order matter for the list?</div></div>' +
+            '<div class="prereqs"> <div class="placeholder-text">Does the order matter for the list? ("yes" or "no")</div></div>' +
             '<div style="padding-top: 20px;"></div><input type="text" name="url" class="med-box">' +
             '<br>';
           default:
