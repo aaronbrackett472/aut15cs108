@@ -92,6 +92,7 @@ public class QuizGrader extends HttpServlet {
 					int score;
 					String[] responses = request.getParameterValues(attrName);
 					Question currentQuestion = new Question(connection, questionId);
+					//System.out.println("type: " + currentQuestion.getType());
 					if(currentQuestion.getType().equals("Question-Response")||currentQuestion.getType().equals("Response")){
 						QuestionResponse q = new QuestionResponse(connection, currentQuestion.getQuestionId());
 						score = q.evaluateAnswer(responses);
@@ -114,11 +115,18 @@ public class QuizGrader extends HttpServlet {
 							System.out.println(r);
 						}
 					}
+					else if(currentQuestion.getType().equals("Matching")){
+						System.out.println("type: " + currentQuestion.getType());
+						MatchingQuestion q = new MatchingQuestion(connection, currentQuestion.getQuestionId());
+						score = q.evaluateAnswer(responses);
+					}
 					else if(currentQuestion.getType().equals("List")){
 						ListQuestion q = new ListQuestion(connection, currentQuestion.getQuestionId());
 						score = q.evaluateAnswer(responses);
 					}
+					
 					else{
+						System.out.println("type: " + currentQuestion.getType());
 						Question q = new Question();
 						score = q.evaluateAnswer(responses);
 					}
