@@ -65,13 +65,15 @@ public class AnswerCreateServlet extends HttpServlet {
 		}
 		if (type.equals("Multiple Choice")){
 			String checkboxes = request.getParameter("correct");
+			System.out.println("Checkboxes: " + checkboxes);
 			String[] splitCheckboxes = checkboxes.split(",");
 			for (int i = 0; i < numAnswers; i++){
 				String answer = answers[i];
-				String iString = Integer.toString(i);
+				//String iString = Integer.toString(i);
 				boolean saved = false;
 				for (String check : splitCheckboxes){
-					if (iString == check){	
+					System.out.println("got hereeeee");
+					if (i == Integer.parseInt(check)){	
 						Answer.saveToDatabase(questionID, answer, i, true, "");
 						saved = true;
 						break;
